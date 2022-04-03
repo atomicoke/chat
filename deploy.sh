@@ -11,7 +11,7 @@ APP_PORT=8080          # 应用端口
 HEALTH_CHECK_URL=http://127.0.0.1:${APP_PORT}  # 应用健康检查URL
 HEALTH_CHECK_FILE_DIR=/home/admin/status   # 脚本会在这个目录下生成nginx-status文件
 APP_HOME=/home/admin/${APP_NAME} # 从package.tgz中解压出来的jar包放到这个目录下
-JAR_NAME=${APP_HOME}/${APP_NAME}.jar # jar包的名字
+JAR_NAME=${APP_HOME}/target/${APP_NAME}.jar # jar包的名字
 JAVA_OUT=${APP_HOME}/logs/start.log  #应用的启动日志
 
 # 创建出相关目录
