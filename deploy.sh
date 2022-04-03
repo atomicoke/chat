@@ -3,6 +3,11 @@
 # 修改APP_NAME为云效上的应用名
 APP_NAME=chat-0.01
 
+#mkdir -p /home/admin/chat-0.01
+
+#tar zxvf /home/admin/app/package.tgz -C /home/admin/chat-0.01/
+#sh /home/admin/chat-0.01/deploy.sh restart
+
 
 PROG_NAME=$0
 ACTION=$1
