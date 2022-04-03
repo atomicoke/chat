@@ -11,49 +11,19 @@ APP_NAME=chat-0.01
 
 PROG_NAME=$0
 ACTION=$1
-APP_START_TIMEOUT=20    # 等待应用启动的时间
-APP_PORT=8080          # 应用端口
-HEALTH_CHECK_URL=http://127.0.0.1:${APP_PORT}/hello  # 应用健康检查URL
-HEALTH_CHECK_FILE_DIR=/home/admin/status   # 脚本会在这个目录下生成nginx-status文件
 APP_HOME=/home/admin/${APP_NAME} # 从package.tgz中解压出来的jar包放到这个目录下
 JAR_NAME=${APP_HOME}/target/${APP_NAME}.jar # jar包的名字
 JAVA_OUT=${APP_HOME}/logs/start.log  #应用的启动日志
 
 # 创建出相关目录
-mkdir -p ${HEALTH_CHECK_FILE_DIR}
 mkdir -p ${APP_HOME}
 mkdir -p ${APP_HOME}/logs
+
 usage() {
     echo "Usage: $PROG_NAME {start|stop|restart}"
     exit 2
 }
 
-health_check() {
-    exptime=0
-    echo "checking ${HEALTH_CHECK_URL}"
-    while true
-        do
-            status_code=`httpstat  ${HEALTH_CHECK_URL}`
-            if [ "$?" != "0" ]; then
-               echo -n -e "\rapplication not started"
-            else
-                echo "code is $status_code"
-                if [ "$status_code" == "200" ];then
-                    break
-                fi
-            fi
-            sleep 1
-            ((exptime++))
-
-            echo -e "\rWait app to pass health check: $exptime..."
-
-            if [ $exptime -gt ${APP_START_TIMEOUT} ]; then
-                echo 'app start failed'
-               exit 1
-            fi
-        done
-    echo "check ${HEALTH_CHECK_URL} success"
-}
 start_application() {
     echo "starting java process"
     echo "${JAR_NAME}"
