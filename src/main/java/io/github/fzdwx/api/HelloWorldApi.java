@@ -12,6 +12,6 @@ public class HelloWorldApi {
 
     @GetMapping("hello")
     public String hello() {
-        return "hello world12312444443";
+        return "start success";
     }
 }

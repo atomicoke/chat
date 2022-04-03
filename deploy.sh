@@ -1,22 +1,21 @@
 #!/bin/bash
 
 # 修改APP_NAME为云效上的应用名
-APP_NAME=chat-0.01
 
 #mkdir -p /home/admin/chat-0.01
 
 #tar zxvf /home/admin/app/package.tgz -C /home/admin/chat-0.01/
 #sh /home/admin/chat-0.01/deploy.sh restart
 
-
 PROG_NAME=$0
-ACTION=$1
-APP_HOME=/home/admin/${APP_NAME} # 从package.tgz中解压出来的jar包放到这个目录下
-JAR_NAME=${APP_HOME}/target/${APP_NAME}.jar # jar包的名字
+APP_NAME=$1
+JAR_NAME=$2
+ACTION=$3
+APP_HOME=/root/project/${APP_NAME} # 从package.tgz中解压出来的jar包放到这个目录下
+JAR_NAME=${APP_HOME}/${JAR_NAME}.jar # jar包的名字
 JAVA_OUT=${APP_HOME}/logs/start.log  #应用的启动日志
 
 # 创建出相关目录
-mkdir -p ${APP_HOME}
 mkdir -p ${APP_HOME}/logs
 
 usage() {
