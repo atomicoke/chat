@@ -8,7 +8,7 @@ PROG_NAME=$0
 ACTION=$1
 APP_START_TIMEOUT=20    # 等待应用启动的时间
 APP_PORT=8080          # 应用端口
-HEALTH_CHECK_URL=http://127.0.0.1:${APP_PORT}  # 应用健康检查URL
+HEALTH_CHECK_URL=http://127.0.0.1:${APP_PORT}/hello  # 应用健康检查URL
 HEALTH_CHECK_FILE_DIR=/home/admin/status   # 脚本会在这个目录下生成nginx-status文件
 APP_HOME=/home/admin/${APP_NAME} # 从package.tgz中解压出来的jar包放到这个目录下
 JAR_NAME=${APP_HOME}/target/${APP_NAME}.jar # jar包的名字
@@ -28,7 +28,7 @@ health_check() {
     echo "checking ${HEALTH_CHECK_URL}"
     while true
         do
-            status_code=`/usr/bin/curl -L -o /dev/null --connect-timeout 5 -s -w %{http_code}  ${HEALTH_CHECK_URL}`
+            status_code=`httpstat  ${HEALTH_CHECK_URL}`
             if [ "$?" != "0" ]; then
                echo -n -e "\rapplication not started"
             else
@@ -51,6 +51,7 @@ health_check() {
 }
 start_application() {
     echo "starting java process"
+    echo "${JAR_NAME}"
     nohup java -jar ${JAR_NAME} > ${JAVA_OUT} 2>&1 &
     echo "started java process"
 }
@@ -82,8 +83,8 @@ stop_application() {
 }
 start() {
     start_application
-    health_check
 }
+
 stop() {
     stop_application
 }
