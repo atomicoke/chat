@@ -31,16 +31,15 @@ public class HelloWorldTest {
          * 插入数据
          */
         HelloWorldEntity entity = new HelloWorldEntity();
-        entity.setId(1L);
-        entity.setSayHello("hello world");
-        entity.setYourName("fluent mybatis");
-        entity.setIsDeleted(false);
-        mapper.insert(entity);
+        // entity.setId(1L);
+        entity.setSayHello("hello 222world");
+        entity.setYourName("fluent my222batis");
+        final var insert = mapper.insert(entity);
         /**
          * 查询 id = 1 的数据
          */
         HelloWorldEntity result1 = mapper.findOne(mapper.query()
-                .where.id().eq(1L).end());
+                .where.id().eq(entity.getId()).end());
         /**
          * 控制台直接打印出查询结果
          */
