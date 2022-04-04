@@ -1,4 +1,4 @@
-package io.github.fzdwx.logic.helloworld.entity;
+package io.github.fzdwx.logic.domain.entity;
 
 import cn.org.atool.fluent.mybatis.annotation.FluentMybatis;
 import cn.org.atool.fluent.mybatis.annotation.LogicDelete;

@@ -1,5 +1,7 @@
 package io.github.fzdwx.inf.web.model;
 
+import org.springframework.http.HttpStatus;
+
 import java.util.LinkedHashMap;
 import java.util.function.Supplier;
 
@@ -20,6 +22,10 @@ public class Rest<OUT> extends LinkedHashMap<String, Object> {
     public static final String SUCCESS_MESSAGE = "ok";
     public static final int FAILURE = 20001;
     public static final String FAILURE_MESSAGE = "failure";
+
+    public static <OUT> Rest<OUT> failure(final HttpStatus status, final String message) {
+        return create(null, status.value(), message);
+    }
 
     public static <OUT> Rest<OUT> failure() {
         return create(null, FAILURE, FAILURE_MESSAGE);
@@ -49,6 +55,15 @@ public class Rest<OUT> extends LinkedHashMap<String, Object> {
         return create(null, SUCCESS, SUCCESS_MESSAGE);
     }
 
+    public static <OUT> Rest<OUT> of(final OUT data) {
+        if (data instanceof Boolean) {
+            if (data == Boolean.TRUE) {
+                return ok();
+            } else failure();
+        }
+        return ok(data);
+    }
+
     public static <OUT> Rest<OUT> create(OUT data, int code, String message) {
         Rest<OUT> rest = new Rest<>();
         if (data != null) {
@@ -61,6 +76,7 @@ public class Rest<OUT> extends LinkedHashMap<String, Object> {
     }
 
     public Rest<OUT> stackTrace(StackTraceElement[] stackTrace) {
+        // this.put(STACKTRACE, stackTrace[0]);
         this.put(STACKTRACE, stackTrace);
         return this;
     }

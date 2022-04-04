@@ -3,6 +3,7 @@ package io.github.fzdwx.inf.minio;
 import cn.hutool.core.io.FileTypeUtil;
 import io.github.fzdwx.inf.exc.VerifyException;
 import io.github.fzdwx.inf.minio.model.MinioUploadRes;
+import io.github.fzdwx.inf.web.model.Rest;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,9 +26,10 @@ public class MinioApi {
     static long videoMaxSize = 1024 * 1024 * 100;
 
     @PostMapping("/image")
-    public MinioUploadRes image(MultipartFile file) throws IOException {
+    public Rest<MinioUploadRes> image(MultipartFile file) throws IOException {
         checkImage(file);
-        return Minio.upload(file.getInputStream(), file.getOriginalFilename());
+
+        return Rest.of(Minio.upload(file.getInputStream(), file.getOriginalFilename()));
     }
 
     private void checkImage(final MultipartFile file) throws IOException {

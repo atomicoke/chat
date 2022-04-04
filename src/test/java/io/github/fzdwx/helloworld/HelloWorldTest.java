@@ -1,69 +1,36 @@
 package io.github.fzdwx.helloworld;
 
-import io.github.fzdwx.inf.db.config.MybatisConfiguration;
-import io.github.fzdwx.logic.helloworld.entity.HelloWorldEntity;
-import io.github.fzdwx.logic.helloworld.mapper.HelloWorldMapper;
+import cn.org.atool.generator.FileGenerator;
+import cn.org.atool.generator.annotation.Table;
+import cn.org.atool.generator.annotation.Tables;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ContextConfiguration;
 
 /**
  * @author <a href="mailto:likelovec@gmail.com">fzdwx</a>
  * @date 2022/4/4 12:20
  */
-@SpringBootTest
-@ContextConfiguration(classes = {MybatisConfiguration.class, DataSourceAutoConfiguration.class})
 public class HelloWorldTest {
 
-    @Autowired
-    private HelloWorldMapper mapper;
+    public static final String url = "jdbc:mysql://114.132.249.192:3306/chat?useUnicode=true&characterEncoding=utf-8&useSSL=false";
+
 
     @Test
-    void test1() {
-        /**
-         * 为了演示方便，先删除数据
-         */
-        mapper.delete(mapper.query()
-                .where.id().eq(1L).end());
-        /**
-         * 插入数据
-         */
-        HelloWorldEntity entity = new HelloWorldEntity();
-        // entity.setId(1L);
-        entity.setSayHello("hello 222world");
-        entity.setYourName("fluent my222batis");
-        final var insert = mapper.insert(entity);
-        /**
-         * 查询 id = 1 的数据
-         */
-        HelloWorldEntity result1 = mapper.findOne(mapper.query()
-                .where.id().eq(entity.getId()).end());
-        /**
-         * 控制台直接打印出查询结果
-         */
-        System.out.println("1. HelloWorldEntity:" + result1.toString());
-        /**
-         * 更新id = 1的记录
-         */
-        mapper.updateBy(mapper.updater()
-                .set.sayHello().is("say hello, say hello!")
-                .set.yourName().is("fluent mybatis is powerful!").end()
-                .where.id().eq(1L).end()
-        );
-        /**
-         * 查询 id = 1 的数据
-         */
-        HelloWorldEntity result2 = mapper.findOne(mapper.query()
-                .where.sayHello().like("hello")
-                .and.isDeleted().eq(false).end()
-                .limit(1)
-        );
-        /**
-         * 控制台直接打印出查询结果
-         */
-        System.out.println("2. HelloWorldEntity:" + result2.toString());
+    public void generate() throws Exception {
+        FileGenerator.build(Empty.class);
+    }
 
+    @Tables(
+            // 设置数据库连接信息
+            url = url, username = "root", password = "qkq23123A2.ww%",
+            // 设置entity类生成src目录, 相对于 user.dir
+            srcDir = "src/main/java",
+            // 设置entity类的package值
+            basePack = "io.github.fzdwx.logic.user",
+            // 设置dao接口和实现的src目录, 相对于 user.dir
+            daoDir = "src/main/java",
+            // 设置哪些表要生成Entity文件
+            tables = {@Table(value = {"user"})}
+    )
+    static class Empty {
     }
 }

@@ -1,8 +1,10 @@
 package io.github.fzdwx.logic.helloworld.api;
 
 import cn.hutool.core.util.RandomUtil;
+import io.github.fzdwx.inf.redis.Redis;
+import io.github.fzdwx.inf.web.Web;
 import io.github.fzdwx.logic.helloworld.dao.HelloWorldDao;
-import io.github.fzdwx.logic.helloworld.entity.HelloWorldEntity;
+import io.github.fzdwx.logic.domain.entity.HelloWorldEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +22,8 @@ public class HelloWorldApi {
 
     @GetMapping("hello")
     public String hello() {
+        Redis.set("hello","world");
+        System.out.println(Web.getUserInfo());
         return "start success";
     }
 

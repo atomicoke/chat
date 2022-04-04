@@ -12,7 +12,7 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spring.boot.version>2.6.5</spring.boot.version>
+        <spring.boot.version>2.5.7</spring.boot.version>
 
         <fluent-mybatis.version>1.9.5</fluent-mybatis.version>
 
@@ -23,6 +23,9 @@
         <lombok.version>1.18.22</lombok.version>
         <minio.version>8.3.7</minio.version>
         <okhttp.version>4.8.1</okhttp.version>
+        <sa-token.version>1.29.0</sa-token.version>
+        <ttl.version>2.12.6</ttl.version>
+        <redisson.version>3.16.4</redisson.version>
     </properties>
 
     <build>
@@ -104,10 +107,29 @@
             <artifactId>spring-boot-starter-undertow</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+        <dependency>
             <groupId>io.github.fzdwx</groupId>
             <artifactId>sky-infrastructure</artifactId>
             <version>${sky.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>transmittable-thread-local</artifactId>
+            <version>${ttl.version}</version>
+        </dependency>
+
+        <!-- redis 分布式锁 -->
+        <dependency>
+            <groupId>org.redisson</groupId>
+            <artifactId>redisson-spring-boot-starter</artifactId>
+            <version>${redisson.version}</version>
+        </dependency>
+
+
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -133,6 +155,33 @@
             <groupId>io.github.fzdwx</groupId>
             <artifactId>lambda</artifactId>
         </dependency>
+        <!-- redis 缓存操作 lettuce -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>redis.clients</groupId>
+                    <artifactId>jedis</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-pool2</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>cn.dev33</groupId>
+            <artifactId>sa-token-spring-boot-starter</artifactId>
+            <version>${sa-token.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>cn.dev33</groupId>
+            <artifactId>sa-token-dao-redis-jackson</artifactId>
+            <version>${sa-token.version}</version>
+        </dependency>
+
 
         <!-- 引入fluent-mybatis 运行依赖包, scope为compile -->
         <dependency>
@@ -161,6 +210,8 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
+
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
