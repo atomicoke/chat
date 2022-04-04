@@ -1,0 +1,21 @@
+server:
+  port: 8080
+
+spring:
+  profiles:
+    active: @profiles.active@
+  main:
+    allow-bean-definition-overriding: true
+  application:
+    name: chat
+  datasource:
+    url: jdbc:mysql://114.132.249.192:3306/chat?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    username: root
+    password: root
+    driverClassName: com.mysql.cj.jdbc.Driver
+    hikari:
+      connection-timeout: 30000
+      maximum-pool-size: 25
+      minimum-idle: 10
+      auto-commit: true
+    type: com.zaxxer.hikari.HikariDataSource

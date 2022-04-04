@@ -1,4 +1,4 @@
-package io.github.fzdwx.api;
+package io.github.fzdwx.helloworld.api;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
