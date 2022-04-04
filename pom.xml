@@ -139,6 +139,7 @@
             <groupId>com.github.atool</groupId>
             <artifactId>fluent-mybatis-boot-starter</artifactId>
         </dependency>
+
         <!-- 引入fluent-mybatis 运行依赖包, scope为compile -->
         <dependency>
             <groupId>com.github.atool</groupId>

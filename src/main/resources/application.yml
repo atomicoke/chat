@@ -7,6 +7,7 @@ spring:
   profiles:
     active: @profiles.active@
   main:
+    banner-mode: OFF
     allow-bean-definition-overriding: true
   application:
     name: chat

@@ -1,5 +1,7 @@
 package io.github.fzdwx.inf.minio;
 
+import cn.hutool.core.util.IdUtil;
+import io.github.fzdwx.inf.exc.MinioException;
 import io.github.fzdwx.inf.minio.model.MinioUploadRes;
 import io.github.fzdwx.lambada.lang.UnixTime;
 import io.minio.GetPresignedObjectUrlArgs;
@@ -38,7 +40,7 @@ public class Minio implements InitializingBean {
     }
 
     public static MinioUploadRes upload(InputStream stream, String fileName) {
-        String objectName = UnixTime.unixTime() + "/" + fileName;
+        String objectName = UnixTime.unixTime() + "/" + IdUtil.getSnowflakeNextId() + "-" + fileName;
 
         try {
             return MinioUploadRes.create(minioClient.putObject(PutObjectArgs.builder()
@@ -47,7 +49,7 @@ public class Minio implements InitializingBean {
                     .stream(stream, stream.available(), -1)
                     .build()), getAccessUrl(objectName));
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new MinioException(e);
         }
     }
 
@@ -72,7 +74,7 @@ public class Minio implements InitializingBean {
                     .expiry(amount, timeUnit)
                     .build());
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new MinioException(e);
         }
     }
 
