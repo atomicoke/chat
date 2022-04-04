@@ -1,8 +1,8 @@
-package io.github.fzdwx.helloworld.api;
+package io.github.fzdwx.logic.helloworld.api;
 
 import cn.hutool.core.util.RandomUtil;
-import io.github.fzdwx.helloworld.dao.HelloWorldDao;
-import io.github.fzdwx.helloworld.entity.HelloWorldEntity;
+import io.github.fzdwx.logic.helloworld.dao.HelloWorldDao;
+import io.github.fzdwx.logic.helloworld.entity.HelloWorldEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

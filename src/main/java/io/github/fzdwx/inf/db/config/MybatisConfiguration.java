@@ -1,4 +1,4 @@
-package io.github.fzdwx.db.config;
+package io.github.fzdwx.inf.db.config;
 
 import cn.org.atool.fluent.mybatis.spring.MapperFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;

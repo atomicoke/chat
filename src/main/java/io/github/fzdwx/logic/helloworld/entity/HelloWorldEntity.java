@@ -1,11 +1,11 @@
-package io.github.fzdwx.helloworld.entity;
+package io.github.fzdwx.logic.helloworld.entity;
 
 import cn.org.atool.fluent.mybatis.annotation.FluentMybatis;
 import cn.org.atool.fluent.mybatis.annotation.LogicDelete;
 import cn.org.atool.fluent.mybatis.annotation.TableField;
 import cn.org.atool.fluent.mybatis.annotation.TableId;
 import cn.org.atool.fluent.mybatis.base.IEntity;
-import io.github.fzdwx.db.config.EntityFiledSetter;
+import io.github.fzdwx.inf.db.config.EntityFiledSetter;
 import lombok.Data;
 
 import java.util.Date;

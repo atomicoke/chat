@@ -1,4 +1,4 @@
-package io.github.fzdwx.ws.config;
+package io.github.fzdwx.inf.ws.config;
 
 import org.springframework.stereotype.Component;
 
@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
 
 /**
  * @author <a href="mailto:likelovec@gmail.com">fzdwx</a>
- * @date 2022/4/4 15:17
+ * @date 2022/4/4 18:37
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
@@ -19,4 +19,5 @@ import java.lang.annotation.Target;
 public @interface Ws {
 
     String value();
+
 }

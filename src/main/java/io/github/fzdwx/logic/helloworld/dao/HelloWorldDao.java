@@ -1,7 +1,7 @@
-package io.github.fzdwx.helloworld.dao;
+package io.github.fzdwx.logic.helloworld.dao;
 
-import io.github.fzdwx.helloworld.dao.base.HelloWorldBaseDao;
-import io.github.fzdwx.helloworld.entity.HelloWorldEntity;
+import io.github.fzdwx.logic.helloworld.dao.base.HelloWorldBaseDao;
+import io.github.fzdwx.logic.helloworld.entity.HelloWorldEntity;
 import org.springframework.stereotype.Repository;
 
 /**

@@ -1,5 +1,7 @@
 server:
   port: 8080
+  ws:
+    port: 8081
 
 spring:
   profiles:
@@ -19,3 +21,9 @@ spring:
       minimum-idle: 10
       auto-commit: true
     type: com.zaxxer.hikari.HikariDataSource
+
+minio:
+  endpoint: yrou minio endpoint
+  access-key: yrou minio access-key
+  secret-key: yrou minio secret-key
+  bucket: yrou minio bucket

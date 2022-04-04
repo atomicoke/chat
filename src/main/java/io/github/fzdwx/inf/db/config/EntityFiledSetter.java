@@ -1,4 +1,4 @@
-package io.github.fzdwx.db.config;
+package io.github.fzdwx.inf.db.config;
 
 import cn.hutool.core.util.IdUtil;
 import cn.org.atool.fluent.mybatis.base.IEntity;

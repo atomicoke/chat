@@ -1,8 +1,8 @@
 package io.github.fzdwx.helloworld;
 
-import io.github.fzdwx.db.config.MybatisConfiguration;
-import io.github.fzdwx.helloworld.entity.HelloWorldEntity;
-import io.github.fzdwx.helloworld.mapper.HelloWorldMapper;
+import io.github.fzdwx.inf.db.config.MybatisConfiguration;
+import io.github.fzdwx.logic.helloworld.entity.HelloWorldEntity;
+import io.github.fzdwx.logic.helloworld.mapper.HelloWorldMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
@@ -18,7 +18,7 @@ import org.springframework.test.context.ContextConfiguration;
 public class HelloWorldTest {
 
     @Autowired
-    private  HelloWorldMapper mapper;
+    private HelloWorldMapper mapper;
 
     @Test
     void test1() {
