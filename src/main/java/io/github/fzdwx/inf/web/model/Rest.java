@@ -1,6 +1,7 @@
 package io.github.fzdwx.inf.web.model;
 
 import java.util.LinkedHashMap;
+import java.util.function.Supplier;
 
 /**
  * rest response.
@@ -10,35 +11,57 @@ import java.util.LinkedHashMap;
  */
 public class Rest<OUT> extends LinkedHashMap<String, Object> {
 
+    public static final String DATA = "data";
+    public static final String CODE = "code";
+    public static final String MESSAGE = "message";
+    public static final String STACKTRACE = "stackTrace";
+
+    public static final int SUCCESS = 0;
+    public static final String SUCCESS_MESSAGE = "ok";
+    public static final int FAILURE = 20001;
+    public static final String FAILURE_MESSAGE = "failure";
+
     public static <OUT> Rest<OUT> failure() {
-        return create(null, 20001, "failure");
+        return create(null, FAILURE, FAILURE_MESSAGE);
     }
 
     public static <OUT> Rest<OUT> failure(String message) {
-        return create(null, 20001, message);
+        return create(null, FAILURE, message);
     }
 
     public static <OUT> Rest<OUT> ok(OUT out) {
-        return create(out, 0, "OK");
+        return create(out, SUCCESS, SUCCESS_MESSAGE);
+    }
+
+    public static <OUT> Rest<OUT> ok(OUT out, String message) {
+        return create(out, SUCCESS, message);
+    }
+
+    public static <OUT> Rest<OUT> ok(Supplier<OUT> sup) {
+        return create(sup.get(), SUCCESS, SUCCESS_MESSAGE);
+    }
+
+    public static <OUT> Rest<OUT> ok(Supplier<OUT> sup, String message) {
+        return create(sup.get(), SUCCESS, message);
     }
 
     public static <OUT> Rest<OUT> ok() {
-        return create(null, 0, "OK");
+        return create(null, SUCCESS, SUCCESS_MESSAGE);
     }
 
     public static <OUT> Rest<OUT> create(OUT data, int code, String message) {
         Rest<OUT> rest = new Rest<>();
         if (data != null) {
-            rest.put("data", data);
+            rest.put(DATA, data);
         }
 
-        rest.put("code", code);
-        rest.put("message", message);
+        rest.put(CODE, code);
+        rest.put(MESSAGE, message);
         return rest;
     }
 
     public Rest<OUT> stackTrace(StackTraceElement[] stackTrace) {
-        this.put("stackTrace", stackTrace);
+        this.put(STACKTRACE, stackTrace);
         return this;
     }
 }

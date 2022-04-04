@@ -24,7 +24,6 @@ public class MinioApi {
     static long imageMaxSize = 1024 * 1024 * 3;
     static long videoMaxSize = 1024 * 1024 * 100;
 
-
     @PostMapping("/image")
     public MinioUploadRes image(MultipartFile file) throws IOException {
         checkImage(file);
