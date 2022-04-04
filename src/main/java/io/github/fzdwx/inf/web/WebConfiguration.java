@@ -5,6 +5,7 @@ import cn.dev33.satoken.filter.SaFilterErrorStrategy;
 import cn.dev33.satoken.filter.SaServletFilter;
 import io.github.fzdwx.inf.exc.ForbiddenException;
 import io.github.fzdwx.inf.exc.VerifyException;
+import io.github.fzdwx.inf.util.Json;
 import io.github.fzdwx.inf.web.core.Context;
 import io.github.fzdwx.inf.web.core.TokenListener;
 import io.github.fzdwx.inf.web.model.Rest;
@@ -115,7 +116,7 @@ public class WebConfiguration {
      */
     private SaFilterErrorStrategy handlerError() {
         return e -> {
-            return Rest.failure("auth exception: " + e.getMessage());
+            return Json.toJson(Rest.failure(HttpStatus.UNAUTHORIZED,"auth exception: " + e.getMessage()));
         };
     }
 
