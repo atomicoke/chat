@@ -3,7 +3,8 @@ package io.github.fzdwx.helloworld.api;
 import cn.hutool.core.util.RandomUtil;
 import io.github.fzdwx.helloworld.dao.HelloWorldDao;
 import io.github.fzdwx.helloworld.entity.HelloWorldEntity;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,10 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
  * @date 2022/4/3 16:07
  */
 @RestController
-@RequiredArgsConstructor
+@NoArgsConstructor
 public class HelloWorldApi {
 
-    private final HelloWorldDao helloWorldDao;
+    @Autowired
+    private HelloWorldDao helloWorldDao;
 
     @GetMapping("hello")
     public String hello() {

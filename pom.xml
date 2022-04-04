@@ -12,10 +12,13 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spring.boot.version>2.6.6</spring.boot.version>
+        <spring.boot.version>2.6.5</spring.boot.version>
 
         <fluent-mybatis.version>1.9.5</fluent-mybatis.version>
+
         <lambda.version>0.09.2</lambda.version>
+        <sky.version>0.09</sky.version>
+
         <HikariCP.version>5.0.1</HikariCP.version>
         <lombok.version>1.18.22</lombok.version>
     </properties>
@@ -83,10 +86,33 @@
     </build>
 
     <dependencies>
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-starter-webflux</artifactId>-->
+<!--            <version>${spring.boot.version}</version>-->
+<!--        </dependency>-->
+        <dependency>
+            <groupId>io.github.fzdwx</groupId>
+            <artifactId>sky-http-spring-boot-starter</artifactId>
+            <version>${sky.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-webflux</artifactId>
-            <version>${spring.boot.version}</version>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
