@@ -1,6 +1,7 @@
 package io.github.fzdwx.inf.common.web.model;
 
 import cn.hutool.core.util.ArrayUtil;
+import io.github.fzdwx.lambada.fun.Callable;
 import org.springframework.http.HttpStatus;
 
 import java.util.LinkedHashMap;
@@ -63,6 +64,11 @@ public class Rest<OUT> extends LinkedHashMap<String, Object> {
             } else failure();
         }
         return ok(data);
+    }
+
+    public static <OUT> Rest<OUT> of(final Runnable action) {
+        action.run();
+        return ok();
     }
 
     public static <OUT> Rest<OUT> create(OUT data, int code, String message) {

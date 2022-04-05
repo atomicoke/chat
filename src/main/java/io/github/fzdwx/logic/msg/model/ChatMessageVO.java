@@ -2,7 +2,7 @@ package io.github.fzdwx.logic.msg.model;
 
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * @author <a href="mailto:likelovec@gmail.com">fzdwx</a>
@@ -31,7 +31,7 @@ public class ChatMessageVO {
     /**
      * 会话类型 1:单聊 2:群聊
      */
-    private Integer sessionType;
+    private Long sessionType;
     /**
      * 消息发送者的类型 1:用户 2:系统
      */
@@ -39,5 +39,5 @@ public class ChatMessageVO {
     /**
      * 发送时间
      */
-    private LocalDateTime sendTime;
+    private Date sendTime;
 }

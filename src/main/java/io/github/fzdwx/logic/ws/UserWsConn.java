@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentSkipListMap;
+import java.util.function.BiConsumer;
 
 /**
  * @author <a href="mailto:likelovec@gmail.com">fzdwx</a>
@@ -32,5 +33,9 @@ public class UserWsConn {
         }
 
         conn.send(msg);
+    }
+
+    public static void foreach(BiConsumer<String, WebSocket> consumer) {
+        WEB_SOCKET_MAP.forEach(consumer);
     }
 }

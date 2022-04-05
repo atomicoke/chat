@@ -5,6 +5,7 @@ import cn.org.atool.fluent.mybatis.annotation.TableField;
 import cn.org.atool.fluent.mybatis.annotation.TableId;
 import cn.org.atool.fluent.mybatis.base.RichEntity;
 import io.github.fzdwx.inf.middleware.db.config.EntityFiledSetter;
+import io.github.fzdwx.logic.msg.model.ChatMessageVO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -69,8 +70,7 @@ public class ChatLogEntity extends RichEntity {
 
     @TableField(
             value = "send_time",
-            desc = "发送时间",
-            insert = "now()"
+            desc = "发送时间"
     )
     private Date sendTime;
 
@@ -89,5 +89,18 @@ public class ChatLogEntity extends RichEntity {
     @Override
     public final Class entityClass() {
         return ChatLogEntity.class;
+    }
+
+    public static ChatLogEntity from(final ChatMessageVO chatMessageVO) {
+        final var entity = new ChatLogEntity();
+        entity.setFromId(chatMessageVO.getFromId());
+        entity.setToId(chatMessageVO.getToId());
+        entity.setContent(chatMessageVO.getContent());
+        entity.setMsgFrom(chatMessageVO.getMsgFrom());
+        entity.setContentType(chatMessageVO.getContentType());
+        entity.setSessionType(chatMessageVO.getSessionType());
+        entity.setSendTime(chatMessageVO.getSendTime());
+
+        return entity;
     }
 }

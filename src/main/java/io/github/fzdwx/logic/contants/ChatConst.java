@@ -6,8 +6,8 @@ package io.github.fzdwx.logic.contants;
  */
 public interface ChatConst {
 
-    Integer SESSION_TYPE_PERSONAL = 1;
-    Integer SESSION_TYPE_GROUP = 2;
+    Long SESSION_TYPE_PERSONAL = 1L;
+    Long SESSION_TYPE_GROUP = 2L;
 
     Integer MSG_FROM_USER = 1;
     Integer MSG_FROM_SYS = 1;
