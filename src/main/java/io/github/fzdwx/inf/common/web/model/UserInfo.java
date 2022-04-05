@@ -14,6 +14,7 @@ public class UserInfo {
     private String id;
     private String uname;
     private Long mobile;
+    private Integer gender;
     private String roleKey;
     private String avatar;
 
@@ -23,6 +24,7 @@ public class UserInfo {
         userInfo.setUname(userEntity.getUname());
         userInfo.setMobile(userEntity.getMobile());
         userInfo.setRoleKey(userEntity.getRoleKey());
+        userInfo.setGender(userEntity.getGender());
         if (userEntity.getAvatar() != null) {
             userInfo.setAvatar(Minio.getAccessUrl(userEntity.getAvatar()));
         }

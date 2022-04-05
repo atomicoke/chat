@@ -94,6 +94,12 @@ public class UserEntity extends RichEntity {
     private String salt;
 
     @TableField(
+            value = "gender",
+            desc = "性别 0:未知 1:男 2:女"
+    )
+    private Integer gender;
+
+    @TableField(
             value = "uname",
             desc = "用户名"
     )
@@ -135,6 +141,10 @@ public class UserEntity extends RichEntity {
         if (req.getAvatar() != null) {
             userEntity.setAvatar(req.getAvatar());
         } else userEntity.setAvatar(user.getAvatar());
+
+        if (req.getGender() != null) {
+            userEntity.setGender(req.getGender());
+        } else userEntity.setGender(user.getGender());
 
         if (req.getRoleKey() != null) {
             userEntity.setRoleKey(req.getRoleKey());
