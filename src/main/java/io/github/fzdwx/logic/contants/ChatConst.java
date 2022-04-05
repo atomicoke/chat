@@ -10,5 +10,5 @@ public interface ChatConst {
     Long SESSION_TYPE_GROUP = 2L;
 
     Integer MSG_FROM_USER = 1;
-    Integer MSG_FROM_SYS = 1;
+    Integer MSG_FROM_SYS = 2;
 }
