@@ -40,4 +40,8 @@ public class Web {
         Context.user((UserInfo) sessionUser);
         return (UserInfo) sessionUser;
     }
+
+    public static UserInfo getUserInfo(final Object loginId) {
+        return (UserInfo) StpUtil.getSessionByLoginId(loginId).get(USER);
+    }
 }
