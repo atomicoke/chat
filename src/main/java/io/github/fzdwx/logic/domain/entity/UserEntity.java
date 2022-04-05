@@ -6,6 +6,7 @@ import cn.org.atool.fluent.mybatis.annotation.FluentMybatis;
 import cn.org.atool.fluent.mybatis.annotation.TableField;
 import cn.org.atool.fluent.mybatis.annotation.TableId;
 import cn.org.atool.fluent.mybatis.base.RichEntity;
+import io.github.fzdwx.inf.common.web.model.RoleConstant;
 import io.github.fzdwx.inf.middleware.db.config.EntityFiledSetter;
 import io.github.fzdwx.lambada.Lang;
 import io.github.fzdwx.logic.user.api.model.EditUserInfoReq;
@@ -57,7 +58,7 @@ public class UserEntity extends RichEntity {
 
     @TableField(
             value = "create_time",
-            desc = "更新时间",
+            desc = "创建时间",
             insert = "now()"
     )
     private Date createTime;
@@ -114,6 +115,7 @@ public class UserEntity extends RichEntity {
         final var salt = RandomUtil.randomString(8);
         return new UserEntity().setUname(req.getUname())
                 .setSalt(salt)
+                .setRoleKey(RoleConstant.COMMON)
                 .setPasswd(encodePasswd(req.getPasswd(), salt));
     }
 

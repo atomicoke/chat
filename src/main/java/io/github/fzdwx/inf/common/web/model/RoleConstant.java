@@ -7,4 +7,5 @@ package io.github.fzdwx.inf.common.web.model;
 public interface RoleConstant {
 
     String ADMIN = "admin";
+    String COMMON = "common";
 }

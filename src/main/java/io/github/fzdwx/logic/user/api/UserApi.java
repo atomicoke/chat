@@ -49,7 +49,7 @@ public class UserApi {
     }
 
     /**
-     * 获取用户信息
+     * 获取当前登录用户的信息
      */
     @GetMapping("getUserInfo")
     public Rest<UserInfo> getUserInfo() {

@@ -9,6 +9,12 @@ import lombok.Data;
 @Data
 public class SingInReq {
 
+    /**
+     * 用户名
+     */
     private String uname;
+    /**
+     * 密码
+     */
     private String passwd;
 }

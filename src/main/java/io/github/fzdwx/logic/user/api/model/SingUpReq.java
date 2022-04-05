@@ -1,8 +1,5 @@
 package io.github.fzdwx.logic.user.api.model;
 
-import cn.dev33.satoken.secure.SaSecureUtil;
-import cn.hutool.core.util.RandomUtil;
-import io.github.fzdwx.logic.domain.entity.UserEntity;
 import lombok.Data;
 
 /**
@@ -12,6 +9,12 @@ import lombok.Data;
 @Data
 public class SingUpReq {
 
+    /**
+     * 用户名
+     */
     private String uname;
+    /**
+     * 密码
+     */
     private String passwd;
 }

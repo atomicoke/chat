@@ -10,14 +10,29 @@ import lombok.Data;
 @Data
 public class EditUserInfoReq {
 
+    /**
+     * id
+     */
     private Long id;
 
+    /**
+     * 头像
+     */
     private String avatar;
 
+    /**
+     * 手机号码
+     */
     private Long mobile;
 
+    /**
+     * 密码
+     */
     private String passwd;
 
+    /**
+     * role key[admin,user,...]
+     */
     private String roleKey;
 
     public void preCheck() {
