@@ -3,7 +3,7 @@ package io.github.fzdwx.logic.domain.dao;
 import cn.org.atool.fluent.mybatis.base.IBaseDao;
 import io.github.fzdwx.logic.domain.dao.base.ChatLogBaseDao;
 import io.github.fzdwx.logic.domain.entity.ChatLogEntity;
-import io.github.fzdwx.logic.msg.api.model.ChatMessageVO;
+import io.github.fzdwx.logic.msg.api.model.SendChatMessageReq;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class ChatLogDao extends ChatLogBaseDao implements IBaseDao<ChatLogEntity> {
 
-    public void save(final ChatMessageVO chatMessageVO) {
-        this.mapper.save(ChatLogEntity.from(chatMessageVO));
+    public void save(final SendChatMessageReq sendChatMessageReq) {
+        this.mapper.save(ChatLogEntity.from(sendChatMessageReq));
     }
 }

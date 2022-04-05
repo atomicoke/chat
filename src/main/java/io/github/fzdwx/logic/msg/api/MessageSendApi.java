@@ -4,7 +4,7 @@ import io.github.fzdwx.inf.common.web.core.Context;
 import io.github.fzdwx.inf.common.web.model.Rest;
 import io.github.fzdwx.logic.contants.ChatConst;
 import io.github.fzdwx.logic.msg.MessageService;
-import io.github.fzdwx.logic.msg.api.model.ChatMessageVO;
+import io.github.fzdwx.logic.msg.api.model.SendChatMessageReq;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,23 +29,23 @@ public class MessageSendApi {
      * 向所有人发送消息
      */
     @PostMapping("/sendAll")
-    public Rest<Object> sendAll(@RequestBody final ChatMessageVO chatMessageVO) {
-        chatMessageVO.setFromId(Long.valueOf(Context.user().getId()));
-        chatMessageVO.setToId(0L);
-        chatMessageVO.setSessionType(ChatConst.SESSION_TYPE_GROUP);
-        chatMessageVO.setMsgFrom(ChatConst.MSG_FROM_USER);
-        return Rest.of(() -> messageService.sendAll(chatMessageVO));
+    public Rest<Object> sendAll(@RequestBody final SendChatMessageReq sendChatMessageReq) {
+        sendChatMessageReq.setFromId(Long.valueOf(Context.user().getId()));
+        sendChatMessageReq.setToId(0L);
+        sendChatMessageReq.setSessionType(ChatConst.SESSION_TYPE_GROUP);
+        sendChatMessageReq.setMsgFrom(ChatConst.MSG_FROM_USER);
+        return Rest.of(() -> messageService.sendAll(sendChatMessageReq));
     }
 
     /**
      * 向群发送消息
      */
     @PostMapping("/group/{groupId}")
-    public void group(@RequestBody final ChatMessageVO chatMessageVO, @PathVariable final Long groupId) {
-        chatMessageVO.setFromId(Long.valueOf(Context.user().getId()));
-        chatMessageVO.setToId(groupId);
-        chatMessageVO.setSessionType(ChatConst.SESSION_TYPE_GROUP);
-        chatMessageVO.setMsgFrom(ChatConst.MSG_FROM_USER);
+    public void group(@RequestBody final SendChatMessageReq sendChatMessageReq, @PathVariable final Long groupId) {
+        sendChatMessageReq.setFromId(Long.valueOf(Context.user().getId()));
+        sendChatMessageReq.setToId(groupId);
+        sendChatMessageReq.setSessionType(ChatConst.SESSION_TYPE_GROUP);
+        sendChatMessageReq.setMsgFrom(ChatConst.MSG_FROM_USER);
 
         // messageService.send(chatMessageVO);
     }
