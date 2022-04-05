@@ -1,8 +1,8 @@
 package io.github.fzdwx.logic.helloworld.api;
 
 import cn.hutool.core.util.RandomUtil;
-import io.github.fzdwx.inf.redis.Redis;
-import io.github.fzdwx.inf.web.Web;
+import io.github.fzdwx.inf.middleware.redis.Redis;
+import io.github.fzdwx.inf.common.web.Web;
 import io.github.fzdwx.logic.helloworld.dao.HelloWorldDao;
 import io.github.fzdwx.logic.domain.entity.HelloWorldEntity;
 import lombok.RequiredArgsConstructor;

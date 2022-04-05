@@ -1,16 +1,11 @@
 package io.github.fzdwx.logic.user.api;
 
-import io.github.fzdwx.inf.redis.lock.ApiIdempotent;
-import io.github.fzdwx.inf.web.Web;
-import io.github.fzdwx.inf.web.model.Rest;
-import io.github.fzdwx.inf.web.model.UserInfo;
-import io.github.fzdwx.logic.domain.entity.UserEntity;
-import io.github.fzdwx.logic.user.api.model.SingInAndUpResp;
+import io.github.fzdwx.inf.middleware.redis.lock.ApiIdempotent;
+import io.github.fzdwx.inf.common.web.model.Rest;
 import io.github.fzdwx.logic.user.api.model.SingInReq;
 import io.github.fzdwx.logic.user.api.model.SingUpReq;
 import io.github.fzdwx.logic.user.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,7 +27,7 @@ public class AuthApi {
      */
     @PostMapping("singIn")
     @ApiIdempotent
-    public Rest<SingInAndUpResp> singIn(@RequestBody SingInReq req) {
+    public Rest<String> singIn(@RequestBody SingInReq req) {
         return Rest.of(userService.singIn(req));
     }
 
@@ -41,15 +36,7 @@ public class AuthApi {
      */
     @ApiIdempotent
     @PostMapping("singUp")
-    public Rest<SingInAndUpResp> singUp(@RequestBody SingUpReq singUpReq) {
+    public Rest<String> singUp(@RequestBody SingUpReq singUpReq) {
         return Rest.of(userService.singUp(singUpReq));
-    }
-
-    /**
-     * 获取用户信息
-     */
-    @GetMapping("getUserInfo")
-    public Rest<UserInfo> getUserInfo() {
-        return Rest.of(Web.getUserInfo());
     }
 }

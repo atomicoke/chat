@@ -25,4 +25,8 @@ public class UserDao extends UserBaseDao implements IBaseDao<UserEntity> {
     public UserEntity findOne(final String uname) {
         return this.mapper.findOne(query().where.uname().eq(uname).end());
     }
+
+    public UserEntity findOne(final Long id) {
+        return this.mapper.findById(id);
+    }
 }

@@ -1,12 +1,10 @@
 package io.github.fzdwx.logic.user.service;
 
-import cn.dev33.satoken.secure.SaSecureUtil;
-import cn.dev33.satoken.stp.StpUtil;
-import io.github.fzdwx.inf.exc.VerifyException;
-import io.github.fzdwx.inf.web.Web;
-import io.github.fzdwx.lambada.Lang;
+import io.github.fzdwx.inf.common.exc.Exceptions;
+import io.github.fzdwx.inf.common.exc.VerifyException;
+import io.github.fzdwx.inf.common.web.Web;
 import io.github.fzdwx.logic.domain.entity.UserEntity;
-import io.github.fzdwx.logic.user.api.model.SingInAndUpResp;
+import io.github.fzdwx.logic.user.api.model.EditUserInfoReq;
 import io.github.fzdwx.logic.user.api.model.SingInReq;
 import io.github.fzdwx.logic.user.api.model.SingUpReq;
 import io.github.fzdwx.logic.user.dao.UserDao;
@@ -23,38 +21,55 @@ public class UserService {
 
     private final UserDao userDao;
 
-    public SingInAndUpResp singUp(final SingUpReq singUpReq) {
-        final var count = userDao.countWithUname(singUpReq.getUname());
+    /**
+     * 注册
+     */
+    public String singUp(final SingUpReq req) {
+        final var count = userDao.countWithUname(req.getUname());
         if (count > 0) {
             throw new VerifyException("用户名已存在");
         }
 
-        final var entity = singUpReq.toEntity();
-        final var id = this.userDao.save(entity);
+        final var entity = UserEntity.from(req);
 
-        return doLogin(entity);
+        this.userDao.save(entity);
 
+        return Web.doLogin(entity);
     }
 
-    public SingInAndUpResp singIn(final SingInReq req) {
+    /**
+     * 登录
+     */
+    public String singIn(final SingInReq req) {
         final var user = this.userDao.findOne(req.getUname());
         if (user == null) {
             throw new VerifyException("用户不存在，请注册");
         }
 
-        if (!Lang.eq(SaSecureUtil.md5BySalt(req.getPasswd(), user.getSalt()), user.getPasswd())) {
+        if (!UserEntity.checkPasswd(req.getPasswd(), user.getPasswd(), user.getSalt())) {
             throw new VerifyException("密码错误");
         }
 
-
-        return doLogin(user);
+        return Web.doLogin(user);
     }
 
-    private SingInAndUpResp doLogin(final UserEntity entity) {
-        StpUtil.login(entity.getId());
+    /**
+     * 编辑用户信息
+     */
+    public boolean editUserInfo(final EditUserInfoReq req) {
+        req.preCheck();
 
-        Web.cacheUserToSession(entity);
+        final var user = this.userDao.findOne(req.getId());
+        if (user == null) {
+            throw Exceptions.verify("用户不存在");
+        }
 
-        return SingInAndUpResp.of(StpUtil.getTokenValue(), entity.getId());
+        final var userEntity = UserEntity.form(req, user);
+        final var b = this.userDao.updateById(userEntity);
+
+        if (b) {
+            Web.cacheUserToSession(userEntity);
+        }
+        return b;
     }
 }

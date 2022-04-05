@@ -3,7 +3,7 @@ package io.github.fzdwx.logic.ws;
 import io.github.fzdwx.inf.http.core.HttpHandler;
 import io.github.fzdwx.inf.http.core.HttpServerRequest;
 import io.github.fzdwx.inf.http.core.HttpServerResponse;
-import io.github.fzdwx.inf.ws.config.Ws;
+import io.github.fzdwx.inf.middleware.sky.config.Ws;
 
 /**
  * @author <a href="mailto:likelovec@gmail.com">fzdwx</a>

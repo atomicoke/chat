@@ -1,15 +1,21 @@
 package io.github.fzdwx.logic.domain.entity;
 
+import cn.dev33.satoken.secure.SaSecureUtil;
+import cn.hutool.core.util.RandomUtil;
 import cn.org.atool.fluent.mybatis.annotation.FluentMybatis;
 import cn.org.atool.fluent.mybatis.annotation.TableField;
 import cn.org.atool.fluent.mybatis.annotation.TableId;
 import cn.org.atool.fluent.mybatis.base.RichEntity;
-import io.github.fzdwx.inf.db.config.EntityFiledSetter;
+import io.github.fzdwx.inf.middleware.db.config.EntityFiledSetter;
+import io.github.fzdwx.lambada.Lang;
+import io.github.fzdwx.logic.user.api.model.EditUserInfoReq;
+import io.github.fzdwx.logic.user.api.model.SingUpReq;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Date;
 
@@ -52,7 +58,7 @@ public class UserEntity extends RichEntity {
     @TableField(
             value = "create_time",
             desc = "更新时间",
-            insert = "now()", update = "now()"
+            insert = "now()"
     )
     private Date createTime;
 
@@ -102,5 +108,45 @@ public class UserEntity extends RichEntity {
     @Override
     public final Class entityClass() {
         return UserEntity.class;
+    }
+
+    public static UserEntity from(final SingUpReq req) {
+        final var salt = RandomUtil.randomString(8);
+        return new UserEntity().setUname(req.getUname())
+                .setSalt(salt)
+                .setPasswd(encodePasswd(req.getPasswd(), salt));
+    }
+
+    public static UserEntity form(final EditUserInfoReq req, final UserEntity user) {
+        final var userEntity = new UserEntity();
+
+        userEntity.setId(user.getId());
+        userEntity.setUname(user.getUname());
+        if (req.getPasswd() != null) {
+            userEntity.setPasswd(encodePasswd(req.getPasswd(), user.getSalt()));
+        } else userEntity.setPasswd(user.getPasswd());
+
+        if (req.getMobile() != null) {
+            userEntity.setMobile(req.getMobile());
+        } else userEntity.setMobile(user.getMobile());
+
+        if (req.getAvatar() != null) {
+            userEntity.setAvatar(req.getAvatar());
+        } else userEntity.setAvatar(user.getAvatar());
+
+        if (req.getRoleKey() != null) {
+            userEntity.setRoleKey(req.getRoleKey());
+        } else userEntity.setRoleKey(user.getRoleKey());
+
+        return userEntity;
+    }
+
+    public static boolean checkPasswd(final String passwd, final String dbPasswd, final String salt) {
+        return Lang.eq(encodePasswd(passwd, salt), dbPasswd);
+    }
+
+    @NotNull
+    private static String encodePasswd(final String req, final String salt) {
+        return SaSecureUtil.md5BySalt(req, salt);
     }
 }
