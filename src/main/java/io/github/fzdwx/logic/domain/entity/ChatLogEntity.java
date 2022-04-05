@@ -5,7 +5,7 @@ import cn.org.atool.fluent.mybatis.annotation.TableField;
 import cn.org.atool.fluent.mybatis.annotation.TableId;
 import cn.org.atool.fluent.mybatis.base.RichEntity;
 import io.github.fzdwx.inf.middleware.db.config.EntityFiledSetter;
-import io.github.fzdwx.logic.msg.model.ChatMessageVO;
+import io.github.fzdwx.logic.msg.api.model.ChatMessageVO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

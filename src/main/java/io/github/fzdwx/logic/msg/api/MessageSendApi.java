@@ -1,9 +1,10 @@
-package io.github.fzdwx.logic.msg;
+package io.github.fzdwx.logic.msg.api;
 
 import io.github.fzdwx.inf.common.web.core.Context;
 import io.github.fzdwx.inf.common.web.model.Rest;
 import io.github.fzdwx.logic.contants.ChatConst;
-import io.github.fzdwx.logic.msg.model.ChatMessageVO;
+import io.github.fzdwx.logic.msg.MessageService;
+import io.github.fzdwx.logic.msg.api.model.ChatMessageVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;

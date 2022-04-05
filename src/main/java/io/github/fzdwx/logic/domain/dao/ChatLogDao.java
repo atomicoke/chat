@@ -3,7 +3,7 @@ package io.github.fzdwx.logic.domain.dao;
 import cn.org.atool.fluent.mybatis.base.IBaseDao;
 import io.github.fzdwx.logic.domain.dao.base.ChatLogBaseDao;
 import io.github.fzdwx.logic.domain.entity.ChatLogEntity;
-import io.github.fzdwx.logic.msg.model.ChatMessageVO;
+import io.github.fzdwx.logic.msg.api.model.ChatMessageVO;
 import org.springframework.stereotype.Repository;
 
 /**

@@ -1,6 +1,9 @@
-package io.github.fzdwx.logic.msg.model;
+package io.github.fzdwx.logic.msg.api.model;
 
+import cn.hutool.core.date.DatePattern;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -39,5 +42,7 @@ public class ChatMessageVO {
     /**
      * 发送时间
      */
+    @DateTimeFormat(pattern = DatePattern.NORM_DATETIME_PATTERN)
+    @JsonFormat(pattern = DatePattern.NORM_DATETIME_PATTERN)
     private Date sendTime;
 }

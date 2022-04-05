@@ -3,13 +3,17 @@ package io.github.fzdwx.logic.user.service;
 import io.github.fzdwx.inf.common.exc.Exceptions;
 import io.github.fzdwx.inf.common.exc.VerifyException;
 import io.github.fzdwx.inf.common.web.Web;
+import io.github.fzdwx.inf.common.web.model.UserInfo;
+import io.github.fzdwx.logic.domain.dao.UserDao;
 import io.github.fzdwx.logic.domain.entity.UserEntity;
 import io.github.fzdwx.logic.user.api.model.EditUserInfoReq;
 import io.github.fzdwx.logic.user.api.model.SingInReq;
 import io.github.fzdwx.logic.user.api.model.SingUpReq;
-import io.github.fzdwx.logic.domain.dao.UserDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author <a href="mailto:likelovec@gmail.com">fzdwx</a>
@@ -71,5 +75,9 @@ public class UserService {
             Web.cacheUserToSession(userEntity);
         }
         return b;
+    }
+
+    public List<UserInfo> getAllUser() {
+        return this.userDao.listEntity(this.userDao.mapper().query()).stream().map(UserInfo::of).collect(Collectors.toList());
     }
 }

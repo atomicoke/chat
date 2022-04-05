@@ -1,7 +1,7 @@
 package io.github.fzdwx.logic.msg;
 
 import io.github.fzdwx.logic.domain.dao.ChatLogDao;
-import io.github.fzdwx.logic.msg.model.ChatMessageVO;
+import io.github.fzdwx.logic.msg.api.model.ChatMessageVO;
 import io.github.fzdwx.logic.ws.UserWsConn;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

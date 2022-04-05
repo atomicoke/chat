@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 /**
  * @author <a href="mailto:likelovec@gmail.com">fzdwx</a>
  * @date 2022/4/5 9:05
@@ -24,6 +26,16 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserApi {
 
     private final UserService userService;
+
+    /**
+     * 获取所有用户信息
+     *
+     * @apiNote 暂时使用这个
+     */
+    @GetMapping("getAll")
+    public Rest<List<UserInfo>> getAll() {
+        return Rest.of(userService.getAllUser());
+    }
 
     /**
      * 修改用户信息
