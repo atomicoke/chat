@@ -7,7 +7,7 @@ import io.github.fzdwx.logic.domain.entity.UserEntity;
 import io.github.fzdwx.logic.user.api.model.EditUserInfoReq;
 import io.github.fzdwx.logic.user.api.model.SingInReq;
 import io.github.fzdwx.logic.user.api.model.SingUpReq;
-import io.github.fzdwx.logic.user.dao.UserDao;
+import io.github.fzdwx.logic.domain.dao.UserDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

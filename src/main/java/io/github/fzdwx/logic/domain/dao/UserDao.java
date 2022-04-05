@@ -1,4 +1,4 @@
-package io.github.fzdwx.logic.user.dao;
+package io.github.fzdwx.logic.domain.dao;
 
 import cn.org.atool.fluent.mybatis.base.IBaseDao;
 import io.github.fzdwx.logic.domain.dao.base.UserBaseDao;

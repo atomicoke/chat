@@ -29,7 +29,14 @@ public class HelloWorldTest {
             // 设置dao接口和实现的src目录, 相对于 user.dir
             daoDir = "src/main/java",
             // 设置哪些表要生成Entity文件
-            tables = {@Table(value = {"user"})}
+            tables = {@Table(value = {
+                    "chat_log",
+                    "friend",
+                    "friend_request",
+                    "group_chat",
+                    "group_chat_member",
+                    "group_chat_request"
+                    })}
     )
     static class Empty {
     }

@@ -1,4 +1,4 @@
-package io.github.fzdwx.logic.helloworld.dao;
+package io.github.fzdwx.logic.domain.dao;
 
 import io.github.fzdwx.logic.domain.dao.base.HelloWorldBaseDao;
 import io.github.fzdwx.logic.domain.entity.HelloWorldEntity;
