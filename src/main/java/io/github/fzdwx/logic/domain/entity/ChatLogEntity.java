@@ -62,6 +62,9 @@ public class ChatLogEntity extends RichEntity {
     )
     private Long fromId;
 
+    /**
+     * @see io.github.fzdwx.logic.contants.ChatConst.MsgFrom
+     */
     @TableField(
             value = "msg_from",
             desc = "消息发送者的类型 1:用户 2:系统"
@@ -74,6 +77,9 @@ public class ChatLogEntity extends RichEntity {
     )
     private Date sendTime;
 
+    /**
+     * @see io.github.fzdwx.logic.contants.ChatConst.SessionType
+     */
     @TableField(
             value = "session_type",
             desc = "会话类型 1:单聊 2:群聊"

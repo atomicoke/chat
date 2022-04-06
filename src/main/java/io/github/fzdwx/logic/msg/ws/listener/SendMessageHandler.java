@@ -21,7 +21,7 @@ public class SendMessageHandler {
     @EventListener(SendMessageEvent.class)
     public void handler(SendMessageEvent event) {
         final var message = event.getMessage();
-        if (Lang.eq(message.getToId(), ChatConst.SEND_All)) {
+        if (Lang.eq(message.getSessionType(), ChatConst.SessionType.ALL)) {
             sendAll(event, message);
             return;
         }
@@ -30,7 +30,7 @@ public class SendMessageHandler {
     private void sendAll(final SendMessageEvent event, final ChatMessageVO message) {
         final var text = Json.toJson(message);
         UserWsConn.foreach((id, ws) -> {
-            if (!id.equals(event.getSenderId())) {
+            if (event.needSend(id)) {
                 ws.send(text).addListener(f -> {
                     if (!f.isSuccess()) {
                         log.info("发送消息失败", f.cause());

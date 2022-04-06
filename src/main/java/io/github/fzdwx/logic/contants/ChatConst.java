@@ -1,17 +1,47 @@
 package io.github.fzdwx.logic.contants;
 
+import io.github.fzdwx.logic.domain.entity.ChatLogEntity;
+
 /**
  * @author <a href="mailto:likelovec@gmail.com">fzdwx</a>
  * @date 2022/4/5 18:52
  */
 public interface ChatConst {
 
-    Long SESSION_TYPE_PERSONAL = 1L;
-    Long SESSION_TYPE_GROUP = 2L;
+    /**
+     * @see ChatLogEntity#getSessionType()
+     */
+    interface SessionType {
 
-    Integer MSG_FROM_USER = 1;
-    Integer MSG_FROM_SYS = 2;
+        /**
+         * 私聊
+         */
+        Long personal = 1L;
 
+        /**
+         * 群聊/频道
+         */
+        Long group = 2L;
 
-    Long SEND_All = 0L;
+        /**
+         * 发送给所有人
+         */
+        Long ALL = 3L;
+    }
+
+    /**
+     * @see ChatLogEntity#getMsgFrom()
+     */
+    interface MsgFrom {
+
+        /**
+         * 用户
+         */
+        Integer USER = 1;
+
+        /**
+         * 系统
+         */
+        Integer SYS = 2;
+    }
 }

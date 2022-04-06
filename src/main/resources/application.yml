@@ -4,6 +4,9 @@ server:
     port: 8081
 
 spring:
+  data:
+    mongodb:
+      url: "mongodb://localhost:27017/test"
   profiles:
     active: @profiles.active@
   main:

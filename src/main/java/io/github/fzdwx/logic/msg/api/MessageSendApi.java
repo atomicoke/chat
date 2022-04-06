@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static io.github.fzdwx.logic.contants.ChatConst.SEND_All;
-
 /**
  * 发送消息
  *
@@ -33,9 +31,9 @@ public class MessageSendApi {
     @PostMapping("/sendAll")
     public Rest<Object> sendAll(@RequestBody final SendChatMessageReq sendChatMessageReq) {
         sendChatMessageReq.setFromId(Long.valueOf(Context.user().getId()));
-        sendChatMessageReq.setToId(SEND_All);
-        sendChatMessageReq.setSessionType(ChatConst.SESSION_TYPE_GROUP);
-        sendChatMessageReq.setMsgFrom(ChatConst.MSG_FROM_USER);
+        sendChatMessageReq.setToId(ChatConst.SessionType.ALL);
+        sendChatMessageReq.setSessionType(ChatConst.SessionType.ALL);
+        sendChatMessageReq.setMsgFrom(ChatConst.MsgFrom.USER);
         return Rest.of(() -> messageService.send(sendChatMessageReq));
     }
 
@@ -46,9 +44,9 @@ public class MessageSendApi {
     public void group(@RequestBody final SendChatMessageReq sendChatMessageReq, @PathVariable final Long groupId) {
         sendChatMessageReq.setFromId(Long.valueOf(Context.user().getId()));
         sendChatMessageReq.setToId(groupId);
-        sendChatMessageReq.setSessionType(ChatConst.SESSION_TYPE_GROUP);
-        sendChatMessageReq.setMsgFrom(ChatConst.MSG_FROM_USER);
-
+        sendChatMessageReq.setSessionType(ChatConst.SessionType.ALL);
+        sendChatMessageReq.setMsgFrom(ChatConst.MsgFrom.USER);
+        // TODO: 2022/4/6
         // messageService.send(chatMessageVO);
     }
 }

@@ -12,12 +12,34 @@ import java.util.Date;
 @Data
 public class ChatMessageVO {
 
+    /**
+     * 发送者 id
+     */
     private Long fromId;
+    /**
+     * 发送者 uname
+     */
     private String fromUname;
+    /**
+     * 发送者 avatar
+     */
     private String fromAvatar;
+    /**
+     * 接收者 id
+     */
     private Long toId;
+    /**
+     * 消息体
+     */
     private String content;
+    /**
+     * 消息类型 e.g: text, image, audio, video, file
+     */
     private Integer contentType;
+    /**
+     * 会话类型
+     * @see io.github.fzdwx.logic.contants.ChatConst
+     */
     private Long sessionType;
     private Integer msgFrom;
     private Date sendTime;

@@ -1,6 +1,7 @@
 package io.github.fzdwx.logic.msg.ws.model.event;
 
 import io.github.fzdwx.inf.common.event.Event;
+import io.github.fzdwx.lambada.Lang;
 import io.github.fzdwx.logic.msg.api.model.ChatMessageVO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,4 +19,8 @@ public class SendMessageEvent implements Event {
 
     private String senderId;
     private ChatMessageVO message;
+
+    public boolean needSend(final String id) {
+        return !Lang.eq(id, this.senderId);
+    }
 }
