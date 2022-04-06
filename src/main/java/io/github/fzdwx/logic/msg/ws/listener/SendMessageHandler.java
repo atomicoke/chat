@@ -30,13 +30,15 @@ public class SendMessageHandler {
     private void sendAll(final SendMessageEvent event, final ChatMessageVO message) {
         final var text = Json.toJson(message);
         UserWsConn.foreach((id, ws) -> {
-            if (event.needSend(id)) {
-                ws.send(text).addListener(f -> {
-                    if (!f.isSuccess()) {
-                        log.info("发送消息失败", f.cause());
-                    }
-                });
+            if (event.noNeedSend(id)) {
+                return;
             }
+
+            ws.send(text).addListener(f -> {
+                if (!f.isSuccess()) {
+                    log.info("发送消息失败", f.cause());
+                }
+            });
         });
     }
 }

@@ -20,7 +20,7 @@ public class SendMessageEvent implements Event {
     private String senderId;
     private ChatMessageVO message;
 
-    public boolean needSend(final String id) {
-        return !Lang.eq(id, this.senderId);
+    public boolean noNeedSend(final String id) {
+        return Lang.eq(id, this.senderId);
     }
 }
