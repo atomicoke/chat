@@ -44,4 +44,8 @@ public class Web {
     public static UserInfo getUserInfo(final Object loginId) {
         return (UserInfo) StpUtil.getSessionByLoginId(loginId).get(USER);
     }
+
+    public static void singOut() {
+        StpUtil.logout();
+    }
 }

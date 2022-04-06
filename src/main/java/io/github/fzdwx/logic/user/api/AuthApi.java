@@ -1,7 +1,8 @@
 package io.github.fzdwx.logic.user.api;
 
-import io.github.fzdwx.inf.middleware.redis.lock.ApiIdempotent;
+import io.github.fzdwx.inf.common.web.Web;
 import io.github.fzdwx.inf.common.web.model.Rest;
+import io.github.fzdwx.inf.middleware.redis.lock.ApiIdempotent;
 import io.github.fzdwx.logic.user.api.model.SingInReq;
 import io.github.fzdwx.logic.user.api.model.SingUpReq;
 import io.github.fzdwx.logic.user.service.UserService;
@@ -29,6 +30,14 @@ public class AuthApi {
     @ApiIdempotent
     public Rest<String> singIn(@RequestBody SingInReq req) {
         return Rest.of(userService.singIn(req));
+    }
+
+    /**
+     * 登出
+     */
+    @PostMapping("singOut")
+    public Rest<Object> singOut() {
+        return Rest.of(Web::singOut);
     }
 
     /**
