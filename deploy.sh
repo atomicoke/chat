@@ -26,7 +26,7 @@ usage() {
 start_application() {
     echo "starting java process"
     echo "${JAR_NAME}"
-    nohup java -jar ${JAR_NAME} > ${JAVA_OUT} 2>&1 &
+    nohup java -javaagent:/root/project/xrebel.jar -jar ${JAR_NAME} > ${JAVA_OUT} 2>&1 &
     echo "started java process"
 }
 
