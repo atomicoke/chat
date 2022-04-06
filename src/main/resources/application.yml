@@ -34,7 +34,7 @@ spring:
     type: com.zaxxer.hikari.HikariDataSource
 
 minio:
-  endpoint: 127.0.0.1
+  endpoint: http://127.0.0.1:9000
   outEndpoint: yrou minio endpoint
   access-key: yrou minio access-key
   secret-key: yrou minio secret-key

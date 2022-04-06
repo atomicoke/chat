@@ -36,8 +36,8 @@ public class Minio implements InitializingBean {
     private final String bucket;
 
     public Minio(@Value("${minio.endpoint}") final String endpoint,
-                 @Value("${minio.out-endpoint}") final String accessKey,
-                 @Value("${minio.access-key}") final String outEndpoint,
+                 @Value("${minio.out-endpoint}") final String outEndpoint,
+                 @Value("${minio.access-key}") final String accessKey,
                  @Value("${minio.secret-key}") final String secretKey,
                  @Value("${minio.bucket}") final String bucket) {
         this.endpoint = endpoint;
