@@ -1,4 +1,4 @@
-package io.github.fzdwx.logic.ws;
+package io.github.fzdwx.logic.msg.ws;
 
 import cn.dev33.satoken.stp.StpUtil;
 import io.github.fzdwx.inf.http.core.HttpHandler;

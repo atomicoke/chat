@@ -16,7 +16,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class ChatLogDao extends ChatLogBaseDao implements IBaseDao<ChatLogEntity> {
 
-    public void save(final SendChatMessageReq sendChatMessageReq) {
-        this.mapper.save(ChatLogEntity.from(sendChatMessageReq));
+    public Object save(final SendChatMessageReq sendChatMessageReq) {
+        return this.mapper.save(ChatLogEntity.from(sendChatMessageReq));
     }
 }

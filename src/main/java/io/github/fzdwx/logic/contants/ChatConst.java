@@ -11,4 +11,7 @@ public interface ChatConst {
 
     Integer MSG_FROM_USER = 1;
     Integer MSG_FROM_SYS = 2;
+
+
+    Long SEND_All = 0L;
 }

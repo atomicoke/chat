@@ -18,6 +18,10 @@ public class Exceptions {
         return new VerifyException(e);
     }
 
+    public static NormalException normal(String message) {
+        return new NormalException(message);
+    }
+
     public static NotFoundException notFound(String message) {
         return new NotFoundException(message);
     }

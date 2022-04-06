@@ -1,4 +1,4 @@
-package io.github.fzdwx.logic.ws;
+package io.github.fzdwx.logic.msg.ws;
 
 import io.github.fzdwx.inf.msg.WebSocket;
 import lombok.extern.slf4j.Slf4j;

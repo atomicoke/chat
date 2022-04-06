@@ -1,11 +1,13 @@
-package io.github.fzdwx.logic.msg;
+package io.github.fzdwx.logic.msg.service;
 
-import io.github.fzdwx.inf.common.util.Json;
+import cn.hutool.core.util.ObjectUtil;
+import io.github.fzdwx.inf.common.event.Event;
+import io.github.fzdwx.inf.common.exc.Exceptions;
 import io.github.fzdwx.inf.common.web.Web;
 import io.github.fzdwx.logic.domain.dao.ChatLogDao;
 import io.github.fzdwx.logic.msg.api.model.ChatMessageVO;
 import io.github.fzdwx.logic.msg.api.model.SendChatMessageReq;
-import io.github.fzdwx.logic.ws.UserWsConn;
+import io.github.fzdwx.logic.msg.ws.model.event.SendMessageEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,18 +22,13 @@ public class MessageService {
     private final ChatLogDao chatLogDao;
 
     public void send(final SendChatMessageReq sendChatMessageReq) {
-
-    }
-
-    public void sendAll(final SendChatMessageReq sendChatMessageReq) {
         final var userInfo = Web.getUserInfo();
-        chatLogDao.save(sendChatMessageReq);
+        if (ObjectUtil.isNull(chatLogDao.save(sendChatMessageReq))) {
+            throw Exceptions.normal("保存聊天记录失败");
+        }
 
         final var msgVO = ChatMessageVO.from(sendChatMessageReq, userInfo);
-        UserWsConn.foreach((id, ws) -> {
-            if (!id.equals(userInfo.getId())) {
-                ws.send(Json.toJson(msgVO));
-            }
-        });
+
+        Event.routing(new SendMessageEvent(userInfo.getId(), msgVO));
     }
 }
