@@ -24,19 +24,27 @@ public class Minio implements InitializingBean {
 
     private static MinioClient minioClient;
     private static String bucketName;
+    private static String endpointStatic;
+    private static String outEndpointStatic;
+    /**
+     * 内网的地址
+     */
     private final String endpoint;
+    private final String outEndpoint;
     private final String accessKey;
     private final String secretKey;
     private final String bucket;
 
     public Minio(@Value("${minio.endpoint}") final String endpoint,
-                 @Value("${minio.access-key}") final String accessKey,
+                 @Value("${minio.out-endpoint}") final String accessKey,
+                 @Value("${minio.access-key}") final String outEndpoint,
                  @Value("${minio.secret-key}") final String secretKey,
                  @Value("${minio.bucket}") final String bucket) {
         this.endpoint = endpoint;
         this.accessKey = accessKey;
         this.secretKey = secretKey;
         this.bucket = bucket;
+        this.outEndpoint = outEndpoint;
     }
 
     public static MinioUploadRes upload(InputStream stream, String fileName) {
@@ -72,7 +80,8 @@ public class Minio implements InitializingBean {
                     .object(objectName)
                     .method(Method.GET)
                     .expiry(amount, timeUnit)
-                    .build());
+                    .build())
+                    .replace(endpointStatic,outEndpointStatic);
         } catch (Exception e) {
             throw new MinioException(e);
         }
@@ -81,6 +90,8 @@ public class Minio implements InitializingBean {
     @Override
     public void afterPropertiesSet() throws Exception {
         bucketName = bucket;
+        endpointStatic = endpoint;
+        outEndpointStatic = outEndpoint;
         minioClient = MinioClient.builder()
                 .endpoint(endpoint)
                 .credentials(accessKey, secretKey)
