@@ -1,4 +1,4 @@
-package io.github.fzdwx.inf.middleware.minio.model;
+package io.github.fzdwx.inf.middleware.minio.api.model;
 
 import io.minio.ObjectWriteResponse;
 import lombok.AllArgsConstructor;

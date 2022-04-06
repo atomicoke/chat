@@ -2,7 +2,7 @@ package io.github.fzdwx.inf.middleware.minio;
 
 import cn.hutool.core.util.IdUtil;
 import io.github.fzdwx.inf.common.exc.MinioException;
-import io.github.fzdwx.inf.middleware.minio.model.MinioUploadRes;
+import io.github.fzdwx.inf.middleware.minio.api.model.MinioUploadRes;
 import io.github.fzdwx.lambada.lang.UnixTime;
 import io.minio.GetPresignedObjectUrlArgs;
 import io.minio.MinioClient;
