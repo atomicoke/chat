@@ -31,26 +31,22 @@ public class WebConfiguration implements WebMvcConfigurer {
     public Rest<Object> Exception(Exception e) {
         log.error("", e);
 
-        return Rest.failure(e.getClass().getSimpleName() + " : " + e.getMessage())
-                .stackTrace(e.getStackTrace());
+        return Rest.failure(e.getClass().getSimpleName() + " : " + e.getMessage(), e.getStackTrace());
     }
 
     @ExceptionHandler(VerifyException.class)
     public Rest<Object> VerifyException(VerifyException e) {
-        return Rest.failure(e.getClass().getSimpleName() + " : " + e.getMessage())
-                .stackTrace(e.getStackTrace());
+        return Rest.failure(e.getClass().getSimpleName() + " : " + e.getMessage(), e.getStackTrace());
     }
 
     @ExceptionHandler(ForbiddenException.class)
     public Rest<Object> ForbiddenException(ForbiddenException e) {
-        return Rest.failure(HttpStatus.FORBIDDEN, e.getMessage())
-                .stackTrace(e.getStackTrace());
+        return Rest.failure(HttpStatus.FORBIDDEN, e.getMessage(), e.getStackTrace());
     }
 
     @ExceptionHandler(NotRoleException.class)
     public Rest<Object> nor(NotRoleException e) {
-        return Rest.failure(HttpStatus.UNAUTHORIZED, "您无此操作权限 : " + e.getRole())
-                .stackTrace(e.getStackTrace());
+        return Rest.failure(HttpStatus.UNAUTHORIZED, "您无此操作权限 : " + e.getRole(), e.getStackTrace());
     }
 
     @Override
