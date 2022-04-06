@@ -6,7 +6,7 @@ server:
 spring:
   data:
     mongodb:
-      url: "mongodb://localhost:27017/test"
+      uri: "mongodb://localhost:27017/test"
   profiles:
     active: @profiles.active@
   main:
