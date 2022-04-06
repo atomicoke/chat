@@ -26,6 +26,7 @@
         <sa-token.version>1.29.0</sa-token.version>
         <ttl.version>2.12.6</ttl.version>
         <redisson.version>3.16.4</redisson.version>
+        <skipTests>true</skipTests>
     </properties>
 
     <build>
@@ -128,7 +129,6 @@
             <artifactId>redisson-spring-boot-starter</artifactId>
             <version>${redisson.version}</version>
         </dependency>
-
 
 
         <dependency>
