@@ -1,7 +1,10 @@
 package io.github.fzdwx.inf.middleware.minio;
 
+import cn.hutool.core.io.FileTypeUtil;
 import cn.hutool.core.util.IdUtil;
+import io.github.fzdwx.inf.common.exc.Exceptions;
 import io.github.fzdwx.inf.common.exc.MinioException;
+import io.github.fzdwx.inf.common.exc.VerifyException;
 import io.github.fzdwx.inf.middleware.minio.api.model.MinioUploadRes;
 import io.github.fzdwx.lambada.lang.UnixTime;
 import io.minio.GetPresignedObjectUrlArgs;
@@ -12,7 +15,9 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -23,6 +28,11 @@ import java.util.concurrent.TimeUnit;
  */
 @Component
 public class Minio implements InitializingBean {
+
+    static List<String> imageTypes = List.of("jpg", "jpeg", "png", "gif");
+    static List<String> videoTypes = List.of("mp4", "avi", "rmvb", "wmv", "mkv", "flv", "mov", "mpg", "mpeg");
+    static long imageMaxSize = 1024 * 1024 * 3;
+    static long videoMaxSize = 1024 * 1024 * 100;
 
     private static MinioClient minioClient;
     private static String bucketName;
@@ -47,6 +57,18 @@ public class Minio implements InitializingBean {
         this.secretKey = secretKey;
         this.bucket = bucket;
         this.outEndpoint = outEndpoint;
+    }
+
+    public static MinioUploadRes uploadImage(InputStream stream, String fileName) throws IOException {
+        if (stream == null) {
+            throw Exceptions.verify("image stream is null");
+        }
+        if (fileName == null) {
+            throw Exceptions.verify("image fileName is null");
+        }
+        checkImage(stream);
+
+        return upload(stream, fileName);
     }
 
     public static MinioUploadRes upload(InputStream stream, String fileName) {
@@ -100,5 +122,22 @@ public class Minio implements InitializingBean {
                 .endpoint(endpoint)
                 .credentials(accessKey, secretKey)
                 .build();
+    }
+
+
+    private static void checkImage(final InputStream stream) throws IOException {
+        final var available = stream.available();
+        if (available > imageMaxSize) {
+            throw new VerifyException("图片大小不能超过3M");
+        }
+
+        final var type = FileTypeUtil.getType(stream);
+        if (type == null) {
+            throw new VerifyException("文件格式不支持");
+        }
+
+        if (!imageTypes.contains(type)) {
+            throw new VerifyException("不支持的图片类型:" + type);
+        }
     }
 }
