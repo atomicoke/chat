@@ -3,9 +3,9 @@ package io.github.fzdwx.logic.msg.ws.listener;
 import io.github.fzdwx.inf.common.util.Json;
 import io.github.fzdwx.lambada.Lang;
 import io.github.fzdwx.logic.contants.ChatConst;
-import io.github.fzdwx.logic.msg.api.model.ChatMessageVO;
 import io.github.fzdwx.logic.msg.ws.UserWsConn;
-import io.github.fzdwx.logic.msg.ws.model.event.SendMessageEvent;
+import io.github.fzdwx.logic.msg.ws.listener.event.SendMessageEvent;
+import io.github.fzdwx.logic.msg.ws.packet.ChatMessagePacket;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
@@ -27,7 +27,7 @@ public class SendMessageHandler {
         }
     }
 
-    private void sendAll(final SendMessageEvent event, final ChatMessageVO message) {
+    private void sendAll(final SendMessageEvent event, final ChatMessagePacket message) {
         final var text = Json.toJson(message);
         UserWsConn.foreach((id, ws) -> {
             if (event.noNeedSend(id)) {

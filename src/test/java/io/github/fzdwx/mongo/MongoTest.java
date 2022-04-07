@@ -2,7 +2,7 @@ package io.github.fzdwx.mongo;
 
 import com.mongodb.client.MongoClients;
 import io.github.fzdwx.inf.common.util.Json;
-import io.github.fzdwx.logic.msg.api.model.ChatMessageVO;
+import io.github.fzdwx.logic.msg.ws.packet.ChatMessagePacket;
 import org.bson.BsonDocument;
 import org.bson.Document;
 import org.junit.jupiter.api.Test;
@@ -28,7 +28,7 @@ public class MongoTest {
         }
         final var test = mongoTemplate.createCollection("test");
 
-        final var vo = new ChatMessageVO();
+        final var vo = new ChatMessagePacket();
         vo.setContent("hello");
         vo.setContentType(1);
         vo.setMsgFrom(1);
@@ -53,7 +53,7 @@ public class MongoTest {
     static class MsgInfo {
 
         Date sendTime;
-        ChatMessageVO msg;
+        ChatMessagePacket msg;
     }
 
     static class UserChat {

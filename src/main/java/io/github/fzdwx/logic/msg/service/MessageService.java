@@ -5,9 +5,9 @@ import io.github.fzdwx.inf.common.event.Event;
 import io.github.fzdwx.inf.common.exc.Exceptions;
 import io.github.fzdwx.inf.common.web.Web;
 import io.github.fzdwx.logic.domain.dao.ChatLogDao;
-import io.github.fzdwx.logic.msg.api.model.ChatMessageVO;
 import io.github.fzdwx.logic.msg.api.model.SendChatMessageReq;
-import io.github.fzdwx.logic.msg.ws.model.event.SendMessageEvent;
+import io.github.fzdwx.logic.msg.ws.listener.event.SendMessageEvent;
+import io.github.fzdwx.logic.msg.ws.packet.ChatMessagePacket;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -27,8 +27,8 @@ public class MessageService {
             throw Exceptions.normal("保存聊天记录失败");
         }
 
-        final var msgVO = ChatMessageVO.from(sendChatMessageReq, userInfo);
+        final var packet = ChatMessagePacket.from(sendChatMessageReq, userInfo);
 
-        Event.routing(new SendMessageEvent(userInfo.getId(), msgVO));
+        Event.routing(new SendMessageEvent(userInfo.getId(), packet));
     }
 }

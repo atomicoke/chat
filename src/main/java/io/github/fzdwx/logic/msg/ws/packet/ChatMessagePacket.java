@@ -1,6 +1,8 @@
-package io.github.fzdwx.logic.msg.api.model;
+package io.github.fzdwx.logic.msg.ws.packet;
 
 import io.github.fzdwx.inf.common.web.model.UserInfo;
+import io.github.fzdwx.logic.msg.api.model.SendChatMessageReq;
+import io.github.fzdwx.logic.msg.ws.WsPacket;
 import lombok.Data;
 
 import java.util.Date;
@@ -10,7 +12,9 @@ import java.util.Date;
  * @date 2022/4/5 20:26
  */
 @Data
-public class ChatMessageVO {
+public class ChatMessagePacket implements WsPacket {
+
+    private String type = Type.chat;
 
     /**
      * 发送者 id
@@ -38,14 +42,21 @@ public class ChatMessageVO {
     private Integer contentType;
     /**
      * 会话类型
-     * @see io.github.fzdwx.logic.contants.ChatConst
+     *
+     * @see io.github.fzdwx.logic.contants.ChatConst.SessionType
      */
     private Long sessionType;
+    /**
+     * @see io.github.fzdwx.logic.contants.ChatConst.MsgFrom
+     */
     private Integer msgFrom;
+    /**
+     * 发送时间
+     */
     private Date sendTime;
 
-    public static ChatMessageVO from(SendChatMessageReq sendChatMessageReq, UserInfo userInfo) {
-        final var chatMessageVO = new ChatMessageVO();
+    public static ChatMessagePacket from(SendChatMessageReq sendChatMessageReq, UserInfo userInfo) {
+        final var chatMessageVO = new ChatMessagePacket();
         chatMessageVO.setFromId(sendChatMessageReq.getFromId());
         chatMessageVO.setFromUname(userInfo.getUname());
         chatMessageVO.setFromAvatar(userInfo.getAvatar());
@@ -57,5 +68,10 @@ public class ChatMessageVO {
         chatMessageVO.setSendTime(sendChatMessageReq.getSendTime());
 
         return chatMessageVO;
+    }
+
+    @Override
+    public String type() {
+        return type;
     }
 }

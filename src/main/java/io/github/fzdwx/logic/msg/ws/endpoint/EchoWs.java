@@ -1,10 +1,11 @@
-package io.github.fzdwx.logic.msg.ws;
+package io.github.fzdwx.logic.msg.ws.endpoint;
 
 import cn.dev33.satoken.stp.StpUtil;
 import io.github.fzdwx.inf.http.core.HttpHandler;
 import io.github.fzdwx.inf.http.core.HttpServerRequest;
 import io.github.fzdwx.inf.http.core.HttpServerResponse;
 import io.github.fzdwx.inf.middleware.sky.config.Ws;
+import io.github.fzdwx.logic.msg.ws.UserWsConn;
 import lombok.extern.slf4j.Slf4j;
 
 /**
