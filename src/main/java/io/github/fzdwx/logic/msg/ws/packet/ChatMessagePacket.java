@@ -4,6 +4,7 @@ import io.github.fzdwx.inf.common.web.model.UserInfo;
 import io.github.fzdwx.logic.msg.api.model.SendChatMessageReq;
 import io.github.fzdwx.logic.msg.ws.WsPacket;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.Date;
 
@@ -11,8 +12,9 @@ import java.util.Date;
  * @author <a href="mailto:likelovec@gmail.com">fzdwx</a>
  * @date 2022/4/5 20:26
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
-public class ChatMessagePacket implements WsPacket {
+public class ChatMessagePacket extends WsPacket {
 
     private String type = Type.chat;
 

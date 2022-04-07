@@ -1,6 +1,5 @@
 package io.github.fzdwx.logic.msg.ws.listener;
 
-import io.github.fzdwx.inf.common.util.Json;
 import io.github.fzdwx.lambada.Lang;
 import io.github.fzdwx.logic.contants.ChatConst;
 import io.github.fzdwx.logic.msg.ws.UserWsConn;
@@ -28,7 +27,7 @@ public class SendMessageHandler {
     }
 
     private void sendAll(final SendMessageEvent event, final ChatMessagePacket message) {
-        final var text = Json.toJson(message);
+        final var text = message.encode();
         UserWsConn.foreach((id, ws) -> {
             if (event.noNeedSend(id)) {
                 return;

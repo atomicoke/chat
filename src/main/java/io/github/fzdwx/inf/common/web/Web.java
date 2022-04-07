@@ -6,13 +6,15 @@ import io.github.fzdwx.inf.common.web.core.Context;
 import io.github.fzdwx.inf.common.web.model.UserInfo;
 import io.github.fzdwx.logic.domain.entity.UserEntity;
 
+import javax.annotation.Nullable;
+
 /**
  * @author <a href="mailto:likelovec@gmail.com">fzdwx</a>
  * @date 2022/4/4 21:49
  */
 public class Web {
 
-    private final static String USER = "user";
+    public final static String USER = "user";
 
     public static String doLogin(final UserEntity user) {
         StpUtil.login(user.getId());
@@ -47,5 +49,17 @@ public class Web {
 
     public static void singOut() {
         StpUtil.logout();
+    }
+
+    /**
+     * @apiNote 当token对应的用户没登录时，返回null
+     */
+    @Nullable
+    public static UserInfo getUserInfoByToken(final String token) {
+        final var loginId = StpUtil.getLoginIdByToken(token);
+        if (loginId == null) {
+            return null;
+        }
+        return getUserInfo(loginId);
     }
 }

@@ -1,11 +1,13 @@
 package io.github.fzdwx.logic.msg.ws.endpoint;
 
 import cn.dev33.satoken.stp.StpUtil;
+import io.github.fzdwx.inf.common.web.Web;
 import io.github.fzdwx.inf.http.core.HttpHandler;
 import io.github.fzdwx.inf.http.core.HttpServerRequest;
 import io.github.fzdwx.inf.http.core.HttpServerResponse;
 import io.github.fzdwx.inf.middleware.sky.config.Ws;
 import io.github.fzdwx.logic.msg.ws.UserWsConn;
+import io.github.fzdwx.logic.msg.ws.WsPacket;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -24,26 +26,40 @@ public class EchoWs implements HttpHandler {
             return;
         }
 
-        final var userId = StpUtil.getLoginIdByToken(token);
-        if (userId == null) {
+        final var userInfo = Web.getUserInfoByToken(token);
+        if (userInfo == null) {
             resp.end("token无效");
             return;
         }
 
         request.upgradeToWebSocket()
                 .then(ws -> {
-                    final var userIdStr = (String) userId;
+
+                    UserWsConn.attach(ws, userInfo);
+
+                    final var id = userInfo.getId();
 
                     ws.mountOpen(h -> {
-                        UserWsConn.add(userIdStr, ws);
+                        UserWsConn.add(id, ws);
                     });
 
                     ws.mountClose(h -> {
-                        UserWsConn.remove(userIdStr);
+                        UserWsConn.remove(id);
                     });
 
                     ws.mountError(h -> {
                         log.error("ws error", h.getCause());
+                    });
+
+                    ws.mountText(s -> {
+                        final var wsPacket = WsPacket.decode(s);
+                        if (wsPacket == null) {
+                            // ws.send()
+                        }
+
+                        // switch (wsPacket.type()) {
+                        //
+                        // }
                     });
                 });
     }
