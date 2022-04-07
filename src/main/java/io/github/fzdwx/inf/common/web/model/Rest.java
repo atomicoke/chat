@@ -68,8 +68,9 @@ public class Rest<OUT> extends ResponseEntity<Rest.Info<OUT>> {
         return create(null, HttpStatus.INTERNAL_SERVER_ERROR, message, code, stackTrace);
     }
 
+    @NotNull
     public static <OUT> Rest<OUT> success() {
-        return create(null, HttpStatus.OK, SUCCESS, SUCCESS_MESSAGE);
+        return create(null, HttpStatus.OK, SUCCESS_MESSAGE, SUCCESS, null);
     }
 
     @NotNull
@@ -77,45 +78,38 @@ public class Rest<OUT> extends ResponseEntity<Rest.Info<OUT>> {
         return success(out, SUCCESS_MESSAGE);
     }
 
+    @NotNull
     public static <OUT> Rest<OUT> success(OUT data, String message) {
-        return create(data, HttpStatus.OK, SUCCESS, message);
+        return create(data, HttpStatus.OK, message, SUCCESS, null);
     }
 
+    @NotNull
     public static <OUT> Rest<OUT> success(Supplier<OUT> sup) {
         return success(sup.get());
     }
 
+    @NotNull
     public static <OUT> Rest<OUT> success(Supplier<OUT> sup, String message) {
         return success(sup.get(), message);
     }
 
+    @NotNull
     public static <OUT> Rest<OUT> of(final OUT data) {
         if (data instanceof Boolean) {
             if (data == Boolean.TRUE) {
                 return success();
-            } else failure();
+            } else return failure();
         }
         return success(data);
     }
 
+    @NotNull
     public static <OUT> Rest<OUT> of(final Runnable action) {
         action.run();
         return success();
     }
 
-    public static <OUT> Rest<OUT> create(OUT data, HttpStatus status, int code, String message) {
-        final var outInfo = new Info<OUT>();
-        if (data != null) {
-            outInfo.put(DATA, data);
-        }
-
-        if (message != null) {
-            outInfo.put(MESSAGE, message);
-        }
-
-        return new Rest<>(outInfo, status);
-    }
-
+    @NotNull
     public static <OUT> Rest<OUT> create(OUT data, HttpStatus status, String message, int code, StackTraceElement[] stackTrace) {
         final var outInfo = new Info<OUT>();
         if (message != null) {
