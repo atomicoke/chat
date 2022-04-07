@@ -2,9 +2,9 @@ package io.github.fzdwx.inf.middleware.minio.api;
 
 import cn.hutool.core.io.FileTypeUtil;
 import io.github.fzdwx.inf.common.exc.VerifyException;
+import io.github.fzdwx.inf.common.web.model.Rest;
 import io.github.fzdwx.inf.middleware.minio.Minio;
 import io.github.fzdwx.inf.middleware.minio.api.model.MinioUploadRes;
-import io.github.fzdwx.inf.common.web.model.Rest;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

@@ -1,13 +1,15 @@
 package io.github.fzdwx.inf.common.web.core;
 
+import cn.dev33.satoken.exception.BackResultException;
+import cn.dev33.satoken.exception.StopMatchException;
 import cn.dev33.satoken.filter.SaFilterAuthStrategy;
 import cn.dev33.satoken.filter.SaFilterErrorStrategy;
+import cn.dev33.satoken.router.SaRouter;
 import io.github.fzdwx.inf.common.exc.VerifyException;
 import io.github.fzdwx.inf.common.util.Json;
 import io.github.fzdwx.inf.common.web.Web;
 import io.github.fzdwx.inf.common.web.model.Rest;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -29,10 +31,38 @@ public class SaServletFilter extends cn.dev33.satoken.filter.SaServletFilter {
     public void doFilter(final ServletRequest request, final ServletResponse response,
                          final FilterChain chain) throws IOException, ServletException {
         try {
-            super.doFilter(request, response, chain);
+            // 执行全局过滤器
+            SaRouter.match(super.getIncludeList()).notMatch(super.getExcludeList()).check(r -> {
+                beforeAuth.run(null);
+                auth.run(null);
+            });
+
+        } catch (StopMatchException e) {
+
+        } catch (Throwable e) {
+            final var run = error.run(e);
+
+            if (run instanceof Rest<?> r) {
+                response.setContentType("application/json;charset=UTF-8");
+                response.getWriter().print(Json.toJson(r.getBody()));
+            } else {
+                // 1. 获取异常处理策略结果
+                String result = (e instanceof BackResultException) ? e.getMessage() : String.valueOf(run);
+
+                // 2. 写入输出流
+                if (response.getContentType() == null) {
+                    response.setContentType("text/plain; charset=utf-8");
+                }
+                response.getWriter().print(result);
+            }
+
+            return;
         } finally {
             Context.clean();
         }
+
+        // 执行
+        chain.doFilter(request, response);
     }
 
     public static SaServletFilter classic() {
@@ -49,11 +79,11 @@ public class SaServletFilter extends cn.dev33.satoken.filter.SaServletFilter {
      */
     private SaFilterAuthStrategy auth() {
         return obj -> {
-
             final var request = (HttpServletRequest) Context.request();
             if (request.getRequestURI().startsWith("/auth")) {
                 return;
             }
+
             Context.user(Web.getUserInfo());
         };
     }
@@ -76,7 +106,7 @@ public class SaServletFilter extends cn.dev33.satoken.filter.SaServletFilter {
      */
     private SaFilterErrorStrategy handlerError() {
         return e -> {
-            return Json.toJson(Rest.failure(HttpStatus.UNAUTHORIZED, "auth exception: " + e.getMessage()));
+            return Rest.unauthorized("auth exception【 " + e.getMessage() + " 】");
         };
     }
 

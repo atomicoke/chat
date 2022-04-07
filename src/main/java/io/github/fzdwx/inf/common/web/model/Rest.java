@@ -17,59 +17,76 @@ import java.util.function.Supplier;
 public class Rest<OUT> extends ResponseEntity<Rest.Info<OUT>> {
 
     public static final String DATA = "data";
+    public static final String CODE = "code";
     public static final String MESSAGE = "message";
     public static final String STACKTRACE = "stackTrace";
 
+    public static final int SUCCESS = 0;
     public static final String SUCCESS_MESSAGE = "ok";
+    public static final int FAILURE = 20001;
     public static final String FAILURE_MESSAGE = "failure";
 
-    public Rest(final HttpStatus status) {
-        super(status);
-    }
+    public static final int verify = 20010;
 
     public Rest(final Info<OUT> body, final HttpStatus status) {
         super(body, status);
     }
 
-    public static <OUT> Rest<OUT> failure(final HttpStatus status, final String message) {
-        return create(null, status, message);
+    public static <OUT> Rest<OUT> unauthorized(final String message) {
+        return unauthorized(message, null);
+    }
+
+    public static <OUT> Rest<OUT> unauthorized(final String message, final StackTraceElement[] stackTrace) {
+        return failure(message, HttpStatus.UNAUTHORIZED.value(), stackTrace);
+    }
+
+    public static <OUT> Rest<OUT> forbidden(final String message, final StackTraceElement[] stackTrace) {
+        return failure(message, HttpStatus.FORBIDDEN.value(), stackTrace);
+    }
+
+    public static <OUT> Rest<OUT> verify(final String message, final StackTraceElement[] stackTrace) {
+        return failure(message, verify, stackTrace);
     }
 
     public static <OUT> Rest<OUT> failure() {
-        return create(null, HttpStatus.INTERNAL_SERVER_ERROR, FAILURE_MESSAGE);
-    }
-
-    public static <OUT> Rest<OUT> failure(String message, StackTraceElement[] stackTrace) {
-        return create(null, HttpStatus.INTERNAL_SERVER_ERROR, message, stackTrace);
-    }
-
-    public static Rest<Object> failure(final HttpStatus status, final String message, final StackTraceElement[] stackTrace) {
-        return create(null, status, message, stackTrace);
+        return failure(FAILURE_MESSAGE);
     }
 
     public static <OUT> Rest<OUT> failure(String message) {
-        return create(null, HttpStatus.INTERNAL_SERVER_ERROR, message);
+        return failure(message, FAILURE);
+    }
+
+    public static <OUT> Rest<OUT> failure(final String message, final int code) {
+        return failure(message, code, null);
+    }
+
+    public static <OUT> Rest<OUT> failure(String message, StackTraceElement[] stackTrace) {
+        return failure(message, FAILURE, stackTrace);
+    }
+
+    public static <OUT> Rest<OUT> failure(final String message, int code, final StackTraceElement[] stackTrace) {
+        return create(null, HttpStatus.INTERNAL_SERVER_ERROR, message, code, stackTrace);
+    }
+
+    public static <OUT> Rest<OUT> success() {
+        return create(null, HttpStatus.OK, SUCCESS, SUCCESS_MESSAGE);
     }
 
     @NotNull
     public static <OUT> Rest<OUT> success(OUT out) {
-        return create(out, HttpStatus.OK, SUCCESS_MESSAGE);
+        return success(out, SUCCESS_MESSAGE);
     }
 
-    public static <OUT> Rest<OUT> success(OUT out, String message) {
-        return create(out, HttpStatus.INTERNAL_SERVER_ERROR, message);
+    public static <OUT> Rest<OUT> success(OUT data, String message) {
+        return create(data, HttpStatus.OK, SUCCESS, message);
     }
 
     public static <OUT> Rest<OUT> success(Supplier<OUT> sup) {
-        return create(sup.get(), HttpStatus.OK, SUCCESS_MESSAGE);
+        return success(sup.get());
     }
 
     public static <OUT> Rest<OUT> success(Supplier<OUT> sup, String message) {
-        return create(sup.get(), HttpStatus.OK, message);
-    }
-
-    public static <OUT> Rest<OUT> success() {
-        return create(null, HttpStatus.OK, SUCCESS_MESSAGE);
+        return success(sup.get(), message);
     }
 
     public static <OUT> Rest<OUT> of(final OUT data) {
@@ -86,7 +103,7 @@ public class Rest<OUT> extends ResponseEntity<Rest.Info<OUT>> {
         return success();
     }
 
-    public static <OUT> Rest<OUT> create(OUT data, HttpStatus status, String message) {
+    public static <OUT> Rest<OUT> create(OUT data, HttpStatus status, int code, String message) {
         final var outInfo = new Info<OUT>();
         if (data != null) {
             outInfo.put(DATA, data);
@@ -99,8 +116,12 @@ public class Rest<OUT> extends ResponseEntity<Rest.Info<OUT>> {
         return new Rest<>(outInfo, status);
     }
 
-    public static <OUT> Rest<OUT> create(OUT data, HttpStatus status, String message, StackTraceElement[] stackTrace) {
+    public static <OUT> Rest<OUT> create(OUT data, HttpStatus status, String message, int code, StackTraceElement[] stackTrace) {
         final var outInfo = new Info<OUT>();
+        if (message != null) {
+            outInfo.put(CODE, code);
+        }
+
         if (data != null) {
             outInfo.put(DATA, data);
         }
@@ -116,7 +137,7 @@ public class Rest<OUT> extends ResponseEntity<Rest.Info<OUT>> {
         return new Rest<>(outInfo, status);
     }
 
-    static class Info<OUT> extends LinkedHashMap<String, Object> {
+    public static class Info<OUT> extends LinkedHashMap<String, Object> {
 
     }
 }

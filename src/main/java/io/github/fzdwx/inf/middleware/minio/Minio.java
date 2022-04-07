@@ -16,6 +16,8 @@ import java.io.InputStream;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * minio util.
+ *
  * @author <a href="mailto:likelovec@gmail.com">fzdwx</a>
  * @date 2022/4/4 16:55
  */
@@ -51,11 +53,13 @@ public class Minio implements InitializingBean {
         String objectName = UnixTime.unixTime() + "/" + IdUtil.getSnowflakeNextId() + "-" + fileName;
 
         try {
-            return MinioUploadRes.create(minioClient.putObject(PutObjectArgs.builder()
-                    .bucket(bucketName)
-                    .object(objectName)
-                    .stream(stream, stream.available(), -1)
-                    .build()), getAccessUrl(objectName));
+            return MinioUploadRes.create(
+                    minioClient.putObject(PutObjectArgs.builder()
+                            .bucket(bucketName)
+                            .object(objectName)
+                            .stream(stream, stream.available(), -1)
+                            .build()),
+                    getAccessUrl(objectName));
         } catch (Exception e) {
             throw new MinioException(e);
         }
@@ -76,12 +80,12 @@ public class Minio implements InitializingBean {
     public static String getAccessUrl(String objectName, int amount, TimeUnit timeUnit) {
         try {
             return minioClient.getPresignedObjectUrl(GetPresignedObjectUrlArgs.builder()
-                    .bucket(bucketName)
-                    .object(objectName)
-                    .method(Method.GET)
-                    .expiry(amount, timeUnit)
-                    .build())
-                    .replace(endpointStatic,outEndpointStatic);
+                            .bucket(bucketName)
+                            .object(objectName)
+                            .method(Method.GET)
+                            .expiry(amount, timeUnit)
+                            .build())
+                    .replace(endpointStatic, outEndpointStatic);
         } catch (Exception e) {
             throw new MinioException(e);
         }
