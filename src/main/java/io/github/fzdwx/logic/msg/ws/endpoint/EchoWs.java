@@ -2,7 +2,6 @@ package io.github.fzdwx.logic.msg.ws.endpoint;
 
 import cn.dev33.satoken.stp.StpUtil;
 import io.github.fzdwx.inf.common.web.Web;
-import io.github.fzdwx.inf.http.core.HttpHandler;
 import io.github.fzdwx.inf.http.core.HttpServerRequest;
 import io.github.fzdwx.inf.http.core.HttpServerResponse;
 import io.github.fzdwx.inf.middleware.sky.Ws;
@@ -16,9 +15,8 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Ws("/echo")
 @Slf4j
-public class EchoWs implements HttpHandler {
+public class EchoWs {
 
-    @Override
     public void handle(final HttpServerRequest request, final HttpServerResponse resp) throws Exception {
         final var token = request.params().get(StpUtil.getTokenName());
         if (token == null) {
