@@ -35,18 +35,21 @@ public class WsConfiguration implements InitializingBean {
     public void afterPropertiesSet() throws Exception {
         SpringUtil.getConfigurableBeanFactory().getBeansWithAnnotation(Ws.class)
                 .forEach((name, bean) -> {
+                    final HttpHandler handler;
                     final var ws = bean.getClass().getAnnotation(Ws.class);
-                    HttpHandler handler;
+
                     if (!bean.getClass().isAssignableFrom(HttpHandler.class)) {
                         handler = parseHandleFromMethod(bean);
                     } else {
                         handler = ((HttpHandler) bean);
                     }
+
                     router.GET(ws.value(), handler);
                 });
 
         Netty.HTTP(port, router)
-                .dev().bind();
+                .dev()
+                .bind();
     }
 
     @NotNull
