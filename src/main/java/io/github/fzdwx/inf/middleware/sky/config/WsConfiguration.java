@@ -3,6 +3,7 @@ package io.github.fzdwx.inf.middleware.sky.config;
 import cn.hutool.extra.spring.SpringUtil;
 import io.github.fzdwx.inf.Netty;
 import io.github.fzdwx.inf.http.core.HttpHandler;
+import io.github.fzdwx.inf.middleware.sky.Ws;
 import io.github.fzdwx.inf.route.Router;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;

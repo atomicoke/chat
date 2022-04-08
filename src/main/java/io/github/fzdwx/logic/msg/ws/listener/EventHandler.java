@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Slf4j
-public class SendMessageHandler {
+public class EventHandler {
 
     @EventListener(SendMessageEvent.class)
     public void handler(SendMessageEvent event) {

@@ -5,7 +5,7 @@ import io.github.fzdwx.inf.common.web.Web;
 import io.github.fzdwx.inf.http.core.HttpHandler;
 import io.github.fzdwx.inf.http.core.HttpServerRequest;
 import io.github.fzdwx.inf.http.core.HttpServerResponse;
-import io.github.fzdwx.inf.middleware.sky.config.Ws;
+import io.github.fzdwx.inf.middleware.sky.Ws;
 import io.github.fzdwx.logic.msg.ws.UserWsConn;
 import io.github.fzdwx.logic.msg.ws.WsPacket;
 import lombok.extern.slf4j.Slf4j;

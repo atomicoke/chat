@@ -1,7 +1,6 @@
 package io.github.fzdwx.logic.msg.service;
 
 import cn.hutool.core.util.ObjectUtil;
-import io.github.fzdwx.inf.common.event.Event;
 import io.github.fzdwx.inf.common.exc.Exceptions;
 import io.github.fzdwx.inf.common.web.Web;
 import io.github.fzdwx.logic.domain.dao.ChatLogDao;
@@ -29,6 +28,6 @@ public class MessageService {
 
         final var packet = ChatMessagePacket.from(sendChatMessageReq, userInfo);
 
-        Event.routing(new SendMessageEvent(userInfo.getId(), packet));
+        SendMessageEvent.routing(userInfo.getId(), packet);
     }
 }

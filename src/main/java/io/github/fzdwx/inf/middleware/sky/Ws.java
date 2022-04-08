@@ -1,4 +1,4 @@
-package io.github.fzdwx.inf.middleware.sky.config;
+package io.github.fzdwx.inf.middleware.sky;
 
 import org.springframework.stereotype.Component;
 
