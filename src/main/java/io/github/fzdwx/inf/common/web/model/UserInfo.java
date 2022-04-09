@@ -17,10 +17,12 @@ public class UserInfo {
     private Integer gender;
     private String roleKey;
     private String avatar;
+    private Long idLong;
 
     public static UserInfo of(UserEntity userEntity) {
         UserInfo userInfo = new UserInfo();
         userInfo.setId(String.valueOf(userEntity.getId()));
+        userInfo.setIdLong(userEntity.getId());
         userInfo.setUname(userEntity.getUname());
         userInfo.setMobile(userEntity.getMobile());
         userInfo.setRoleKey(userEntity.getRoleKey());

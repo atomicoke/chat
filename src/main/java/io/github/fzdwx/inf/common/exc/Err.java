@@ -4,7 +4,19 @@ package io.github.fzdwx.inf.common.exc;
  * @author <a href="mailto:likelovec@gmail.com">fzdwx</a>
  * @date 2022/4/5 8:49
  */
-public class Exceptions {
+public class Err extends RuntimeException {
+
+    public Err(final String message) {
+        super(message);
+    }
+
+    public Err(final Exception e) {
+        super(e);
+    }
+
+    public Err() {
+        super();
+    }
 
     public static ForbiddenException forbidden(String message) {
         return new ForbiddenException(message);

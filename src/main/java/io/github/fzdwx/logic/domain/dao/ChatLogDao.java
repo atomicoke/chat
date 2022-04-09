@@ -3,8 +3,10 @@ package io.github.fzdwx.logic.domain.dao;
 import cn.org.atool.fluent.mybatis.base.IBaseDao;
 import io.github.fzdwx.logic.domain.dao.base.ChatLogBaseDao;
 import io.github.fzdwx.logic.domain.entity.ChatLogEntity;
-import io.github.fzdwx.logic.msg.api.model.SendChatMessageReq;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Collection;
 
 /**
  * ChatLogDao: 数据操作接口实现
@@ -16,7 +18,17 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class ChatLogDao extends ChatLogBaseDao implements IBaseDao<ChatLogEntity> {
 
-    public Object save(final SendChatMessageReq sendChatMessageReq) {
-        return this.mapper.save(ChatLogEntity.from(sendChatMessageReq));
+    @Transactional(rollbackFor = Exception.class)
+    public int saveWithTx(final Collection<ChatLogEntity> toChatLogs) {
+        if (toChatLogs == null || toChatLogs.isEmpty()) {
+            return 0;
+        }
+
+        final int i = super.save(toChatLogs);
+        if (i != toChatLogs.size()) {
+            throw new RuntimeException("保存失败");
+        }
+
+        return i;
     }
 }

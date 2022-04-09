@@ -1,6 +1,6 @@
 package io.github.fzdwx.logic.user.service;
 
-import io.github.fzdwx.inf.common.exc.Exceptions;
+import io.github.fzdwx.inf.common.exc.Err;
 import io.github.fzdwx.inf.common.exc.VerifyException;
 import io.github.fzdwx.inf.common.web.Web;
 import io.github.fzdwx.inf.common.web.model.UserInfo;
@@ -65,7 +65,7 @@ public class UserService {
 
         final var user = this.userDao.findOne(req.getId());
         if (user == null) {
-            throw Exceptions.verify("用户不存在");
+            throw Err.verify("用户不存在");
         }
 
         final var userEntity = UserEntity.form(req, user);

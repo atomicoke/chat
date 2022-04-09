@@ -5,7 +5,6 @@ import cn.org.atool.fluent.mybatis.annotation.TableField;
 import cn.org.atool.fluent.mybatis.annotation.TableId;
 import cn.org.atool.fluent.mybatis.base.RichEntity;
 import io.github.fzdwx.inf.middleware.db.config.EntityFiledSetter;
-import io.github.fzdwx.logic.msg.api.model.SendChatMessageReq;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -84,7 +83,7 @@ public class ChatLogEntity extends RichEntity {
             value = "session_type",
             desc = "会话类型 1:单聊 2:群聊"
     )
-    private Long sessionType;
+    private Integer sessionType;
 
     @TableField(
             value = "to_id",
@@ -95,18 +94,5 @@ public class ChatLogEntity extends RichEntity {
     @Override
     public final Class entityClass() {
         return ChatLogEntity.class;
-    }
-
-    public static ChatLogEntity from(final SendChatMessageReq sendChatMessageReq) {
-        final var entity = new ChatLogEntity();
-        entity.setFromId(sendChatMessageReq.getFromId());
-        entity.setToId(sendChatMessageReq.getToId());
-        entity.setContent(sendChatMessageReq.getContent());
-        entity.setMsgFrom(sendChatMessageReq.getMsgFrom());
-        entity.setContentType(sendChatMessageReq.getContentType());
-        entity.setSessionType(sendChatMessageReq.getSessionType());
-        entity.setSendTime(sendChatMessageReq.getSendTime());
-
-        return entity;
     }
 }

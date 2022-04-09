@@ -2,7 +2,7 @@ package io.github.fzdwx.inf.middleware.minio;
 
 import cn.hutool.core.io.FileTypeUtil;
 import cn.hutool.core.util.IdUtil;
-import io.github.fzdwx.inf.common.exc.Exceptions;
+import io.github.fzdwx.inf.common.exc.Err;
 import io.github.fzdwx.inf.common.exc.MinioException;
 import io.github.fzdwx.inf.common.exc.VerifyException;
 import io.github.fzdwx.inf.middleware.minio.api.model.MinioUploadRes;
@@ -61,10 +61,10 @@ public class Minio implements InitializingBean {
 
     public static MinioUploadRes uploadImage(InputStream stream, String fileName) throws IOException {
         if (stream == null) {
-            throw Exceptions.verify("image stream is null");
+            throw Err.verify("image stream is null");
         }
         if (fileName == null) {
-            throw Exceptions.verify("image fileName is null");
+            throw Err.verify("image fileName is null");
         }
         checkImage(stream);
 
@@ -125,7 +125,7 @@ public class Minio implements InitializingBean {
     }
 
 
-    private static void checkImage(final InputStream stream) throws IOException {
+    public static void checkImage(final InputStream stream) throws IOException {
         final var available = stream.available();
         if (available > imageMaxSize) {
             throw new VerifyException("图片大小不能超过3M");

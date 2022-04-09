@@ -1,13 +1,18 @@
 package io.github.fzdwx.logic.msg.ws;
 
+import io.github.fzdwx.inf.common.exc.Err;
 import io.github.fzdwx.inf.common.web.model.UserInfo;
 import io.github.fzdwx.inf.msg.WebSocket;
+import io.github.fzdwx.lambada.fun.State;
+import io.netty.channel.ChannelFuture;
 import io.netty.util.AttributeKey;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.function.BiConsumer;
+
+import static io.github.fzdwx.inf.common.exc.Err.verify;
 
 /**
  * @author <a href="mailto:likelovec@gmail.com">fzdwx</a>
@@ -29,13 +34,13 @@ public class UserWsConn {
         log.info("remove userId:{}", userId);
     }
 
-    public static void sendTo(String userId, String msg) {
+    public static State<ChannelFuture> sendTo(String userId, String msg) {
         final var conn = WEB_SOCKET_MAP.get(userId);
         if (conn == null) {
-            return;
+            return State.failure(Err.verify("user conn  not found :" + userId));
         }
 
-        conn.send(msg);
+        return State.success(conn.send(msg));
     }
 
     public static void foreach(BiConsumer<String, WebSocket> consumer) {
@@ -47,6 +52,7 @@ public class UserWsConn {
     }
 
     public static UserInfo get(WebSocket webSocket) {
+        if (webSocket == null) throw verify("webSocket is null");
         return webSocket.channel().attr(KEY).get();
     }
 }

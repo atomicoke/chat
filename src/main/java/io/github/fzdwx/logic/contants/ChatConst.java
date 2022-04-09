@@ -16,17 +16,17 @@ public interface ChatConst {
         /**
          * 私聊
          */
-        Long personal = 1L;
+        int personal = 1;
 
         /**
          * 群聊/频道
          */
-        Long group = 2L;
+        int group = 2;
 
         /**
          * 发送给所有人
          */
-        Long ALL = 3L;
+        int ALL = 3;
     }
 
     /**
@@ -44,4 +44,21 @@ public interface ChatConst {
          */
         Integer SYS = 2;
     }
+
+    interface ContentType {
+
+        int Text = 1;
+
+        int image = 2;
+
+        /**
+         * 音频
+         */
+        int audio = 3;
+
+        int video = 4;
+
+        int file = 5;
+    }
+
 }

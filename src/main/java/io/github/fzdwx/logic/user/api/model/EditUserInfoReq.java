@@ -1,6 +1,6 @@
 package io.github.fzdwx.logic.user.api.model;
 
-import io.github.fzdwx.inf.common.exc.Exceptions;
+import io.github.fzdwx.inf.common.exc.Err;
 import lombok.Data;
 
 /**
@@ -42,7 +42,7 @@ public class EditUserInfoReq {
 
     public void preCheck() {
         if (id == null) {
-            throw Exceptions.verify("id不能为空");
+            throw Err.verify("id不能为空");
         }
     }
 }
