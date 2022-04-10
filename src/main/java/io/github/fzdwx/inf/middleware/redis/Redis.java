@@ -2,6 +2,7 @@ package io.github.fzdwx.inf.middleware.redis;
 
 import cn.hutool.extra.spring.SpringUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.SetOperations;
@@ -9,7 +10,6 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Component;
 
-import javax.validation.constraints.NotNull;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.Collection;

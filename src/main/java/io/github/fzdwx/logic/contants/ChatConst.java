@@ -1,6 +1,7 @@
 package io.github.fzdwx.logic.contants;
 
-import io.github.fzdwx.logic.domain.entity.ChatLogEntity;
+
+import io.github.fzdwx.logic.domain.entity.ChatLog;
 
 /**
  * @author <a href="mailto:likelovec@gmail.com">fzdwx</a>
@@ -9,7 +10,7 @@ import io.github.fzdwx.logic.domain.entity.ChatLogEntity;
 public interface ChatConst {
 
     /**
-     * @see ChatLogEntity#getSessionType()
+     * @see ChatLog#getSessionType()
      */
     interface SessionType {
 
@@ -30,7 +31,7 @@ public interface ChatConst {
     }
 
     /**
-     * @see ChatLogEntity#getMsgFrom()
+     * @see ChatLog#getMsgFrom()
      */
     interface MsgFrom {
 

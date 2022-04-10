@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.github.fzdwx.logic.domain.mapper.ChatLogMapper">
+
+    <resultMap id="BaseResultMap" type="io.github.fzdwx.logic.domain.entity.ChatLog">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="fromId" column="from_id" jdbcType="BIGINT"/>
+            <result property="sessionType" column="session_type" jdbcType="INTEGER"/>
+            <result property="toId" column="to_id" jdbcType="BIGINT"/>
+            <result property="msgFrom" column="msg_from" jdbcType="TINYINT"/>
+            <result property="contentType" column="content_type" jdbcType="INTEGER"/>
+            <result property="content" column="content" jdbcType="VARCHAR"/>
+            <result property="sendTime" column="send_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,from_id,session_type,
+        to_id,msg_from,content_type,
+        content,send_time
+    </sql>
+</mapper>

@@ -8,8 +8,8 @@ import io.github.fzdwx.inf.msg.WebSocket;
 import io.github.fzdwx.logic.msg.ws.packet.ChatMessagePacket;
 import io.github.fzdwx.logic.msg.ws.packet.handler.ChatMessagePacketHandler;
 import io.netty.channel.ChannelFuture;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -20,6 +20,14 @@ import java.util.Map;
  * @date 2022/4/7 11:20
  */
 public abstract class WsPacket {
+
+    @Getter
+    @Setter
+    protected String randomId;
+    @Getter
+    @Setter
+    protected String type;
+    protected WebSocket ws;
 
     public String encode() {
         return Json.toJson(this);
@@ -41,6 +49,23 @@ public abstract class WsPacket {
         return jsonObject.toBean(TypeClassMapping.map.get(type), true);
     }
 
+    /**
+     * new a success packet.
+     */
+    public static <OUT> SuccessPacket<OUT> newSuccessPacket(OUT data, WsPacket packet) {
+        if (packet == null) {
+            throw Err.verify("packet is null");
+        }
+        return new SuccessPacket<OUT>(data, packet.randomId);
+    }
+
+    /**
+     * new a success packet.
+     */
+    public <OUT> SuccessPacket<OUT> newSuccessPacket(OUT data) {
+        return WsPacket.newSuccessPacket(data, this);
+    }
+
     public WsPacket mountWebsocket(WebSocket ws) {
         this.ws = ws;
         return this;
@@ -54,13 +79,6 @@ public abstract class WsPacket {
         }
         handler.handle(p);
     }
-
-    protected String randomId;
-
-    protected String type;
-
-    protected WebSocket ws;
-
 
     /**
      * 类型
@@ -93,11 +111,26 @@ public abstract class WsPacket {
         return this.ws.send(new ErrorPacket(errorMessage, this.randomId).encode());
     }
 
+    public void sendSuccess() {
+        this.ws.send(this.newSuccessPacket(null).encode());
+    }
+
     public interface Type {
 
         String err = "err";
 
+        String success = "success";
+
         String chat = "chat";
+    }
+
+    public interface Handler<Packet extends WsPacket> {
+
+        void handle(Packet packet);
+
+        default UserInfo getUserInfo(Packet packet) {
+            return UserWsConn.userInfo(packet.webSocket());
+        }
     }
 
     public static class TypeClassMapping {
@@ -106,15 +139,6 @@ public abstract class WsPacket {
 
         static {
             map.put(Type.chat, ChatMessagePacket.class);
-        }
-    }
-
-    public interface Handler<Packet extends WsPacket> {
-
-        void handle(Packet packet);
-
-        default UserInfo getUserInfo(Packet packet) {
-            return UserWsConn.get(packet.webSocket());
         }
     }
 
@@ -129,35 +153,6 @@ public abstract class WsPacket {
 
         public static <Packet extends WsPacket> Handler<Packet> get(String type) {
             return (Handler<Packet>) map.get(type);
-        }
-    }
-
-    @EqualsAndHashCode(callSuper = true)
-    @Data
-    public static class ErrorPacket extends WsPacket {
-
-        private String errorMessage;
-
-        private String randomId;
-
-        public ErrorPacket(final Err err, final String randomId) {
-            this.randomId = randomId;
-            this.errorMessage = err.getMessage();
-        }
-
-        public ErrorPacket(final String errorMessage, final String randomId) {
-            this.randomId = randomId;
-            this.errorMessage = errorMessage;
-        }
-
-        @Override
-        public WsPacket mountWebsocket(final WebSocket ws) {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        public String type() {
-            return Type.err;
         }
     }
 }

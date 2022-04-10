@@ -14,8 +14,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring.boot.version>2.5.7</spring.boot.version>
 
-        <fluent-mybatis.version>1.9.5</fluent-mybatis.version>
-
         <lambda.version>0.09.2</lambda.version>
         <sky.version>0.09</sky.version>
 
@@ -26,6 +24,8 @@
         <sa-token.version>1.29.0</sa-token.version>
         <ttl.version>2.12.6</ttl.version>
         <redisson.version>3.16.4</redisson.version>
+        <mybatis-plus-boot-starter.version>3.5.1</mybatis-plus-boot-starter.version>
+
         <skipTests>true</skipTests>
     </properties>
 
@@ -44,11 +44,6 @@
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
                             <version>${lombok.version}</version>
-                        </path>
-                        <path>
-                            <groupId>com.github.atool</groupId>
-                            <artifactId>fluent-mybatis-processor</artifactId>
-                            <version>${fluent-mybatis.version}</version>
                         </path>
                     </annotationProcessorPaths>
                 </configuration>
@@ -171,26 +166,6 @@
             <version>${sa-token.version}</version>
         </dependency>
 
-
-        <!-- 引入fluent-mybatis 运行依赖包, scope为compile -->
-        <dependency>
-            <groupId>com.github.atool</groupId>
-            <artifactId>fluent-mybatis-boot-starter</artifactId>
-        </dependency>
-
-        <!-- 引入fluent-mybatis 运行依赖包, scope为compile -->
-        <dependency>
-            <groupId>com.github.atool</groupId>
-            <artifactId>fluent-mybatis</artifactId>
-            <version>${fluent-mybatis.version}</version>
-        </dependency>
-        <!-- 引入fluent-mybatis-processor, scope设置为provider 编译需要，运行时不需要 -->
-        <dependency>
-            <groupId>com.github.atool</groupId>
-            <artifactId>fluent-mybatis-processor</artifactId>
-            <scope>provided</scope>
-            <version>${fluent-mybatis.version}</version>
-        </dependency>
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
@@ -205,6 +180,11 @@
             <artifactId>spring-boot-starter-data-mongodb</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <version>${mybatis-plus-boot-starter.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -250,11 +230,10 @@
                 <artifactId>HikariCP</artifactId>
                 <version>${HikariCP.version}</version>
             </dependency>
-            <!-- 引入fluent-mybatis 运行依赖包, scope为compile -->
             <dependency>
-                <groupId>com.github.atool</groupId>
-                <artifactId>fluent-mybatis-boot-starter</artifactId>
-                <version>${fluent-mybatis.version}</version>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-boot-starter</artifactId>
+                <version>${mybatis-plus-boot-starter.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>

@@ -5,7 +5,7 @@ import io.github.fzdwx.inf.common.web.model.UserInfo;
 import io.github.fzdwx.inf.middleware.minio.Minio;
 import io.github.fzdwx.lambada.Seq;
 import io.github.fzdwx.logic.contants.ChatConst;
-import io.github.fzdwx.logic.domain.entity.ChatLogEntity;
+import io.github.fzdwx.logic.domain.entity.ChatLog;
 import io.github.fzdwx.logic.msg.ws.WsPacket;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -60,8 +60,24 @@ public class ChatMessagePacket extends WsPacket {
     }
 
     public Err prepare() {
+        if (this.randomId == null) {
+            return Err.verify("randomId is null");
+        }
+
         if (this.chatMessages == null || this.chatMessages.isEmpty()) {
             return Err.verify("chatMessages can not be null");
+        }
+
+        if (this.toId == null || this.toId.isEmpty()) {
+            return Err.verify("toId can not be null");
+        }
+
+        if (this.sessionType == 0) {
+            return Err.verify("sessionType can not be null");
+        }
+
+        if (this.sendTime == null) {
+            this.sendTime = new Date();
         }
 
         for (final ChatMessage chatMessage : chatMessages) {
@@ -74,7 +90,7 @@ public class ChatMessagePacket extends WsPacket {
         return null;
     }
 
-    public Collection<ChatLogEntity> toChatLogs(final UserInfo userInfo) {
+    public Collection<ChatLog> buildChatLogs(final UserInfo userInfo) {
         return Seq.of(this.chatMessages).map(c -> mapping(userInfo, c)).toList();
     }
 
@@ -82,16 +98,27 @@ public class ChatMessagePacket extends WsPacket {
         return this.chatMessages.size();
     }
 
-    private ChatLogEntity mapping(final UserInfo userInfo, final ChatMessage chatMessage) {
-        return new ChatLogEntity()
-                .setContent(chatMessage.getContent())
-                .setContentType(chatMessage.getContentType())
-                .setFromId(userInfo.getIdLong())
-                .setMsgFrom(ChatConst.MsgFrom.USER)
-                .setSendTime(this.sendTime)
-                .setSessionType(this.sessionType)
-                .setToId(Long.valueOf(this.toId))
-                ;
+    public ChatMessageResp toResp(final UserInfo userInfo) {
+        final var resp = new ChatMessageResp();
+        resp.setFromId(userInfo.getId());
+        resp.setFromUname(userInfo.getUname());
+        resp.setFromAvatar(userInfo.getAvatar());
+        resp.setToId(this.toId);
+        resp.setSendTime(this.sendTime);
+        resp.setChatMessages(this.chatMessages.stream().map(ChatMessage::toResp).toList());
+        return resp;
+    }
+
+    private ChatLog mapping(final UserInfo userInfo, final ChatMessage chatMessage) {
+        final ChatLog log = new ChatLog();
+        log.setContent(chatMessage.getContent());
+        log.setContentType(chatMessage.getContentType());
+        log.setFromId(userInfo.getIdLong());
+        log.setMsgFrom(ChatConst.MsgFrom.USER);
+        log.setSendTime(this.sendTime);
+        log.setSessionType(this.sessionType);
+        log.setToId(Long.valueOf(this.toId));
+        return log;
     }
 
     @Data
@@ -103,7 +130,9 @@ public class ChatMessagePacket extends WsPacket {
         private String content;
 
         /**
-         * 消息类型 e.g: text, image, audio, video, file
+         * 消息类型
+         *
+         * @see ChatConst.ContentType
          */
         private int contentType;
 
@@ -119,6 +148,8 @@ public class ChatMessagePacket extends WsPacket {
                 if (content == null) {
                     throw Err.verify("content is null");
                 }
+            } else if (contentType == 0) {
+                throw Err.verify("contentType is null");
             } else {
                 if (attrByte == null || attrByte.length == 0) {
                     throw Err.verify("attrByte is null");
@@ -137,6 +168,17 @@ public class ChatMessagePacket extends WsPacket {
             }
 
             return null;
+        }
+
+        public ChatMessageResp.ChatMessage toResp() {
+            final var resp = new ChatMessageResp.ChatMessage();
+            resp.setFileName(this.fileName);
+            if (eq(contentType, Text)) {
+                resp.setContent(this.content);
+            } else {
+                resp.setContent(Minio.getAccessUrl(this.content));
+            }
+            return resp;
         }
 
         private void doUpload() throws IOException {

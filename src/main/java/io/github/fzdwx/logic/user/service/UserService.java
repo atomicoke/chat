@@ -4,8 +4,8 @@ import io.github.fzdwx.inf.common.exc.Err;
 import io.github.fzdwx.inf.common.exc.VerifyException;
 import io.github.fzdwx.inf.common.web.Web;
 import io.github.fzdwx.inf.common.web.model.UserInfo;
-import io.github.fzdwx.logic.domain.dao.UserDao;
-import io.github.fzdwx.logic.domain.entity.UserEntity;
+import io.github.fzdwx.logic.domain.dao.UserRepo;
+import io.github.fzdwx.logic.domain.entity.User;
 import io.github.fzdwx.logic.user.api.model.EditUserInfoReq;
 import io.github.fzdwx.logic.user.api.model.SingInReq;
 import io.github.fzdwx.logic.user.api.model.SingUpReq;
@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserService {
 
-    private final UserDao userDao;
+    private final UserRepo userDao;
 
     /**
      * 注册
@@ -34,7 +34,7 @@ public class UserService {
             throw new VerifyException("用户名已存在");
         }
 
-        final var entity = UserEntity.from(req);
+        final var entity = User.from(req);
 
         this.userDao.save(entity);
 
@@ -50,7 +50,7 @@ public class UserService {
             throw new VerifyException("用户不存在，请注册");
         }
 
-        if (!UserEntity.checkPasswd(req.getPasswd(), user.getPasswd(), user.getSalt())) {
+        if (!User.checkPasswd(req.getPasswd(), user.getPasswd(), user.getSalt())) {
             throw new VerifyException("密码错误");
         }
 
@@ -68,7 +68,7 @@ public class UserService {
             throw Err.verify("用户不存在");
         }
 
-        final var userEntity = UserEntity.form(req, user);
+        final var userEntity = User.form(req, user);
         final var b = this.userDao.updateById(userEntity);
 
         if (b) {
@@ -78,6 +78,6 @@ public class UserService {
     }
 
     public List<UserInfo> getAllUser() {
-        return this.userDao.listEntity(this.userDao.mapper().query()).stream().map(UserInfo::of).collect(Collectors.toList());
+        return this.userDao.list().stream().map(UserInfo::of).collect(Collectors.toList());
     }
 }

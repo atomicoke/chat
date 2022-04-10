@@ -4,7 +4,7 @@ import cn.dev33.satoken.stp.StpUtil;
 import io.github.fzdwx.inf.common.exc.ForbiddenException;
 import io.github.fzdwx.inf.common.web.core.Context;
 import io.github.fzdwx.inf.common.web.model.UserInfo;
-import io.github.fzdwx.logic.domain.entity.UserEntity;
+import io.github.fzdwx.logic.domain.entity.User;
 
 import javax.annotation.Nullable;
 
@@ -16,7 +16,7 @@ public class Web {
 
     public final static String USER = "user";
 
-    public static String doLogin(final UserEntity user) {
+    public static String doLogin(final User user) {
         StpUtil.login(user.getId());
 
         Web.cacheUserToSession(user);
@@ -24,7 +24,7 @@ public class Web {
         return StpUtil.getTokenValue();
     }
 
-    public static void cacheUserToSession(final UserEntity entity) {
+    public static void cacheUserToSession(final User entity) {
         StpUtil.getSessionByLoginId(entity.getId()).set(USER, UserInfo.of(entity));
     }
 

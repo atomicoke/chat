@@ -37,4 +37,8 @@ public class Err extends RuntimeException {
     public static NotFoundException notFound(String message) {
         return new NotFoundException(message);
     }
+
+    public static UnsupportedOperationException unsupported() {
+        return new UnsupportedOperationException();
+    }
 }

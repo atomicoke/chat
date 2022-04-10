@@ -1,7 +1,7 @@
 package io.github.fzdwx.inf.common.web.model;
 
 import io.github.fzdwx.inf.middleware.minio.Minio;
-import io.github.fzdwx.logic.domain.entity.UserEntity;
+import io.github.fzdwx.logic.domain.entity.User;
 import lombok.Data;
 
 /**
@@ -19,7 +19,7 @@ public class UserInfo {
     private String avatar;
     private Long idLong;
 
-    public static UserInfo of(UserEntity userEntity) {
+    public static UserInfo of(User userEntity) {
         UserInfo userInfo = new UserInfo();
         userInfo.setId(String.valueOf(userEntity.getId()));
         userInfo.setIdLong(userEntity.getId());

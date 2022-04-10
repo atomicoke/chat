@@ -4,10 +4,13 @@ import io.github.fzdwx.inf.common.exc.Err;
 import io.github.fzdwx.inf.common.web.model.UserInfo;
 import io.github.fzdwx.inf.msg.WebSocket;
 import io.github.fzdwx.lambada.fun.State;
+import io.github.fzdwx.logic.msg.ws.packet.ChatMessagePacket;
 import io.netty.channel.ChannelFuture;
 import io.netty.util.AttributeKey;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.function.BiConsumer;
@@ -27,6 +30,11 @@ public class UserWsConn {
     public static void add(String userId, WebSocket webSocket) {
         WEB_SOCKET_MAP.put(userId, webSocket);
         log.info("add userId:{}", userId);
+    }
+
+    @Nullable
+    public static WebSocket get(@NotNull ChatMessagePacket packet) {
+        return WEB_SOCKET_MAP.get(packet.getToId());
     }
 
     public static void remove(final String userId) {
@@ -51,7 +59,7 @@ public class UserWsConn {
         ws.channel().attr(KEY).set(userInfo);
     }
 
-    public static UserInfo get(WebSocket webSocket) {
+    public static UserInfo userInfo(WebSocket webSocket) {
         if (webSocket == null) throw verify("webSocket is null");
         return webSocket.channel().attr(KEY).get();
     }
