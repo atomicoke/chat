@@ -182,6 +182,7 @@ public class ChatMessagePacket extends WsPacket {
         public ChatMessageResp.ChatMessage toResp() {
             final var resp = new ChatMessageResp.ChatMessage();
             resp.setFileName(this.fileName);
+            resp.setContentType(this.contentType);
             if (eq(contentType, Text)) {
                 resp.setContent(this.content);
             } else {
