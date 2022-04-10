@@ -32,6 +32,8 @@ public class ChatMessagePacketHandler implements WsPacket.Handler<ChatMessagePac
             return;
         }
 
+        packet.setMsgFrom(ChatConst.MsgFrom.USER);
+
         final var userInfo = getUserInfo(packet);
         final var chatMessages = packet.buildChatLogs(userInfo);
 

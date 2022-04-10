@@ -48,6 +48,13 @@ public class ChatMessagePacket extends WsPacket {
     private int sessionType;
 
     /**
+     * 消息发送者
+     *
+     * @see io.github.fzdwx.logic.contants.ChatConst.MsgFrom
+     */
+    private int msgFrom;
+
+    /**
      * 发送时间
      */
     private Date sendTime;
@@ -104,6 +111,8 @@ public class ChatMessagePacket extends WsPacket {
         resp.setFromUname(userInfo.getUname());
         resp.setFromAvatar(userInfo.getAvatar());
         resp.setToId(this.toId);
+        resp.setSessionType(this.sessionType);
+        resp.setMsgFrom(this.msgFrom);
         resp.setSendTime(this.sendTime);
         resp.setChatMessages(this.chatMessages.stream().map(ChatMessage::toResp).toList());
         return resp;
@@ -114,7 +123,7 @@ public class ChatMessagePacket extends WsPacket {
         log.setContent(chatMessage.getContent());
         log.setContentType(chatMessage.getContentType());
         log.setFromId(userInfo.getIdLong());
-        log.setMsgFrom(ChatConst.MsgFrom.USER);
+        log.setMsgFrom(this.msgFrom);
         log.setSendTime(this.sendTime);
         log.setSessionType(this.sessionType);
         log.setToId(Long.valueOf(this.toId));

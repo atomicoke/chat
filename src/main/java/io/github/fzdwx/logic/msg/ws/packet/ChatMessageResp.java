@@ -20,6 +20,7 @@ public class ChatMessageResp {
     private String fromAvatar;
     private String toId;
     private int sessionType;
+    private int msgFrom;
     private Date sendTime;
     private List<ChatMessage> chatMessages;
 
