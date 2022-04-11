@@ -35,6 +35,7 @@ public class Minio implements InitializingBean {
     static long videoMaxSize = 1024 * 1024 * 100;
 
     private static MinioClient minioClient;
+    private static MinioClient minioAccessUrlClient;
     private static String bucketName;
     private static String endpointStatic;
     private static String outEndpointStatic;
@@ -101,13 +102,12 @@ public class Minio implements InitializingBean {
      */
     public static String getAccessUrl(String objectName, int amount, TimeUnit timeUnit) {
         try {
-            return minioClient.getPresignedObjectUrl(GetPresignedObjectUrlArgs.builder()
-                            .bucket(bucketName)
-                            .object(objectName)
-                            .method(Method.GET)
-                            .expiry(amount, timeUnit)
-                            .build())
-                    .replace(endpointStatic, outEndpointStatic);
+            return minioAccessUrlClient.getPresignedObjectUrl(GetPresignedObjectUrlArgs.builder()
+                    .bucket(bucketName)
+                    .object(objectName)
+                    .method(Method.GET)
+                    .expiry(amount, timeUnit)
+                    .build());
         } catch (Exception e) {
             throw new MinioException(e);
         }
@@ -120,6 +120,10 @@ public class Minio implements InitializingBean {
         outEndpointStatic = outEndpoint;
         minioClient = MinioClient.builder()
                 .endpoint(endpoint)
+                .credentials(accessKey, secretKey)
+                .build();
+        minioAccessUrlClient = MinioClient.builder()
+                .endpoint(outEndpoint)
                 .credentials(accessKey, secretKey)
                 .build();
     }
