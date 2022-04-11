@@ -1,7 +1,8 @@
-package io.github.fzdwx.logic.msg.ws;
+package io.github.fzdwx.logic.msg.ws.packet;
 
 import io.github.fzdwx.inf.common.web.model.Rest;
 import io.github.fzdwx.inf.msg.WebSocket;
+import io.github.fzdwx.logic.msg.ws.WsPacket;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

@@ -1,4 +1,4 @@
-package io.github.fzdwx.logic.msg.ws.packet;
+package io.github.fzdwx.logic.msg.ws.packet.resp;
 
 import io.github.fzdwx.logic.contants.ChatConst;
 import lombok.Data;

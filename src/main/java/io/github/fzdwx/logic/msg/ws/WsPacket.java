@@ -5,17 +5,22 @@ import io.github.fzdwx.inf.common.exc.Err;
 import io.github.fzdwx.inf.common.util.Json;
 import io.github.fzdwx.inf.common.web.model.UserInfo;
 import io.github.fzdwx.inf.msg.WebSocket;
+import io.github.fzdwx.logic.msg.ws.handler.ChatMessagePacketHandler;
 import io.github.fzdwx.logic.msg.ws.packet.ChatMessagePacket;
-import io.github.fzdwx.logic.msg.ws.packet.handler.ChatMessagePacketHandler;
+import io.github.fzdwx.logic.msg.ws.packet.ErrorPacket;
+import io.github.fzdwx.logic.msg.ws.packet.SuccessPacket;
 import io.netty.channel.ChannelFuture;
 import lombok.Getter;
 import lombok.Setter;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * websocket packet.
+ *
  * @author <a href="mailto:likelovec@gmail.com">韦朕</a>
  * @date 2022/4/7 11:20
  */
@@ -128,7 +133,7 @@ public abstract class WsPacket {
 
         void handle(Packet packet);
 
-        default UserInfo getUserInfo(Packet packet) {
+        default UserInfo userInfo(@NotNull Packet packet) {
             return UserWsConn.userInfo(packet.webSocket());
         }
     }

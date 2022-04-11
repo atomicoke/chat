@@ -18,6 +18,8 @@ import java.util.function.BiConsumer;
 import static io.github.fzdwx.inf.common.exc.Err.verify;
 
 /**
+ * manager user to websocket connection.
+ *
  * @author <a href="mailto:likelovec@gmail.com">fzdwx</a>
  * @date 2022/4/5 18:05
  */
@@ -25,7 +27,7 @@ import static io.github.fzdwx.inf.common.exc.Err.verify;
 public class UserWsConn {
 
     private final static Map<String, WebSocket> WEB_SOCKET_MAP = new ConcurrentSkipListMap<>();
-    private final static AttributeKey<UserInfo> KEY = AttributeKey.valueOf("userInfo");
+    private final static AttributeKey<UserInfo> KEY_USER_INFO = AttributeKey.valueOf("userInfo");
 
     public static void add(String userId, WebSocket webSocket) {
         WEB_SOCKET_MAP.put(userId, webSocket);
@@ -55,12 +57,19 @@ public class UserWsConn {
         WEB_SOCKET_MAP.forEach(consumer);
     }
 
-    public static void attach(final WebSocket ws, final UserInfo userInfo) {
-        ws.channel().attr(KEY).set(userInfo);
+    public static void attachUserInfo(final WebSocket ws, final UserInfo userInfo) {
+        attach(ws, KEY_USER_INFO, userInfo);
     }
 
     public static UserInfo userInfo(WebSocket webSocket) {
         if (webSocket == null) throw verify("webSocket is null");
-        return webSocket.channel().attr(KEY).get();
+        return webSocket.channel().attr(KEY_USER_INFO).get();
+    }
+
+    /**
+     * attach attribute to channel
+     */
+    public static <VALUE> void attach(final WebSocket ws, final AttributeKey<VALUE> key, final VALUE value) {
+        ws.channel().attr(key).set(value);
     }
 }

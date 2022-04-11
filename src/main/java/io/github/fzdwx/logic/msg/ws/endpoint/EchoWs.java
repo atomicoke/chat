@@ -35,7 +35,7 @@ public class EchoWs implements HttpHandler {
         request.upgradeToWebSocket()
                 .then(ws -> {
 
-                    UserWsConn.attach(ws, userInfo);
+                    UserWsConn.attachUserInfo(ws, userInfo);
 
                     final var id = userInfo.getId();
 

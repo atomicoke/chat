@@ -7,6 +7,7 @@ import io.github.fzdwx.lambada.Seq;
 import io.github.fzdwx.logic.contants.ChatConst;
 import io.github.fzdwx.logic.domain.entity.ChatLog;
 import io.github.fzdwx.logic.msg.ws.WsPacket;
+import io.github.fzdwx.logic.msg.ws.packet.resp.ChatMessageResp;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;

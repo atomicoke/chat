@@ -1,4 +1,4 @@
-package io.github.fzdwx.logic.msg.ws.packet.handler;
+package io.github.fzdwx.logic.msg.ws.handler;
 
 import io.github.fzdwx.inf.common.exc.Err;
 import io.github.fzdwx.lambada.Seq;
@@ -8,7 +8,7 @@ import io.github.fzdwx.logic.domain.entity.ChatLog;
 import io.github.fzdwx.logic.msg.ws.UserWsConn;
 import io.github.fzdwx.logic.msg.ws.WsPacket;
 import io.github.fzdwx.logic.msg.ws.packet.ChatMessagePacket;
-import io.github.fzdwx.logic.msg.ws.packet.ChatMessageResp;
+import io.github.fzdwx.logic.msg.ws.packet.resp.ChatMessageResp;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -34,7 +34,7 @@ public class ChatMessagePacketHandler implements WsPacket.Handler<ChatMessagePac
 
         packet.setMsgFrom(ChatConst.MsgFrom.USER);
 
-        final var userInfo = getUserInfo(packet);
+        final var userInfo = userInfo(packet);
         final var chatMessages = packet.buildChatLogs(userInfo);
 
         final var flag = chatLogDao.saveBatch(chatMessages);
@@ -66,7 +66,7 @@ public class ChatMessagePacketHandler implements WsPacket.Handler<ChatMessagePac
     }
 
     private void sendGroup(final ChatMessagePacket packet, final ChatMessageResp resp) {
-        final var chatMessages = packet.buildChatLogs(getUserInfo(packet));
+        final var chatMessages = packet.buildChatLogs(userInfo(packet));
 
         chatLogDao.saveBatch(Seq.of(chatMessages).typeOf(ChatLog.class).toList());
     }
