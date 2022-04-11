@@ -1,6 +1,6 @@
 package io.github.fzdwx.logic.msg.ws.packet;
 
-import io.github.fzdwx.inf.common.exc.Err;
+import cn.hutool.core.util.ArrayUtil;
 import io.github.fzdwx.inf.msg.WebSocket;
 import io.github.fzdwx.logic.msg.ws.WsPacket;
 import lombok.Data;
@@ -14,11 +14,14 @@ public class ErrorPacket extends WsPacket {
 
     private String randomId;
 
+    private StackTraceElement[] stackTrace;
+
     private String type = Type.err;
 
-    public ErrorPacket(final Err err, final String randomId) {
+    public ErrorPacket(final Exception err, final String randomId) {
         this.randomId = randomId;
         this.message = err.getMessage();
+        this.stackTrace = ArrayUtil.sub(err.getStackTrace(), 0, 5);
     }
 
     public ErrorPacket(final String message, final String randomId) {
