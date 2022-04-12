@@ -1,8 +1,5 @@
 package io.github.fzdwx.logic.msg.offline;
 
-import io.github.fzdwx.inf.common.util.Json;
-import io.github.fzdwx.inf.middleware.redis.Redis;
-import io.github.fzdwx.lambada.Coll;
 import io.github.fzdwx.logic.msg.ws.packet.resp.ChatMessageResp;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
@@ -24,12 +21,7 @@ public class OfflineMessageManager implements InitializingBean {
     public static void push(final ChatMessageResp chatMessageResp) {
         String key = key(chatMessageResp);
 
-        Coll.map(
-                "fromId", "",
-                "", "",
-                "", ""
-                );
-        Redis.lpush(key, Json.toJson(chatMessageResp.getChatMessages()));
+        // todo
     }
 
     /**
