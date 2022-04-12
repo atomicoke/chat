@@ -28,7 +28,7 @@ public class UserInfo {
         userInfo.setRoleKey(userEntity.getRoleKey());
         userInfo.setGender(userEntity.getGender());
         if (userEntity.getAvatar() != null) {
-            userInfo.setAvatar(Minio.getAccessUrl(userEntity.getAvatar()));
+            userInfo.setAvatar(Minio.getPubAccessUrl(userEntity.getAvatar()));
         }
         return userInfo;
     }

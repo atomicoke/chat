@@ -36,7 +36,8 @@ public class Minio implements InitializingBean {
 
     private static MinioClient minioClient;
     private static MinioClient minioAccessUrlClient;
-    private static String bucketName;
+    private static String pubBucketName;
+    private static String privateBucketName;
     private static String endpointStatic;
     private static String outEndpointStatic;
     /**
@@ -46,21 +47,33 @@ public class Minio implements InitializingBean {
     private final String outEndpoint;
     private final String accessKey;
     private final String secretKey;
-    private final String bucket;
+    private final String pubBucket;
+    private final String privateBucket;
 
     public Minio(@Value("${minio.endpoint}") final String endpoint,
                  @Value("${minio.out-endpoint}") final String outEndpoint,
                  @Value("${minio.access-key}") final String accessKey,
                  @Value("${minio.secret-key}") final String secretKey,
-                 @Value("${minio.bucket}") final String bucket) {
+                 @Value("${minio.pub-bucket}") final String pubBucket,
+                 @Value("${minio.private-bucket}") final String privateBucket
+    ) {
         this.endpoint = endpoint;
         this.accessKey = accessKey;
         this.secretKey = secretKey;
-        this.bucket = bucket;
+        this.pubBucket = pubBucket;
+        this.privateBucket = privateBucket;
         this.outEndpoint = outEndpoint;
     }
 
-    public static MinioUploadRes uploadImage(InputStream stream, String fileName) throws IOException {
+    public static MinioUploadRes uploadPubImage(InputStream stream, String fileName) throws IOException {
+      return uploadImage(stream, fileName, pubBucketName);
+    }
+
+    public static MinioUploadRes uploadPrivateImage(InputStream stream, String fileName) throws IOException {
+        return uploadImage(stream, fileName, privateBucketName);
+    }
+
+    public static MinioUploadRes uploadImage(InputStream stream, String fileName,String bucketName) throws IOException {
         if (stream == null) {
             throw Err.verify("image stream is null");
         }
@@ -69,16 +82,20 @@ public class Minio implements InitializingBean {
         }
         checkImage(stream);
 
-        return upload(stream, fileName);
+        return upload(stream, fileName, bucketName);
     }
 
-    public static MinioUploadRes upload(InputStream stream, String fileName) {
+    public static MinioUploadRes uploadPrivate(InputStream stream, String fileName) {
+        return upload(stream, fileName, privateBucketName);
+    }
+
+    public static MinioUploadRes upload(InputStream stream, String fileName, String bucket) {
         String objectName = UnixTime.unixTime() + "/" + IdUtil.getSnowflakeNextId() + "-" + fileName;
 
         try {
             return MinioUploadRes.create(
                     minioClient.putObject(PutObjectArgs.builder()
-                            .bucket(bucketName)
+                            .bucket(bucket)
                             .object(objectName)
                             .stream(stream, stream.available(), -1)
                             .build()),
@@ -86,6 +103,10 @@ public class Minio implements InitializingBean {
         } catch (Exception e) {
             throw new MinioException(e);
         }
+    }
+
+    public static String getPubAccessUrl(String objectName) {
+        return outEndpointStatic + "/" + pubBucketName + "/" + objectName;
     }
 
     public static String getAccessUrl(String objectName) {
@@ -103,7 +124,7 @@ public class Minio implements InitializingBean {
     public static String getAccessUrl(String objectName, int amount, TimeUnit timeUnit) {
         try {
             return minioAccessUrlClient.getPresignedObjectUrl(GetPresignedObjectUrlArgs.builder()
-                    .bucket(bucketName)
+                    .bucket(privateBucketName)
                     .object(objectName)
                     .method(Method.GET)
                     .expiry(amount, timeUnit)
@@ -115,13 +136,16 @@ public class Minio implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        bucketName = bucket;
+        pubBucketName = pubBucket;
+        privateBucketName = privateBucket;
         endpointStatic = endpoint;
         outEndpointStatic = outEndpoint;
+
         minioClient = MinioClient.builder()
                 .endpoint(endpoint)
                 .credentials(accessKey, secretKey)
                 .build();
+
         minioAccessUrlClient = MinioClient.builder()
                 .endpoint(outEndpoint)
                 .credentials(accessKey, secretKey)

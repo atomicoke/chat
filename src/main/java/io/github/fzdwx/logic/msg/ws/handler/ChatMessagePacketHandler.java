@@ -5,6 +5,7 @@ import io.github.fzdwx.lambada.Seq;
 import io.github.fzdwx.logic.contants.ChatConst;
 import io.github.fzdwx.logic.domain.dao.ChatLogRepo;
 import io.github.fzdwx.logic.domain.entity.ChatLog;
+import io.github.fzdwx.logic.msg.offline.OfflineMessageManager;
 import io.github.fzdwx.logic.msg.ws.UserWsConn;
 import io.github.fzdwx.logic.msg.ws.WsPacket;
 import io.github.fzdwx.logic.msg.ws.packet.ChatMessagePacket;
@@ -45,6 +46,7 @@ public class ChatMessagePacketHandler implements WsPacket.Handler<ChatMessagePac
         }
         //endregion
 
+        packet.sendSuccess();
         //region switch chat type and send to user.
         final var resp = packet.toResp(userInfo);
         switch (packet.getSessionType()) {
@@ -59,14 +61,11 @@ public class ChatMessagePacketHandler implements WsPacket.Handler<ChatMessagePac
     private void sendPersonal(final ChatMessagePacket packet, final ChatMessageResp resp) {
         final var conn = UserWsConn.get(packet);
         if (conn == null) {
-            packet.sendError("用户不在线");
-            return;
+            OfflineMessageManager.push(resp);
+        } else {
+            final var data = packet.newSuccessPacket(resp).encode();
+            conn.send(data);
         }
-
-        packet.sendSuccess();
-
-        final var data = packet.newSuccessPacket(resp).encode();
-        conn.send(data);
     }
 
     private void sendGroup(final ChatMessagePacket packet, final ChatMessageResp resp) {
@@ -76,8 +75,6 @@ public class ChatMessagePacketHandler implements WsPacket.Handler<ChatMessagePac
     }
 
     private void sendAll(final ChatMessagePacket packet, final ChatMessageResp resp) {
-        packet.sendSuccess();
-
         final var data = packet.newSuccessPacket(resp).encode();
         UserWsConn.foreach((id, ws) -> {
             if (id.equals(resp.getFromId())) {

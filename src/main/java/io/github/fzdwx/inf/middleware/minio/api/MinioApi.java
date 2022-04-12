@@ -23,6 +23,14 @@ public class MinioApi {
      */
     @PostMapping("/image")
     public Rest<MinioUploadRes> image(MultipartFile file) throws IOException {
-        return Rest.of(Minio.uploadImage(file.getInputStream(), file.getOriginalFilename()));
+        return Rest.of(Minio.uploadPrivateImage(file.getInputStream(), file.getOriginalFilename()));
+    }
+
+    /**
+     * 上传图片
+     */
+    @PostMapping("/pub/image")
+    public Rest<MinioUploadRes> pubImage(MultipartFile file) throws IOException {
+        return Rest.of(Minio.uploadPubImage(file.getInputStream(), file.getOriginalFilename()));
     }
 }

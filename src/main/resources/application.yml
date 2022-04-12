@@ -41,7 +41,8 @@ minio:
   outEndpoint: yrou minio endpoint
   access-key: yrou minio access-key
   secret-key: yrou minio secret-key
-  bucket: yrou minio bucket
+  pub-bucket: xxx
+  private-bucket: xxx
 
 sa-token:
   # token名称 (同时也是cookie名称)

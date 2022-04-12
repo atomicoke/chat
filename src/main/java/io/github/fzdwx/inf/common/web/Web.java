@@ -19,13 +19,20 @@ public class Web {
     public static String doLogin(final User user) {
         StpUtil.login(user.getId());
 
-        Web.cacheUserToSession(user);
+        cacheUser(user);
 
         return StpUtil.getTokenValue();
     }
 
-    public static void cacheUserToSession(final User entity) {
-        StpUtil.getSessionByLoginId(entity.getId()).set(USER, UserInfo.of(entity));
+    public static UserInfo cacheUser(final User entity) {
+        final UserInfo userInfo = UserInfo.of(entity);
+        Context.user(userInfo);
+        cacheUserToSession(userInfo);
+        return userInfo;
+    }
+
+    public static void cacheUserToSession(final UserInfo userInfo) {
+        StpUtil.getSessionByLoginId(userInfo.getIdLong()).set(USER, userInfo);
     }
 
     public static UserInfo getUserInfo() {

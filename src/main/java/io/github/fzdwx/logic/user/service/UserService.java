@@ -72,12 +72,23 @@ public class UserService {
         final var b = this.userDao.updateById(userEntity);
 
         if (b) {
-            Web.cacheUserToSession(userEntity);
+            Web.cacheUser(userEntity);
         }
         return b;
     }
 
     public List<UserInfo> getAllUser() {
         return this.userDao.list().stream().map(UserInfo::of).collect(Collectors.toList());
+    }
+
+    public UserInfo refreshUserInfo() {
+        final UserInfo userInfo = Web.getUserInfo();
+
+        final var user = this.userDao.findOne(userInfo.getIdLong());
+        if (user == null) {
+            throw Err.verify("用户不存在");
+        }
+
+        return Web.cacheUser(user);
     }
 }

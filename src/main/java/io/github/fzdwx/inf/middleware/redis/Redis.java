@@ -5,6 +5,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.data.redis.core.HashOperations;
+import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.SetOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
@@ -29,6 +30,7 @@ public final class Redis implements InitializingBean {
     private static ValueOperations<String, String> STRING;
     private static HashOperations<String, String, String> HASH;
     private static SetOperations<String, String> SET;
+    private static ListOperations<String, String> LIST;
 
 
     private Redis() {
@@ -176,7 +178,7 @@ public final class Redis implements InitializingBean {
         return SET.remove(key, values);
     }
 
-/*
+    /*
                                              =======================================================
                                              ==============                           ==============
                                              ==============       redis hash          ==============
@@ -242,6 +244,26 @@ public final class Redis implements InitializingBean {
         return HASH.entries(key);
     }
 
+    /*
+                                             =======================================================
+                                             ==============                           ==============
+                                             ==============       redis hash          ==============
+                                             ==============                           ==============
+                                             =======================================================
+     */
+
+    public static List<String> lrange(String key, int start, int end) {
+        return LIST.range(key, start, end);
+    }
+
+    public static List<String> lrange(String key) {
+        return LIST.range(key, 0, -1);
+    }
+
+    public static void lpush(final String key, final String value) {
+        LIST.leftPush(key, value);
+    }
+
         /*
                                              =======================================================
                                              ==============                           ==============
@@ -266,6 +288,6 @@ public final class Redis implements InitializingBean {
         STRING = REDIS_TEMPLATE.opsForValue();
         HASH = REDIS_TEMPLATE.opsForHash();
         SET = REDIS_TEMPLATE.opsForSet();
+        LIST = REDIS_TEMPLATE.opsForList();
     }
-
 }

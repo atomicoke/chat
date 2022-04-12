@@ -65,6 +65,6 @@ public class UserApi {
      */
     @GetMapping("getUserInfo")
     public Rest<UserInfo> getUserInfo() {
-        return Rest.of(Web.getUserInfo());
+        return Rest.of(userService.refreshUserInfo());
     }
 }

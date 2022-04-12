@@ -213,7 +213,7 @@ public class ChatMessagePacket extends WsPacket {
                 }
             }
 
-            this.content = Minio.upload(inputStream, fileName).getObjectName();
+            this.content = Minio.uploadPrivate(inputStream, fileName).getObjectName();
         }
     }
 }
