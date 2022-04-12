@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
 
 /**
  * minio util.
@@ -33,6 +34,9 @@ public class Minio implements InitializingBean {
     static List<String> videoTypes = List.of("mp4", "avi", "rmvb", "wmv", "mkv", "flv", "mov", "mpg", "mpeg");
     static long imageMaxSize = 1024 * 1024 * 3;
     static long videoMaxSize = 1024 * 1024 * 100;
+
+    public static Function<String, String> getPubUrl = Minio::getPubAccessUrl;
+    public static Function<String, String> getPrivateUrl = Minio::getAccessUrl;
 
     private static MinioClient minioClient;
     private static MinioClient minioAccessUrlClient;
@@ -66,14 +70,15 @@ public class Minio implements InitializingBean {
     }
 
     public static MinioUploadRes uploadPubImage(InputStream stream, String fileName) throws IOException {
-      return uploadImage(stream, fileName, pubBucketName);
+        return uploadImage(stream, fileName, pubBucketName, getPubUrl);
     }
 
     public static MinioUploadRes uploadPrivateImage(InputStream stream, String fileName) throws IOException {
-        return uploadImage(stream, fileName, privateBucketName);
+        return uploadImage(stream, fileName, privateBucketName, getPrivateUrl);
     }
 
-    public static MinioUploadRes uploadImage(InputStream stream, String fileName,String bucketName) throws IOException {
+    public static MinioUploadRes uploadImage(InputStream stream, String fileName, String bucketName,
+                                             Function<String, String> accessUrlFunc) throws IOException {
         if (stream == null) {
             throw Err.verify("image stream is null");
         }
@@ -82,14 +87,18 @@ public class Minio implements InitializingBean {
         }
         checkImage(stream);
 
-        return upload(stream, fileName, bucketName);
+        return upload(stream, fileName, bucketName, accessUrlFunc);
     }
 
     public static MinioUploadRes uploadPrivate(InputStream stream, String fileName) {
-        return upload(stream, fileName, privateBucketName);
+        return upload(stream, fileName, privateBucketName, getPrivateUrl);
     }
 
-    public static MinioUploadRes upload(InputStream stream, String fileName, String bucket) {
+    public static MinioUploadRes uploadPublic(InputStream stream, String fileName) {
+        return upload(stream, fileName, pubBucketName, getPubUrl);
+    }
+
+    public static MinioUploadRes upload(InputStream stream, String fileName, String bucket, Function<String, String> accessUrlFunc) {
         String objectName = UnixTime.unixTime() + "/" + IdUtil.getSnowflakeNextId() + "-" + fileName;
 
         try {
@@ -99,7 +108,7 @@ public class Minio implements InitializingBean {
                             .object(objectName)
                             .stream(stream, stream.available(), -1)
                             .build()),
-                    getAccessUrl(objectName));
+                    accessUrlFunc.apply(objectName));
         } catch (Exception e) {
             throw new MinioException(e);
         }
