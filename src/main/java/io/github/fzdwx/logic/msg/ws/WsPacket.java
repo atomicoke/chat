@@ -82,7 +82,12 @@ public abstract class WsPacket {
             // todo send error for not found handler.
             return;
         }
-        handler.handle(p);
+        try {
+            handler.handle(p);
+        } catch (Exception e) {
+            p.sendError(e);
+            throw e;
+        }
     }
 
     /**
@@ -108,7 +113,7 @@ public abstract class WsPacket {
         return randomId;
     }
 
-    public ChannelFuture sendError(final Err err) {
+    public ChannelFuture sendError(final Exception err) {
         return this.ws.send(new ErrorPacket(err, this.randomId).encode());
     }
 

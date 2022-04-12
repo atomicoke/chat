@@ -48,7 +48,7 @@ public class EchoWs implements HttpHandler {
                     });
 
                     ws.mountError(h -> {
-                        log.error("ws error", h);
+                        log.error("handle packet error", h);
                     });
 
                     ws.mountText(s -> {

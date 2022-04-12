@@ -34,6 +34,7 @@ public class ChatMessagePacketHandler implements WsPacket.Handler<ChatMessagePac
 
         packet.setMsgFrom(ChatConst.MsgFrom.USER);
 
+        //region save chat log to mysql
         final var userInfo = userInfo(packet);
         final var chatMessages = packet.buildChatLogs(userInfo);
 
@@ -42,7 +43,9 @@ public class ChatMessagePacketHandler implements WsPacket.Handler<ChatMessagePac
             packet.sendError("保存失败");
             return;
         }
+        //endregion
 
+        //region switch chat type and send to user.
         final var resp = packet.toResp(userInfo);
         switch (packet.getSessionType()) {
             case ChatConst.SessionType.ALL -> sendAll(packet, resp);
@@ -50,6 +53,7 @@ public class ChatMessagePacketHandler implements WsPacket.Handler<ChatMessagePac
             case ChatConst.SessionType.personal -> sendPersonal(packet, resp);
             default -> packet.sendError("未知的会话类型:" + packet.getSessionType());
         }
+        //endregion
     }
 
     private void sendPersonal(final ChatMessagePacket packet, final ChatMessageResp resp) {
