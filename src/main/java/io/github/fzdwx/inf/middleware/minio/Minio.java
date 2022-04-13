@@ -1,10 +1,10 @@
 package io.github.fzdwx.inf.middleware.minio;
 
 import cn.hutool.core.io.FileTypeUtil;
-import cn.hutool.core.util.IdUtil;
 import io.github.fzdwx.inf.common.exc.Err;
 import io.github.fzdwx.inf.common.exc.MinioException;
 import io.github.fzdwx.inf.common.exc.VerifyException;
+import io.github.fzdwx.inf.middleware.id.IdGenerate;
 import io.github.fzdwx.inf.middleware.minio.api.model.MinioUploadRes;
 import io.github.fzdwx.lambada.lang.UnixTime;
 import io.minio.GetPresignedObjectUrlArgs;
@@ -34,16 +34,14 @@ public class Minio implements InitializingBean {
     static List<String> videoTypes = List.of("mp4", "avi", "rmvb", "wmv", "mkv", "flv", "mov", "mpg", "mpeg");
     static long imageMaxSize = 1024 * 1024 * 3;
     static long videoMaxSize = 1024 * 1024 * 100;
-
-    public static Function<String, String> getPubUrl = Minio::getPubAccessUrl;
-    public static Function<String, String> getPrivateUrl = Minio::getAccessUrl;
-
     private static MinioClient minioClient;
     private static MinioClient minioAccessUrlClient;
     private static String pubBucketName;
     private static String privateBucketName;
+    public static Function<String, String> getPrivateUrl = Minio::getAccessUrl;
     private static String endpointStatic;
     private static String outEndpointStatic;
+    public static Function<String, String> getPubUrl = Minio::getPubAccessUrl;
     /**
      * 内网的地址
      */
@@ -99,7 +97,7 @@ public class Minio implements InitializingBean {
     }
 
     public static MinioUploadRes upload(InputStream stream, String fileName, String bucket, Function<String, String> accessUrlFunc) {
-        String objectName = UnixTime.unixTime() + "/" + IdUtil.getSnowflakeNextId() + "-" + fileName;
+        String objectName = UnixTime.unixTime() + "/" + IdGenerate.fastUuid() + "-" + fileName;
 
         try {
             return MinioUploadRes.create(

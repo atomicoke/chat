@@ -1,8 +1,8 @@
 package io.github.fzdwx.inf.middleware.db.config;
 
-import cn.hutool.core.lang.Snowflake;
-import cn.hutool.core.util.IdUtil;
 import com.baomidou.mybatisplus.core.incrementer.IdentifierGenerator;
+import io.github.fzdwx.inf.middleware.id.IdGenerate;
+import me.ahoo.cosid.IdGenerator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -13,10 +13,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class MybatisConfiguration {
 
-    private static final Snowflake id = IdUtil.getSnowflake();
-
     @Bean
     public IdentifierGenerator keyGenerator() {
-        return entity -> id.nextId();
+        return entity -> IdGenerate.nextId();
     }
 }

@@ -27,7 +27,7 @@ spring:
   datasource:
     url: jdbc:mysql://127.0.0.1:3306/chat?useUnicode=true&characterEncoding=utf-8&useSSL=false
     username: root
-    password: root
+    password: root1
     driverClassName: com.mysql.cj.jdbc.Driver
     hikari:
       connection-timeout: 30000
@@ -43,6 +43,14 @@ minio:
   secret-key: yrou minio secret-key
   pub-bucket: xxx
   private-bucket: xxx
+
+cosid:
+  namespace: ${spring.application.name}
+  snowflake:
+    enabled: true
+    machine:
+      distributor:
+        type: redis
 
 sa-token:
   # token名称 (同时也是cookie名称)

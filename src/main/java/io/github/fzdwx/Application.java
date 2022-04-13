@@ -1,5 +1,6 @@
 package io.github.fzdwx;
 
+import me.ahoo.cosid.IdGenerator;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -14,5 +15,7 @@ public class Application {
 
     public static void main(String[] args) throws InterruptedException {
         final var context = SpringApplication.run(Application.class);
+
+        final var idGenerator = context.getBean(IdGenerator.class);
     }
 }

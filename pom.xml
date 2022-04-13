@@ -25,7 +25,7 @@
         <ttl.version>2.12.6</ttl.version>
         <redisson.version>3.16.4</redisson.version>
         <mybatis-plus-boot-starter.version>3.5.1</mybatis-plus-boot-starter.version>
-
+        <cosid.version>1.8.6</cosid.version>
         <skipTests>true</skipTests>
     </properties>
 
@@ -99,6 +99,18 @@
             <groupId>io.github.fzdwx</groupId>
             <artifactId>sky-infrastructure</artifactId>
             <version>${sky.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>me.ahoo.cosid</groupId>
+            <artifactId>cosid-spring-boot-starter</artifactId>
+            <version>${cosid.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>me.ahoo.cosid</groupId>
+            <artifactId>cosid-spring-redis</artifactId>
+            <version>${cosid.version}</version>
         </dependency>
 
         <dependency>
