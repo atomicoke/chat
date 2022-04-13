@@ -30,7 +30,10 @@ public class UserWsConn {
     private final static AttributeKey<UserInfo> KEY_USER_INFO = AttributeKey.valueOf("userInfo");
 
     public static void add(String userId, WebSocket webSocket) {
-        WEB_SOCKET_MAP.put(userId, webSocket);
+        final var old = WEB_SOCKET_MAP.put(userId, webSocket);
+        if (old != null) {
+            old.close();
+        }
         log.info("add userId:{}", userId);
     }
 
