@@ -46,7 +46,7 @@ public class ChatMessagePacketHandler implements WsPacket.Handler<ChatMessagePac
         //endregion
 
         //region switch chat type and send to user.
-        final var resp = packet.toResp(userInfo);
+        final var resp = ChatMessageResp.from(userInfo, packet, chatMessages);
         switch (packet.getSessionType()) {
             case ChatConst.SessionType.ALL -> sendAll(packet, resp);
             case ChatConst.SessionType.group -> sendGroup(packet, resp);

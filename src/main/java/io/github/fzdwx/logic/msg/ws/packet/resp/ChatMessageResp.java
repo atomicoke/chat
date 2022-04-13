@@ -1,9 +1,13 @@
 package io.github.fzdwx.logic.msg.ws.packet.resp;
 
+import io.github.fzdwx.inf.common.web.model.UserInfo;
 import io.github.fzdwx.logic.contants.ChatConst;
+import io.github.fzdwx.logic.domain.entity.ChatLog;
+import io.github.fzdwx.logic.msg.ws.packet.ChatMessagePacket;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -28,6 +32,11 @@ public class ChatMessageResp {
     public static class ChatMessage {
 
         /**
+         * 消息id
+         */
+        private Long id;
+
+        /**
          * 消息体
          */
         private String content;
@@ -40,5 +49,22 @@ public class ChatMessageResp {
         private int contentType;
 
         private String fileName;
+
+        private Integer fileSize;
+    }
+
+    public static ChatMessageResp from(final UserInfo userInfo, final ChatMessagePacket packet, final Collection<ChatLog> chatMessages) {
+        final var resp = new ChatMessageResp();
+
+        resp.setFromId(userInfo.getId());
+        resp.setFromUname(userInfo.getUname());
+        resp.setFromAvatar(userInfo.getAvatar());
+        resp.setToId(packet.getToId());
+        resp.setSessionType(packet.getSessionType());
+        resp.setMsgFrom(packet.getMsgFrom());
+        resp.setSendTime(packet.getSendTime());
+        resp.setChatMessages(chatMessages.stream().map(ChatLog::toResp).toList());
+
+        return resp;
     }
 }

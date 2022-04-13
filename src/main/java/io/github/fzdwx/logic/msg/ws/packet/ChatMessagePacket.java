@@ -3,11 +3,11 @@ package io.github.fzdwx.logic.msg.ws.packet;
 import io.github.fzdwx.inf.common.exc.Err;
 import io.github.fzdwx.inf.common.web.model.UserInfo;
 import io.github.fzdwx.inf.middleware.minio.Minio;
+import io.github.fzdwx.lambada.Lang;
 import io.github.fzdwx.lambada.Seq;
 import io.github.fzdwx.logic.contants.ChatConst;
 import io.github.fzdwx.logic.domain.entity.ChatLog;
 import io.github.fzdwx.logic.msg.ws.WsPacket;
-import io.github.fzdwx.logic.msg.ws.packet.resp.ChatMessageResp;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
@@ -106,19 +106,6 @@ public class ChatMessagePacket extends WsPacket {
         return this.chatMessages.size();
     }
 
-    public ChatMessageResp toResp(final UserInfo userInfo) {
-        final var resp = new ChatMessageResp();
-        resp.setFromId(userInfo.getId());
-        resp.setFromUname(userInfo.getUname());
-        resp.setFromAvatar(userInfo.getAvatar());
-        resp.setToId(this.toId);
-        resp.setSessionType(this.sessionType);
-        resp.setMsgFrom(this.msgFrom);
-        resp.setSendTime(this.sendTime);
-        resp.setChatMessages(this.chatMessages.stream().map(ChatMessage::toResp).toList());
-        return resp;
-    }
-
     private ChatLog mapping(final UserInfo userInfo, final ChatMessage chatMessage) {
         final ChatLog log = new ChatLog();
         log.setContent(chatMessage.getContent());
@@ -128,6 +115,11 @@ public class ChatMessagePacket extends WsPacket {
         log.setSendTime(this.sendTime);
         log.setSessionType(this.sessionType);
         log.setToId(Long.valueOf(this.toId));
+
+        if (!Lang.eq(chatMessage.getContentType(), Text)) {
+            log.setFileName(chatMessage.getFileName());
+            log.setFileSize(chatMessage.getAttrByte().length);
+        }
         return log;
     }
 
@@ -178,18 +170,6 @@ public class ChatMessagePacket extends WsPacket {
             }
 
             return null;
-        }
-
-        public ChatMessageResp.ChatMessage toResp() {
-            final var resp = new ChatMessageResp.ChatMessage();
-            resp.setFileName(this.fileName);
-            resp.setContentType(this.contentType);
-            if (eq(contentType, Text)) {
-                resp.setContent(this.content);
-            } else {
-                resp.setContent(Minio.getAccessUrl(this.content));
-            }
-            return resp;
         }
 
         private void doUpload() throws IOException {

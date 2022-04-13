@@ -71,23 +71,6 @@ public final class Json {
     }
 
     /**
-     * 将对象序列化成json字符串,不输出NULL值
-     *
-     * @param value javaBean
-     * @param <T>   T 泛型标记
-     * @return jsonString json字符串
-     */
-    @Nullable
-    public static <T> String toJsonNoNull(final T value) {
-        try {
-            return getInstanceNoNull().writeValueAsString(value);
-        } catch (final Exception e) {
-            log.error(e.getMessage(), e);
-        }
-        return null;
-    }
-
-    /**
      * 将对象序列化成json字符串 美化
      *
      * @param value 需要json化的数据
@@ -113,7 +96,7 @@ public final class Json {
         try {
             return getInstance().writeValueAsBytes(object);
         } catch (final JsonProcessingException e) {
-           throw new VerifyException(e);
+            throw new VerifyException(e);
         }
     }
 
@@ -172,7 +155,7 @@ public final class Json {
         try {
             return getInstance().readValue(content, typeReference);
         } catch (final IOException e) {
-           throw new VerifyException(e);
+            throw new VerifyException(e);
         }
     }
 
@@ -188,7 +171,7 @@ public final class Json {
         try {
             return getInstance().readValue(bytes, valueType);
         } catch (final IOException e) {
-           throw new VerifyException(e);
+            throw new VerifyException(e);
         }
     }
 
@@ -204,7 +187,7 @@ public final class Json {
         try {
             return getInstance().readValue(bytes, typeReference);
         } catch (final IOException e) {
-           throw new VerifyException(e);
+            throw new VerifyException(e);
         }
     }
 
@@ -220,7 +203,7 @@ public final class Json {
         try {
             return getInstance().readValue(in, valueType);
         } catch (final IOException e) {
-           throw new VerifyException(e);
+            throw new VerifyException(e);
         }
     }
 
@@ -236,7 +219,7 @@ public final class Json {
         try {
             return getInstance().readValue(in, typeReference);
         } catch (final IOException e) {
-           throw new VerifyException(e);
+            throw new VerifyException(e);
         }
     }
 
@@ -308,7 +291,7 @@ public final class Json {
         try {
             return getInstance().readTree(jsonString);
         } catch (final IOException e) {
-           throw new VerifyException(e);
+            throw new VerifyException(e);
         }
     }
 
@@ -322,7 +305,7 @@ public final class Json {
         try {
             return getInstance().readTree(in);
         } catch (final IOException e) {
-           throw new VerifyException(e);
+            throw new VerifyException(e);
         }
     }
 
@@ -336,7 +319,7 @@ public final class Json {
         try {
             return getInstance().readTree(content);
         } catch (final IOException e) {
-           throw new VerifyException(e);
+            throw new VerifyException(e);
         }
     }
 
@@ -350,16 +333,12 @@ public final class Json {
         try {
             return getInstance().readTree(jsonParser);
         } catch (final IOException e) {
-           throw new VerifyException(e);
+            throw new VerifyException(e);
         }
     }
 
     public static ObjectMapper getInstance() {
         return JacksonHolder.INSTANCE;
-    }
-
-    public static ObjectMapper getInstanceNoNull() {
-        return JacksonNoNullHolder.INSTANCE;
     }
 
     private static class JacksonHolder {
@@ -393,6 +372,9 @@ public final class Json {
             this.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
             //日期格式化
             this.registerModule(new JavaTimeModule());
+
+            this.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+
             this.findAndRegisterModules();
         }
 
@@ -400,20 +382,6 @@ public final class Json {
         public ObjectMapper copy() {
             return super.copy();
         }
-    }
-
-    public static class JacksonObjectNoNullMapper extends JacksonObjectMapper {
-
-        private static final long serialVersionUID = 4288193147502386170L;
-
-        public JacksonObjectNoNullMapper() {
-            this.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        }
-    }
-
-    private static class JacksonNoNullHolder {
-
-        private static final ObjectMapper INSTANCE = new JacksonObjectNoNullMapper();
     }
 
     public static final class JavaTimeModule extends SimpleModule {
