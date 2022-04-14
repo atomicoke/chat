@@ -1,6 +1,8 @@
 package io.github.fzdwx.logic.msg.ws.packet.resp;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.github.fzdwx.inf.common.web.model.UserInfo;
+import io.github.fzdwx.lambada.Coll;
 import io.github.fzdwx.logic.contants.ChatConst;
 import io.github.fzdwx.logic.domain.entity.ChatLog;
 import io.github.fzdwx.logic.msg.ws.packet.ChatMessagePacket;
@@ -27,6 +29,9 @@ public class ChatMessageResp {
     private int msgFrom;
     private Date sendTime;
     private List<ChatMessage> chatMessages;
+
+    @JsonIgnore
+    private Long minMessageId;
 
     @Data
     public static class ChatMessage {
@@ -63,8 +68,18 @@ public class ChatMessageResp {
         resp.setSessionType(packet.getSessionType());
         resp.setMsgFrom(packet.getMsgFrom());
         resp.setSendTime(packet.getSendTime());
-        resp.setChatMessages(chatMessages.stream().map(ChatLog::toResp).toList());
 
+        final List<ChatMessage> list = Coll.list();
+        Long minMessageId = Long.MAX_VALUE;
+        for (final ChatLog log : chatMessages) {
+            list.add(log.toResp());
+            if (log.getId() < minMessageId) {
+                minMessageId = log.getId();
+            }
+        }
+
+        resp.setMinMessageId(minMessageId);
+        resp.setChatMessages(list);
         return resp;
     }
 }
