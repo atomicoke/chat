@@ -1,8 +1,8 @@
 package io.github.fzdwx.inf.middleware.redis.lock;
 
 import cn.hutool.crypto.SecureUtil;
-import io.github.fzdwx.inf.common.exc.ForbiddenException;
-import io.github.fzdwx.inf.common.exc.VerifyException;
+import io.github.fzdwx.inf.common.err.impl.ForbiddenException;
+import io.github.fzdwx.inf.common.err.impl.VerifyException;
 import io.github.fzdwx.inf.common.util.SpElUtil;
 import io.github.fzdwx.inf.common.util.SpringAspectUtil;
 import lombok.AllArgsConstructor;

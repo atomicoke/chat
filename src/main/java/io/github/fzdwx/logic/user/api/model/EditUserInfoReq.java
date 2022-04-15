@@ -1,6 +1,6 @@
 package io.github.fzdwx.logic.user.api.model;
 
-import io.github.fzdwx.inf.common.exc.Err;
+import io.github.fzdwx.inf.common.err.Err;
 import lombok.Data;
 
 /**

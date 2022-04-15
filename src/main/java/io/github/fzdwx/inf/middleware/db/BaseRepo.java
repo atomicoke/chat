@@ -11,7 +11,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.extension.toolkit.ChainWrappers;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
-import io.github.fzdwx.inf.common.exc.Err;
+import io.github.fzdwx.inf.common.err.Err;
 import io.github.fzdwx.lambada.internal.Tuple2;
 import org.springframework.transaction.annotation.Transactional;
 

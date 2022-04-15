@@ -1,7 +1,7 @@
 package io.github.fzdwx.logic.msg.ws;
 
 import cn.hutool.extra.spring.SpringUtil;
-import io.github.fzdwx.inf.common.exc.Err;
+import io.github.fzdwx.inf.common.err.Err;
 import io.github.fzdwx.inf.common.util.Json;
 import io.github.fzdwx.inf.common.web.model.UserInfo;
 import io.github.fzdwx.inf.msg.WebSocket;

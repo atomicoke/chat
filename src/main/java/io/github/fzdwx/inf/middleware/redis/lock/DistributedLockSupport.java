@@ -1,7 +1,7 @@
 package io.github.fzdwx.inf.middleware.redis.lock;
 
 import cn.hutool.extra.spring.SpringUtil;
-import io.github.fzdwx.inf.common.exc.ForbiddenException;
+import io.github.fzdwx.inf.common.err.impl.ForbiddenException;
 import io.github.fzdwx.lambada.fun.Callable;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;

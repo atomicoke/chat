@@ -1,4 +1,6 @@
-package io.github.fzdwx.inf.common.exc;
+package io.github.fzdwx.inf.common.err.impl;
+
+import io.github.fzdwx.inf.common.err.Err;
 
 /**
  * @author <a href="mailto:likelovec@gmail.com">fzdwx</a>

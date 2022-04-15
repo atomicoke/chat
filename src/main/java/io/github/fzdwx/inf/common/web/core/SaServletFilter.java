@@ -5,7 +5,7 @@ import cn.dev33.satoken.exception.StopMatchException;
 import cn.dev33.satoken.filter.SaFilterAuthStrategy;
 import cn.dev33.satoken.filter.SaFilterErrorStrategy;
 import cn.dev33.satoken.router.SaRouter;
-import io.github.fzdwx.inf.common.exc.VerifyException;
+import io.github.fzdwx.inf.common.err.impl.VerifyException;
 import io.github.fzdwx.inf.common.util.Json;
 import io.github.fzdwx.inf.common.web.Web;
 import io.github.fzdwx.inf.common.web.model.Rest;

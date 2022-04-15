@@ -1,7 +1,7 @@
 package io.github.fzdwx.logic.user.service;
 
-import io.github.fzdwx.inf.common.exc.Err;
-import io.github.fzdwx.inf.common.exc.VerifyException;
+import io.github.fzdwx.inf.common.err.Err;
+import io.github.fzdwx.inf.common.err.impl.VerifyException;
 import io.github.fzdwx.inf.common.web.Web;
 import io.github.fzdwx.inf.common.web.model.UserInfo;
 import io.github.fzdwx.logic.domain.dao.UserRepo;

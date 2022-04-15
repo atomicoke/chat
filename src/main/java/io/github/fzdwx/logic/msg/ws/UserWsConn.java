@@ -1,6 +1,6 @@
 package io.github.fzdwx.logic.msg.ws;
 
-import io.github.fzdwx.inf.common.exc.Err;
+import io.github.fzdwx.inf.common.err.Err;
 import io.github.fzdwx.inf.common.web.model.UserInfo;
 import io.github.fzdwx.inf.msg.WebSocket;
 import io.github.fzdwx.lambada.fun.State;
@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.function.BiConsumer;
 
-import static io.github.fzdwx.inf.common.exc.Err.verify;
+import static io.github.fzdwx.inf.common.err.Err.verify;
 
 /**
  * manager user to websocket connection.

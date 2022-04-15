@@ -1,9 +1,9 @@
 package io.github.fzdwx.inf.middleware.minio;
 
 import cn.hutool.core.io.FileTypeUtil;
-import io.github.fzdwx.inf.common.exc.Err;
-import io.github.fzdwx.inf.common.exc.MinioException;
-import io.github.fzdwx.inf.common.exc.VerifyException;
+import io.github.fzdwx.inf.common.err.Err;
+import io.github.fzdwx.inf.common.err.impl.MinioException;
+import io.github.fzdwx.inf.common.err.impl.VerifyException;
 import io.github.fzdwx.inf.middleware.id.IdGenerate;
 import io.github.fzdwx.inf.middleware.minio.api.model.MinioUploadRes;
 import io.github.fzdwx.lambada.lang.UnixTime;

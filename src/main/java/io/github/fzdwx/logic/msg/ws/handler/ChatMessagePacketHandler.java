@@ -1,6 +1,6 @@
 package io.github.fzdwx.logic.msg.ws.handler;
 
-import io.github.fzdwx.inf.common.exc.Err;
+import io.github.fzdwx.inf.common.err.Err;
 import io.github.fzdwx.lambada.Seq;
 import io.github.fzdwx.logic.contants.ChatConst;
 import io.github.fzdwx.logic.domain.dao.ChatLogRepo;

@@ -1,4 +1,9 @@
-package io.github.fzdwx.inf.common.exc;
+package io.github.fzdwx.inf.common.err;
+
+import io.github.fzdwx.inf.common.err.impl.ForbiddenException;
+import io.github.fzdwx.inf.common.err.impl.NormalException;
+import io.github.fzdwx.inf.common.err.impl.NotFoundException;
+import io.github.fzdwx.inf.common.err.impl.VerifyException;
 
 /**
  * @author <a href="mailto:likelovec@gmail.com">fzdwx</a>

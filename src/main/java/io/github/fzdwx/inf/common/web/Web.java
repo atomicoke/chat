@@ -1,7 +1,7 @@
 package io.github.fzdwx.inf.common.web;
 
 import cn.dev33.satoken.stp.StpUtil;
-import io.github.fzdwx.inf.common.exc.ForbiddenException;
+import io.github.fzdwx.inf.common.err.impl.ForbiddenException;
 import io.github.fzdwx.inf.common.web.core.Context;
 import io.github.fzdwx.inf.common.web.model.UserInfo;
 import io.github.fzdwx.logic.domain.entity.User;
