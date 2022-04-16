@@ -193,6 +193,14 @@ public final class Redis implements InitializingBean {
         HASH.put(key, field, val);
     }
 
+    public static void hIncr(@NonNull final String key, @NonNull final String field, final long amount) {
+        HASH.increment(key, field, amount);
+    }
+
+    public static void hIncr(@NonNull final String key, @NonNull final String field) {
+        HASH.increment(key, field, 1);
+    }
+
     /**
      * 仅当hashKey不存在时才设置 hash hashKey的value。
      */

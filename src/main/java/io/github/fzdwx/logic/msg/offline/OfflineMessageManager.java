@@ -12,7 +12,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class OfflineMessageManager implements InitializingBean {
 
-    private final static String KEY_PREFIX = "offline:msg:";
+    // 未读消息最小的id
+    private final static String MIN_ID_KEY_PREFIX = "msg:minId:";
+    // 未读消息的数量
+    private final static String MEG_SUM_KEY_PREFIX = "msg:sum:";
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -24,7 +27,17 @@ public class OfflineMessageManager implements InitializingBean {
      * filed: fromId | value:  min message id
      */
     public static void push(final ChatMessageResp chatMessageResp) {
-        String key = key(chatMessageResp);
+        setMinMessageId(chatMessageResp);
+        incrMessageSum(chatMessageResp);
+    }
+
+    private static void incrMessageSum(final ChatMessageResp chatMessageResp) {
+        String key = incrKey(chatMessageResp);
+        Redis.hIncr(key, chatMessageResp.getFromId());
+    }
+
+    private static void setMinMessageId(final ChatMessageResp chatMessageResp) {
+        String key = minIdKey(chatMessageResp);
 
         // 当 msgId 为null 或 msgId > minMsgId 时，更新 msgId
         final String msgId = Redis.hGet(key, chatMessageResp.getFromId());
@@ -33,12 +46,11 @@ public class OfflineMessageManager implements InitializingBean {
         }
     }
 
-    /**
-     * build redis key.
-     *
-     * @return {@link String }
-     */
-    private static String key(ChatMessageResp chatMessageResp) {
-        return KEY_PREFIX + chatMessageResp.getToId();
+    private static String minIdKey(ChatMessageResp chatMessageResp) {
+        return MIN_ID_KEY_PREFIX + chatMessageResp.getToId();
+    }
+
+    private static String incrKey(ChatMessageResp chatMessageResp) {
+        return MEG_SUM_KEY_PREFIX + chatMessageResp.getToId();
     }
 }
