@@ -2,7 +2,7 @@ package io.github.fzdwx.logic.msg.api.model;
 
 import cn.hutool.core.date.DatePattern;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import io.github.fzdwx.logic.contants.ChatConst;
+import io.github.fzdwx.inf.common.contants.ChatConst;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -24,12 +24,12 @@ public class ListPersonalChatReq {
     private String content;
 
     /**
-     * @see io.github.fzdwx.logic.contants.ChatConst.SessionType
+     * @see ChatConst.SessionType
      */
     private Integer sessionType;
 
     /**
-     * @see io.github.fzdwx.logic.contants.ChatConst.MsgFrom
+     * @see ChatConst.MsgFrom
      */
     private Integer msgFrom;
 
@@ -39,7 +39,7 @@ public class ListPersonalChatReq {
     private Long id;
 
     /**
-     * @see io.github.fzdwx.logic.contants.ChatConst.ContentType
+     * @see ChatConst.ContentType
      */
     private Integer contentType;
 
@@ -49,7 +49,7 @@ public class ListPersonalChatReq {
     private Long nextId;
 
     /**
-     * @see io.github.fzdwx.logic.contants.ChatConst.TurnPageType
+     * @see ChatConst.TurnPageType
      */
     private Integer turnPageType;
 

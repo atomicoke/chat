@@ -3,7 +3,7 @@ package io.github.fzdwx.logic.msg.offline;
 import cn.hutool.core.text.StrPool;
 import io.github.fzdwx.inf.common.Assert;
 import io.github.fzdwx.inf.middleware.redis.Redis;
-import io.github.fzdwx.logic.contants.ChatConst;
+import io.github.fzdwx.inf.common.contants.ChatConst;
 import io.github.fzdwx.logic.msg.api.model.OfflineMsgCount;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;

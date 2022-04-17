@@ -2,7 +2,7 @@ package io.github.fzdwx.logic.msg.api.model.vo;
 
 import io.github.fzdwx.inf.middleware.minio.Minio;
 import io.github.fzdwx.lambada.Lang;
-import io.github.fzdwx.logic.contants.ChatConst;
+import io.github.fzdwx.inf.common.contants.ChatConst;
 import io.github.fzdwx.logic.domain.entity.User;
 import lombok.Data;
 

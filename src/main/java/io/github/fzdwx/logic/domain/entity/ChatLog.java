@@ -3,6 +3,7 @@ package io.github.fzdwx.logic.domain.entity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import io.github.fzdwx.inf.common.contants.ChatConst;
 import io.github.fzdwx.inf.middleware.minio.Minio;
 import io.github.fzdwx.logic.msg.ws.packet.resp.ChatMessageResp;
 import lombok.Data;
@@ -11,7 +12,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import static io.github.fzdwx.lambada.Lang.eq;
-import static io.github.fzdwx.logic.contants.ChatConst.ContentType.Text;
+import static io.github.fzdwx.inf.common.contants.ChatConst.ContentType.Text;
 
 /**
  * 聊天记录
@@ -36,7 +37,7 @@ public class ChatLog implements Serializable {
     /**
      * 会话类型 1:单聊 2:群聊
      *
-     * @see io.github.fzdwx.logic.contants.ChatConst.SessionType
+     * @see ChatConst.SessionType
      */
     private Integer sessionType;
     /**
@@ -46,13 +47,13 @@ public class ChatLog implements Serializable {
     /**
      * 消息发送者的类型 1:用户 2:系统
      *
-     * @see io.github.fzdwx.logic.contants.ChatConst.MsgFrom
+     * @see ChatConst.MsgFrom
      */
     private Integer msgFrom;
     /**
      * 消息类型
      *
-     * @see io.github.fzdwx.logic.contants.ChatConst.ContentType
+     * @see ChatConst.ContentType
      */
     private Integer contentType;
     /**

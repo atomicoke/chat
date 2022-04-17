@@ -5,7 +5,7 @@ import io.github.fzdwx.inf.common.web.model.UserInfo;
 import io.github.fzdwx.inf.middleware.minio.Minio;
 import io.github.fzdwx.lambada.Lang;
 import io.github.fzdwx.lambada.Seq;
-import io.github.fzdwx.logic.contants.ChatConst;
+import io.github.fzdwx.inf.common.contants.ChatConst;
 import io.github.fzdwx.logic.domain.entity.ChatLog;
 import io.github.fzdwx.logic.msg.ws.WsPacket;
 import lombok.Data;
@@ -20,11 +20,11 @@ import java.util.Date;
 import java.util.List;
 
 import static io.github.fzdwx.lambada.Lang.eq;
-import static io.github.fzdwx.logic.contants.ChatConst.ContentType.Text;
-import static io.github.fzdwx.logic.contants.ChatConst.ContentType.audio;
-import static io.github.fzdwx.logic.contants.ChatConst.ContentType.file;
-import static io.github.fzdwx.logic.contants.ChatConst.ContentType.image;
-import static io.github.fzdwx.logic.contants.ChatConst.ContentType.video;
+import static io.github.fzdwx.inf.common.contants.ChatConst.ContentType.Text;
+import static io.github.fzdwx.inf.common.contants.ChatConst.ContentType.audio;
+import static io.github.fzdwx.inf.common.contants.ChatConst.ContentType.file;
+import static io.github.fzdwx.inf.common.contants.ChatConst.ContentType.image;
+import static io.github.fzdwx.inf.common.contants.ChatConst.ContentType.video;
 
 /**
  * @author <a href="mailto:likelovec@gmail.com">fzdwx</a>
@@ -45,14 +45,14 @@ public class ChatMessagePacket extends WsPacket {
     /**
      * 会话类型
      *
-     * @see io.github.fzdwx.logic.contants.ChatConst.SessionType
+     * @see ChatConst.SessionType
      */
     private int sessionType;
 
     /**
      * 消息发送者
      *
-     * @see io.github.fzdwx.logic.contants.ChatConst.MsgFrom
+     * @see ChatConst.MsgFrom
      */
     private int msgFrom;
 

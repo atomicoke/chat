@@ -3,7 +3,7 @@ package io.github.fzdwx.logic.msg.ws.packet.resp;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.github.fzdwx.inf.common.web.model.UserInfo;
 import io.github.fzdwx.lambada.Coll;
-import io.github.fzdwx.logic.contants.ChatConst;
+import io.github.fzdwx.inf.common.contants.ChatConst;
 import io.github.fzdwx.logic.domain.entity.ChatLog;
 import io.github.fzdwx.logic.msg.ws.packet.ChatMessagePacket;
 import lombok.Data;

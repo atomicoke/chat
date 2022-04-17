@@ -1,4 +1,4 @@
-package io.github.fzdwx.logic.contants;
+package io.github.fzdwx.inf.common.contants;
 
 
 import io.github.fzdwx.logic.domain.entity.ChatLog;
