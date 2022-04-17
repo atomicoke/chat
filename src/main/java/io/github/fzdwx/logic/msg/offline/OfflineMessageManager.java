@@ -23,10 +23,6 @@ public class OfflineMessageManager implements InitializingBean {
 
     }
 
-    /**
-     * key: offline:msg:userId
-     * filed: fromId | value:  min message id
-     */
     public static void push(final ChatMessageResp chatMessageResp) {
         setMinMessageId(chatMessageResp);
         incrMessageSum(chatMessageResp);
@@ -34,7 +30,7 @@ public class OfflineMessageManager implements InitializingBean {
 
     private static void incrMessageSum(final ChatMessageResp chatMessageResp) {
         String key = incrKey(chatMessageResp);
-        Redis.hIncr(key, chatMessageResp.getSessionType() + StrPool.COLON + chatMessageResp.getFromId(), chatMessageResp.getChatMessages().size());
+        Redis.hIncr(key, chatMessageResp.getFromId(), chatMessageResp.getChatMessages().size());
     }
 
     private static void setMinMessageId(final ChatMessageResp chatMessageResp) {
@@ -47,11 +43,21 @@ public class OfflineMessageManager implements InitializingBean {
         }
     }
 
+    /*
+    key生成规则：
+        如果是单聊：
+            key: offline:msg:userId:SessionType.personal
+            filed: fromId | value:  min message id
+        如果是群聊：
+            key: offline:msg:groupId:SessionType.group
+            filed: fromId | value:  min message id
+     */
+
     private static String minIdKey(ChatMessageResp chatMessageResp) {
-        return MIN_ID_KEY_PREFIX + chatMessageResp.getToId();
+        return MIN_ID_KEY_PREFIX + chatMessageResp.getToId() + StrPool.COLON + chatMessageResp.getSessionType();
     }
 
     private static String incrKey(ChatMessageResp chatMessageResp) {
-        return MEG_SUM_KEY_PREFIX + chatMessageResp.getToId();
+        return MEG_SUM_KEY_PREFIX + chatMessageResp.getToId() + StrPool.COLON + chatMessageResp.getSessionType();
     }
 }
