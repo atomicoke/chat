@@ -1,6 +1,7 @@
 package io.github.fzdwx.inf.middleware.minio;
 
 import cn.hutool.core.io.FileTypeUtil;
+import cn.hutool.core.util.StrUtil;
 import io.github.fzdwx.inf.common.err.Err;
 import io.github.fzdwx.inf.common.err.impl.MinioException;
 import io.github.fzdwx.inf.common.err.impl.VerifyException;
@@ -115,6 +116,9 @@ public class Minio implements InitializingBean {
     }
 
     public static String getPubAccessUrl(String objectName) {
+        if (StrUtil.isBlank(objectName)) {
+            return objectName;
+        }
         return outEndpointStatic + "/" + pubBucketName + "/" + objectName;
     }
 
@@ -131,6 +135,9 @@ public class Minio implements InitializingBean {
      * @return {@link String }
      */
     public static String getAccessUrl(String objectName, int amount, TimeUnit timeUnit) {
+        if (StrUtil.isBlank(objectName)) {
+            return objectName;
+        }
         try {
             return minioAccessUrlClient.getPresignedObjectUrl(GetPresignedObjectUrlArgs.builder()
                     .bucket(privateBucketName)
