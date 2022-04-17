@@ -19,10 +19,14 @@ public interface ChatConst {
          */
         int personal = 1;
 
+        String personalStr = "1";
+
         /**
          * 群聊/频道
          */
         int group = 2;
+
+        String groupStr = "2";
 
         /**
          * 发送给所有人
@@ -62,4 +66,21 @@ public interface ChatConst {
         int file = 5;
     }
 
+    interface TurnPageType {
+
+        /**
+         * 下一页
+         */
+        Integer down = 1;
+        /**
+         * 上一页
+         */
+        Integer up = 2;
+    }
+
+    interface LeftOrRight {
+
+        Integer left = 1;
+        Integer right = 2;
+    }
 }

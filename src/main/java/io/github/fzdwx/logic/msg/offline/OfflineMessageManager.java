@@ -1,10 +1,10 @@
 package io.github.fzdwx.logic.msg.offline;
 
 import cn.hutool.core.text.StrPool;
+import io.github.fzdwx.inf.common.Assert;
 import io.github.fzdwx.inf.middleware.redis.Redis;
 import io.github.fzdwx.logic.contants.ChatConst;
 import io.github.fzdwx.logic.msg.api.model.OfflineMsgCount;
-import io.github.fzdwx.logic.msg.ws.packet.resp.ChatMessageResp;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
 
@@ -25,14 +25,29 @@ public class OfflineMessageManager implements InitializingBean {
 
     }
 
-    public static void push(final ChatMessageResp chatMessageResp) {
-        setMinMessageId(chatMessageResp);
-        incrMessageSum(chatMessageResp);
+    /**
+     * 推
+     *
+     * @param recvUserId   接收消息的用户id
+     * @param channelId    通道标识(根据sessionType区分 比如说发送消息的用户id，群聊的群id)
+     * @param sessionType  会话类型
+     * @param minMessageId 当前一组消息中最小的msg id
+     * @param messageSize  当前一组消息的数量
+     */
+    public static void push(final String recvUserId, String channelId, String sessionType, Long minMessageId, int messageSize) {
+        setMinMessageId(recvUserId, channelId, minMessageId);
+        incrMessageSum(recvUserId, channelId, sessionType, messageSize);
     }
 
-    public static OfflineMsgCount getOfflineMsgCount(final String toId) {
-        final var personalKey = incrKey(toId, ChatConst.SessionType.personal);
-        final var groupKey = incrKey(toId, ChatConst.SessionType.group);
+    /**
+     * 获取离线消息数量
+     *
+     * @param recvUserId 接收消息的用户id
+     * @return {@link OfflineMsgCount }
+     */
+    public static OfflineMsgCount getOfflineMsgCount(final String recvUserId) {
+        final var personalKey = incrKey(recvUserId, ChatConst.SessionType.personalStr);
+        final var groupKey = incrKey(recvUserId, ChatConst.SessionType.groupStr);
 
         final var personalMsgCntMap = Redis.hGetAll(personalKey);
         final var groupMsgCntMap = Redis.hGetAll(groupKey);
@@ -40,18 +55,44 @@ public class OfflineMessageManager implements InitializingBean {
         return OfflineMsgCount.of(personalMsgCntMap, groupMsgCntMap);
     }
 
-    private static void incrMessageSum(final ChatMessageResp chatMessageResp) {
-        String key = incrKey(chatMessageResp.getToId(), chatMessageResp.getSessionType());
-        Redis.hIncr(key, chatMessageResp.getFromId(), chatMessageResp.getChatMessages().size());
+    /**
+     * 获取离线消息最小的id
+     *
+     * @param recvUserId 接收消息的用户id
+     * @param channelId  通道标识(根据sessionType区分 比如说发送消息的用户id，群聊的群id)
+     * @return {@link Long }
+     */
+    public static Long getOfflineMsgMinId(final String recvUserId, final String channelId) {
+        String key = minIdKey(recvUserId);
+        final var minId = Redis.hGet(key, channelId);
+        Assert.notNull(minId, "minId is null");
+        return Long.valueOf(minId);
     }
 
-    private static void setMinMessageId(final ChatMessageResp chatMessageResp) {
-        String key = minIdKey(chatMessageResp.getToId(), chatMessageResp.getSessionType());
+    /**
+     * 清楚离线消息数量与最小的id
+     *
+     * @param recvUserId  接收消息的用户id
+     * @param channelId   通道标识(根据sessionType区分 比如说发送消息的用户id，群聊的群id)
+     * @param sessionType 会话类型
+     */
+    public static void cleanOfflineMsg(final String recvUserId, final String channelId, final String sessionType) {
+        Redis.hDel(minIdKey(recvUserId), channelId);
+        Redis.hDel(incrKey(recvUserId, sessionType), channelId);
+    }
+
+    private static void incrMessageSum(final String recvUserId, String channelId, String sessionType, int msgSize) {
+        String key = incrKey(recvUserId, String.valueOf(sessionType));
+        Redis.hIncr(key, channelId, msgSize);
+    }
+
+    private static void setMinMessageId(final String recvUserId, String channelId, final Long minId) {
+        String key = minIdKey(recvUserId);
 
         // 当 msgId 为null 或 msgId > minMsgId 时，更新 msgId
-        final String msgId = Redis.hGet(key, chatMessageResp.getFromId());
-        if (msgId == null || Long.parseLong(msgId) > chatMessageResp.getMinMessageId()) {
-            Redis.hSet(key, chatMessageResp.getFromId(), chatMessageResp.getMinMessageId().toString());
+        final String msgId = Redis.hGet(key, channelId);
+        if (msgId == null || Long.parseLong(msgId) > minId) {
+            Redis.hSet(key, channelId, minId.toString());
         }
     }
 
@@ -59,18 +100,17 @@ public class OfflineMessageManager implements InitializingBean {
     /*
     key生成规则：
         如果是单聊：
-            key: offline:msg:userId:SessionType.personal
-            filed: fromId | value:  min message id
+            key: offline:msg:recvUserId:SessionType.personal
+            filed: channelId | value:  min message id
         如果是群聊：
-            key: offline:msg:groupId:SessionType.group
-            filed: fromId | value:  min message id
+            key: offline:msg:recvUserId:SessionType.group
+            filed: channelId | value:  min message id
      */
-    private static String minIdKey(final String toId, final int sessionType) {
-        return MIN_ID_KEY_PREFIX + toId + StrPool.COLON + sessionType;
+    private static String minIdKey(final String recvUserId) {
+        return MIN_ID_KEY_PREFIX + recvUserId;
     }
 
-    private static String incrKey(final String toId, final int sessionType) {
-        return MEG_SUM_KEY_PREFIX + toId + StrPool.COLON + sessionType;
+    private static String incrKey(final String recvUserId, final String sessionType) {
+        return MEG_SUM_KEY_PREFIX + recvUserId + StrPool.COLON + sessionType;
     }
-
 }

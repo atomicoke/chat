@@ -60,7 +60,7 @@ public class ChatMessagePacketHandler implements WsPacket.Handler<ChatMessagePac
     private void sendPersonal(final ChatMessagePacket packet, final ChatMessageResp resp) {
         final var conn = UserWsConn.get(packet);
         if (conn == null) {
-            OfflineMessageManager.push(resp);
+            OfflineMessageManager.push(resp.getToId(), resp.getFromId(), String.valueOf(resp.getSessionType()), resp.getMinMessageId(), resp.getChatMessages().size());
             return;
         }
 
@@ -70,7 +70,7 @@ public class ChatMessagePacketHandler implements WsPacket.Handler<ChatMessagePac
 
     private void sendGroup(final ChatMessagePacket packet, final ChatMessageResp resp) {
         final var chatMessages = packet.buildChatLogs(userInfo(packet));
-
+        // TODO: 2022/4/17 群聊
         chatLogDao.saveBatch(Seq.of(chatMessages).typeOf(ChatLog.class).toList());
     }
 

@@ -3,7 +3,11 @@ package io.github.fzdwx.logic.domain.dao;
 import io.github.fzdwx.inf.middleware.db.BaseRepo;
 import io.github.fzdwx.logic.domain.entity.ChatLog;
 import io.github.fzdwx.logic.domain.mapper.ChatLogMapper;
+import io.github.fzdwx.logic.msg.api.model.ListPersonalChatReq;
+import io.github.fzdwx.logic.msg.api.model.vo.ListPersonalChatVO;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * ChatLogDao: 数据操作接口实现
@@ -15,4 +19,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class ChatLogRepo extends BaseRepo<ChatLogMapper, ChatLog> {
 
+    public List<ListPersonalChatVO> listPersonal(final ListPersonalChatReq req) {
+        return super.baseMapper.listPersonal(req);
+    }
 }

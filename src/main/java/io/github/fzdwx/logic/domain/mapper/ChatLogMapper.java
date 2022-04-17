@@ -2,6 +2,11 @@ package io.github.fzdwx.logic.domain.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import io.github.fzdwx.logic.domain.entity.ChatLog;
+import io.github.fzdwx.logic.msg.api.model.ListPersonalChatReq;
+import io.github.fzdwx.logic.msg.api.model.vo.ListPersonalChatVO;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * @author 98065
@@ -11,4 +16,5 @@ import io.github.fzdwx.logic.domain.entity.ChatLog;
  */
 public interface ChatLogMapper extends BaseMapper<ChatLog> {
 
+    List<ListPersonalChatVO> listPersonal(@Param("req") ListPersonalChatReq req);
 }

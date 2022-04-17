@@ -11,6 +11,7 @@ import io.github.fzdwx.logic.msg.ws.WsPacket;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -193,7 +194,8 @@ public class ChatMessagePacket extends WsPacket {
                 }
             }
 
-            this.content = Minio.uploadPrivate(inputStream, fileName).getObjectName();
+            // todo 文件格式
+            this.content = Minio.uploadPrivate(inputStream, fileName, MediaType.APPLICATION_OCTET_STREAM_VALUE).getObjectName();
         }
     }
 }

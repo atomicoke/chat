@@ -3,21 +3,80 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="io.github.fzdwx.logic.domain.mapper.ChatLogMapper">
-
     <resultMap id="BaseResultMap" type="io.github.fzdwx.logic.domain.entity.ChatLog">
-            <id property="id" column="id" jdbcType="BIGINT"/>
-            <result property="fromId" column="from_id" jdbcType="BIGINT"/>
-            <result property="sessionType" column="session_type" jdbcType="INTEGER"/>
-            <result property="toId" column="to_id" jdbcType="BIGINT"/>
-            <result property="msgFrom" column="msg_from" jdbcType="TINYINT"/>
-            <result property="contentType" column="content_type" jdbcType="INTEGER"/>
-            <result property="content" column="content" jdbcType="VARCHAR"/>
-            <result property="sendTime" column="send_time" jdbcType="TIMESTAMP"/>
+        <!--@Table chat_log-->
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="fromId" column="from_id" jdbcType="BIGINT"/>
+        <result property="content" column="content" jdbcType="VARCHAR"/>
+        <result property="sessionType" column="session_type" jdbcType="INTEGER"/>
+        <result property="toId" column="to_id" jdbcType="BIGINT"/>
+        <result property="msgFrom" column="msg_from" jdbcType="TINYINT"/>
+        <result property="contentType" column="content_type" jdbcType="INTEGER"/>
+        <result property="fileName" column="file_name" jdbcType="VARCHAR"/>
+        <result property="fileSize" column="file_size" jdbcType="INTEGER"/>
+        <result property="sendTime" column="send_time" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,from_id,session_type,
-        to_id,msg_from,content_type,
-        content,send_time
+        id,
+        from_id,
+        content,
+        session_type,
+        to_id,
+        msg_from,
+        content_type,
+        file_name,
+        file_size,
+        send_time
     </sql>
+
+    <select id="listPersonal" resultType="io.github.fzdwx.logic.msg.api.model.vo.ListPersonalChatVO">
+        select *
+        from chat_log a
+        where (a.from_id = #{req.fromId} and a.to_id = #{req.toId}
+        or a.from_id = #{req.toId} and a.to_id = #{req.fromId})
+        <!-- 翻页 -->
+        <if test="req.nextId != null">
+            <if test="req.turnPageType == 1">
+                and a.id > #{req.nextId}
+            </if>
+            <if test="req.turnPageType == 2">
+                and #{req.nextId} > a.id
+            </if>
+        </if>
+        <if test="req.startTime != null">
+            and #{req.startTime} &lt;= a.send_time
+        </if>
+        <if test="req.endTime != null">
+            and a.send_time &lt;= #{req.endTime}
+        </if>
+        <if test="req.sessionType != null">
+            and a.session_type = #{req.sessionType}
+        </if>
+        <if test="req.msgFrom != null">
+            and a.msg_from = #{req.msgFrom}
+        </if>
+        <if test="req.id != null">
+            and a.id >= #{req.id}
+        </if>
+        <if test="req.contentType != null">
+            and a.content_type = #{req.contentType}
+        </if>
+        <if test="req.content != null and req.content != ''">
+            and (a.content like concat('%', #{req.content}, '%') or a.file_name like concat('%', #{req.content}, '%'))
+        </if>
+        <if test="req.nextId != null">
+            <if test="req.turnPageType == 1">
+                order by send_time, id
+                limit #{req.limit};
+            </if>
+            <if test="req.turnPageType == 2">
+                order by send_time desc,id desc limit
+                #{req.limit};
+            </if>
+        </if>
+        <if test="req.nextId == null">
+            order by send_time,id limit #{req.limit};
+        </if>
+    </select>
 </mapper>
