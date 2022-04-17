@@ -2,6 +2,8 @@ package io.github.fzdwx.logic.msg.offline;
 
 import cn.hutool.core.text.StrPool;
 import io.github.fzdwx.inf.middleware.redis.Redis;
+import io.github.fzdwx.logic.contants.ChatConst;
+import io.github.fzdwx.logic.msg.api.model.OfflineMsgCount;
 import io.github.fzdwx.logic.msg.ws.packet.resp.ChatMessageResp;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
@@ -28,13 +30,23 @@ public class OfflineMessageManager implements InitializingBean {
         incrMessageSum(chatMessageResp);
     }
 
+    public static OfflineMsgCount getOfflineMsgCount(final String toId) {
+        final var personalKey = incrKey(toId, ChatConst.SessionType.personal);
+        final var groupKey = incrKey(toId, ChatConst.SessionType.group);
+
+        final var personalMsgCntMap = Redis.hGetAll(personalKey);
+        final var groupMsgCntMap = Redis.hGetAll(groupKey);
+
+        return OfflineMsgCount.of(personalMsgCntMap, groupMsgCntMap);
+    }
+
     private static void incrMessageSum(final ChatMessageResp chatMessageResp) {
-        String key = incrKey(chatMessageResp);
+        String key = incrKey(chatMessageResp.getToId(), chatMessageResp.getSessionType());
         Redis.hIncr(key, chatMessageResp.getFromId(), chatMessageResp.getChatMessages().size());
     }
 
     private static void setMinMessageId(final ChatMessageResp chatMessageResp) {
-        String key = minIdKey(chatMessageResp);
+        String key = minIdKey(chatMessageResp.getToId(), chatMessageResp.getSessionType());
 
         // 当 msgId 为null 或 msgId > minMsgId 时，更新 msgId
         final String msgId = Redis.hGet(key, chatMessageResp.getFromId());
@@ -42,6 +54,7 @@ public class OfflineMessageManager implements InitializingBean {
             Redis.hSet(key, chatMessageResp.getFromId(), chatMessageResp.getMinMessageId().toString());
         }
     }
+
 
     /*
     key生成规则：
@@ -52,12 +65,12 @@ public class OfflineMessageManager implements InitializingBean {
             key: offline:msg:groupId:SessionType.group
             filed: fromId | value:  min message id
      */
-
-    private static String minIdKey(ChatMessageResp chatMessageResp) {
-        return MIN_ID_KEY_PREFIX + chatMessageResp.getToId() + StrPool.COLON + chatMessageResp.getSessionType();
+    private static String minIdKey(final String toId, final int sessionType) {
+        return MIN_ID_KEY_PREFIX + toId + StrPool.COLON + sessionType;
     }
 
-    private static String incrKey(ChatMessageResp chatMessageResp) {
-        return MEG_SUM_KEY_PREFIX + chatMessageResp.getToId() + StrPool.COLON + chatMessageResp.getSessionType();
+    private static String incrKey(final String toId, final int sessionType) {
+        return MEG_SUM_KEY_PREFIX + toId + StrPool.COLON + sessionType;
     }
+
 }

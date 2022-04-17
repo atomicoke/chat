@@ -27,7 +27,7 @@ public interface ChatConst {
         /**
          * 发送给所有人
          */
-        int ALL = 3;
+        int broadcast = 3;
     }
 
     /**
