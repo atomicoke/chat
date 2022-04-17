@@ -1,5 +1,6 @@
 package io.github.fzdwx.logic.msg.offline;
 
+import cn.hutool.core.text.StrPool;
 import io.github.fzdwx.inf.middleware.redis.Redis;
 import io.github.fzdwx.logic.msg.ws.packet.resp.ChatMessageResp;
 import org.springframework.beans.factory.InitializingBean;
@@ -33,7 +34,7 @@ public class OfflineMessageManager implements InitializingBean {
 
     private static void incrMessageSum(final ChatMessageResp chatMessageResp) {
         String key = incrKey(chatMessageResp);
-        Redis.hIncr(key, chatMessageResp.getFromId());
+        Redis.hIncr(key, chatMessageResp.getSessionType() + StrPool.COLON + chatMessageResp.getFromId(), chatMessageResp.getChatMessages().size());
     }
 
     private static void setMinMessageId(final ChatMessageResp chatMessageResp) {
