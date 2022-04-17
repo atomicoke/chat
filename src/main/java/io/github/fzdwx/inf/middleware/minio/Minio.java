@@ -67,15 +67,15 @@ public class Minio implements InitializingBean {
         this.outEndpoint = outEndpoint;
     }
 
-    public static MinioUploadRes uploadPubImage(InputStream stream, String fileName) throws IOException {
-        return uploadImage(stream, fileName, pubBucketName, getPubUrl);
+    public static MinioUploadRes uploadPubImage(InputStream stream, String fileName, String contentType) throws IOException {
+        return uploadImage(stream, fileName, pubBucketName, contentType, getPubUrl);
     }
 
-    public static MinioUploadRes uploadPrivateImage(InputStream stream, String fileName) throws IOException {
-        return uploadImage(stream, fileName, privateBucketName, getPrivateUrl);
+    public static MinioUploadRes uploadPrivateImage(InputStream stream, String fileName, String contentType) throws IOException {
+        return uploadImage(stream, fileName, privateBucketName, contentType, getPrivateUrl);
     }
 
-    public static MinioUploadRes uploadImage(InputStream stream, String fileName, String bucketName,
+    public static MinioUploadRes uploadImage(InputStream stream, String fileName, String bucketName, String contentType,
                                              Function<String, String> accessUrlFunc) throws IOException {
         if (stream == null) {
             throw Err.verify("image stream is null");
@@ -85,24 +85,26 @@ public class Minio implements InitializingBean {
         }
         checkImage(stream);
 
-        return upload(stream, fileName, bucketName, accessUrlFunc);
+        return upload(stream, fileName, bucketName, contentType, accessUrlFunc);
     }
 
-    public static MinioUploadRes uploadPrivate(InputStream stream, String fileName) {
-        return upload(stream, fileName, privateBucketName, getPrivateUrl);
+    public static MinioUploadRes uploadPrivate(InputStream stream, String fileName, String contentType) {
+        return upload(stream, fileName, privateBucketName, contentType, getPrivateUrl);
     }
 
-    public static MinioUploadRes uploadPublic(InputStream stream, String fileName) {
-        return upload(stream, fileName, pubBucketName, getPubUrl);
+    public static MinioUploadRes uploadPublic(InputStream stream, String fileName, String contentType) {
+        return upload(stream, fileName, pubBucketName, contentType, getPubUrl);
     }
 
-    public static MinioUploadRes upload(InputStream stream, String fileName, String bucket, Function<String, String> accessUrlFunc) {
-        String objectName = UnixTime.unixTime() + "/" + IdGenerate.fastUuid() + "-" + fileName;
+    public static MinioUploadRes upload(InputStream stream, String fileName, String bucket, String contentType,
+                                        Function<String, String> accessUrlFunc) {
+        String objectName = UnixTime.unixTime() + "/" + IdGenerate.nextId() + fileName;
 
         try {
             return MinioUploadRes.create(
                     minioClient.putObject(PutObjectArgs.builder()
                             .bucket(bucket)
+                            .contentType(contentType)
                             .object(objectName)
                             .stream(stream, stream.available(), -1)
                             .build()),
@@ -167,6 +169,9 @@ public class Minio implements InitializingBean {
         }
 
         final var type = FileTypeUtil.getType(stream);
+
+        stream.reset();
+
         if (type == null) {
             throw new VerifyException("文件格式不支持");
         }

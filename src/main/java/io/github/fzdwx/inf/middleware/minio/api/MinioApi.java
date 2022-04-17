@@ -1,5 +1,6 @@
 package io.github.fzdwx.inf.middleware.minio.api;
 
+import cn.hutool.core.io.IoUtil;
 import io.github.fzdwx.inf.common.web.model.Rest;
 import io.github.fzdwx.inf.middleware.minio.Minio;
 import io.github.fzdwx.inf.middleware.minio.api.model.MinioUploadRes;
@@ -23,7 +24,7 @@ public class MinioApi {
      */
     @PostMapping("/image")
     public Rest<MinioUploadRes> image(MultipartFile file) throws IOException {
-        return Rest.of(Minio.uploadPrivateImage(file.getInputStream(), file.getOriginalFilename()));
+        return Rest.of(Minio.uploadPrivateImage(IoUtil.toStream(file.getBytes()), file.getOriginalFilename(), file.getContentType()));
     }
 
     /**
@@ -31,6 +32,6 @@ public class MinioApi {
      */
     @PostMapping("/pub/image")
     public Rest<MinioUploadRes> pubImage(MultipartFile file) throws IOException {
-        return Rest.of(Minio.uploadPubImage(file.getInputStream(), file.getOriginalFilename()));
+        return Rest.of(Minio.uploadPubImage(IoUtil.toStream(file.getBytes()), file.getOriginalFilename(), file.getContentType()));
     }
 }
