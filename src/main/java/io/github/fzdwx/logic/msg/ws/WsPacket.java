@@ -12,6 +12,7 @@ import io.github.fzdwx.logic.msg.ws.packet.SuccessPacket;
 import io.netty.channel.ChannelFuture;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -24,6 +25,7 @@ import java.util.Map;
  * @author <a href="mailto:likelovec@gmail.com">韦朕</a>
  * @date 2022/4/7 11:20
  */
+@Slf4j
 public abstract class WsPacket {
 
     @Getter
@@ -45,13 +47,18 @@ public abstract class WsPacket {
      */
     @Nullable
     public static <T extends WsPacket> T decode(String s) {
-        final var jsonObject = Json.parseObj(s);
-        final var type = jsonObject.getStr("type");
-        if (type == null) {
+        try {
+            final var jsonObject = Json.parseObj(s);
+            final var type = jsonObject.getStr("type");
+            if (type == null) {
+                return null;
+            }
+
+            return jsonObject.toBean(TypeClassMapping.map.get(type), true);
+        } catch (Exception e) {
+            log.error("decode json to ws packet error", e);
             return null;
         }
-
-        return jsonObject.toBean(TypeClassMapping.map.get(type), true);
     }
 
     /**
