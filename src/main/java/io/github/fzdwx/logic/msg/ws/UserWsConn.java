@@ -1,6 +1,5 @@
 package io.github.fzdwx.logic.msg.ws;
 
-import io.github.fzdwx.inf.common.err.Err;
 import io.github.fzdwx.inf.common.web.model.UserInfo;
 import io.github.fzdwx.inf.msg.WebSocket;
 import io.github.fzdwx.lambada.fun.State;
@@ -16,6 +15,9 @@ import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.function.BiConsumer;
 
 import static io.github.fzdwx.inf.common.err.Err.verify;
+import static io.github.fzdwx.lambada.Lang.isNull;
+import static io.github.fzdwx.lambada.fun.State.failure;
+import static io.github.fzdwx.lambada.fun.State.success;
 
 /**
  * manager user to websocket connection.
@@ -30,6 +32,10 @@ public class UserWsConn {
     private final static AttributeKey<UserInfo> KEY_USER_INFO = AttributeKey.valueOf("userInfo");
 
     public static void add(String userId, WebSocket webSocket) {
+        if (isNull(userId) || isNull(webSocket)) {
+            throw verify("userId or webSocket is null");
+        }
+
         final var old = WEB_SOCKET_MAP.put(userId, webSocket);
         if (old != null) {
             old.close();
@@ -50,10 +56,10 @@ public class UserWsConn {
     public static State<ChannelFuture> sendTo(String userId, String msg) {
         final var conn = WEB_SOCKET_MAP.get(userId);
         if (conn == null) {
-            return State.failure(Err.verify("user conn  not found :" + userId));
+            return failure(verify("user conn  not found :" + userId));
         }
 
-        return State.success(conn.send(msg));
+        return success(conn.send(msg));
     }
 
     public static void foreach(BiConsumer<String, WebSocket> consumer) {
@@ -61,11 +67,18 @@ public class UserWsConn {
     }
 
     public static void attachUserInfo(final WebSocket ws, final UserInfo userInfo) {
+        if (isNull(userInfo) || isNull(userInfo.getIdLong())) {
+            throw verify("userInfo or userInfo.idLong is null");
+        }
+
         attach(ws, KEY_USER_INFO, userInfo);
     }
 
     public static UserInfo userInfo(WebSocket webSocket) {
-        if (webSocket == null) throw verify("webSocket is null");
+        if (isNull(webSocket)) {
+            throw verify("webSocket is null");
+        }
+
         return webSocket.channel().attr(KEY_USER_INFO).get();
     }
 
@@ -73,6 +86,10 @@ public class UserWsConn {
      * attach attribute to channel
      */
     public static <VALUE> void attach(final WebSocket ws, final AttributeKey<VALUE> key, final VALUE value) {
+        if (isNull(ws)) {
+            throw verify("webSocket is null");
+        }
+
         ws.channel().attr(key).set(value);
     }
 }
