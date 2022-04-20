@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * 用户发起好友申请表
@@ -49,7 +49,7 @@ public class FriendRequest implements Serializable {
     /**
      * 处理时间
      */
-    private LocalDateTime handlerTime;
+    private Date handlerTime;
 
     /**
      * 拒绝可以携带msg给发起申请的人
@@ -59,7 +59,7 @@ public class FriendRequest implements Serializable {
     /**
      * 创建时间
      */
-    private LocalDateTime createTime;
+    private Date createTime;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;

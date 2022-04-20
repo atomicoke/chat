@@ -4,12 +4,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.github.fzdwx.inf.common.contants.ChatConst;
 import io.github.fzdwx.inf.common.web.model.UserInfo;
 import io.github.fzdwx.inf.middleware.minio.Minio;
-import io.github.fzdwx.logic.domain.entity.ChatLog;
+import io.github.fzdwx.logic.domain.entity.ChatHistory;
 import io.github.fzdwx.logic.msg.ws.packet.ChatMessagePacket;
 import lombok.Data;
+import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 import static io.github.fzdwx.inf.common.contants.ChatConst.ContentType.Text;
 import static io.github.fzdwx.lambada.Lang.eq;
@@ -20,13 +21,14 @@ import static io.github.fzdwx.lambada.Lang.eq;
  */
 @Data
 @Slf4j
+@Accessors(chain = true)
 public class ChatMessageResp {
 
     /**
-     * 实际接收人id
+     * 当前信箱所属人id
      */
     @JsonIgnore
-    private String receiverId;
+    private String boxOwnerId;
 
     /**
      * 消息id
@@ -43,8 +45,23 @@ public class ChatMessageResp {
     private String toId;
     private int sessionType;
     private int msgFrom;
-    private LocalDateTime sendTime;
+    private Date sendTime;
     private ChatMessage chatMessage;
+
+    public ChatMessageResp copy(final Integer boxOwnerId) {
+        final ChatMessageResp chatMessageResp = new ChatMessageResp();
+        chatMessageResp.setBoxOwnerId(boxOwnerId.toString());
+        chatMessageResp.setMessageId(this.messageId);
+        chatMessageResp.setFromId(this.fromId);
+        chatMessageResp.setFromUname(this.fromUname);
+        chatMessageResp.setFromAvatar(this.fromAvatar);
+        chatMessageResp.setToId(this.toId);
+        chatMessageResp.setSessionType(this.sessionType);
+        chatMessageResp.setMsgFrom(this.msgFrom);
+        chatMessageResp.setSendTime(this.sendTime);
+        chatMessageResp.setChatMessage(this.chatMessage);
+        return chatMessageResp;
+    }
 
     @Data
     public static class ChatMessage {
@@ -77,9 +94,9 @@ public class ChatMessageResp {
         return this;
     }
 
-    public static ChatMessageResp from(final UserInfo userInfo, final ChatMessagePacket packet, final ChatLog chatLog) {
+    public static ChatMessageResp from(final UserInfo userInfo, final ChatMessagePacket packet, final ChatHistory chatHistory) {
         final var resp = new ChatMessageResp();
-        resp.setMessageId(chatLog.getId());
+        resp.setMessageId(chatHistory.getId());
         resp.setFromId(userInfo.getId());
         resp.setFromUname(userInfo.getUname());
         resp.setFromAvatar(userInfo.getAvatar());
@@ -87,7 +104,7 @@ public class ChatMessageResp {
         resp.setSessionType(packet.getSessionType());
         resp.setMsgFrom(packet.getMsgFrom());
         resp.setSendTime(packet.getSendTime());
-        resp.setChatMessage(chatLog.toResp());
+        resp.setChatMessage(chatHistory.toResp());
         return resp;
     }
 }

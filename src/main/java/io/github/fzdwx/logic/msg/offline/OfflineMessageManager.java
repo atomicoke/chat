@@ -2,6 +2,8 @@ package io.github.fzdwx.logic.msg.offline;
 
 import cn.hutool.extra.spring.SpringUtil;
 import io.github.fzdwx.inf.middleware.redis.Redis;
+import io.github.fzdwx.lambada.Seq;
+import io.github.fzdwx.lambada.lang.StopWatch;
 import io.github.fzdwx.logic.msg.domain.resp.ChatMessageResp;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -28,13 +30,13 @@ public class OfflineMessageManager implements InitializingBean {
     /**
      * 推
      *
-     * @param resp       chat message resp
-     * @param receiverId 实际接收者id
+     * @param resp        chat message resp
+     * @param boxOwnerIds 需要发往的各个信箱id
      */
-    public static void push(final ChatMessageResp resp, final String receiverId) {
-        resp.setReceiverId(receiverId);
-        mongoTemplate.insert(resp, COLLECTION);
-        // mongoTemplate.insert()
+    public static void push(final ChatMessageResp resp, final String... boxOwnerIds) {
+        final StopWatch stopWatch = StopWatch.get("insert mongo");
+        mongoTemplate.insert(Seq.range(2000).mapToObj(resp::copy).toList(), COLLECTION);
+        stopWatch.stopAndPrint();
     }
 
     private static void setMinMessageId(final String recvUserId, String channelId, final Long minId) {
@@ -46,7 +48,6 @@ public class OfflineMessageManager implements InitializingBean {
             Redis.hSet(key, channelId, minId.toString());
         }
     }
-
 
     /*
     key生成规则：

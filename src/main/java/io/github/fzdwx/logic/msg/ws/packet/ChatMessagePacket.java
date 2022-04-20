@@ -5,7 +5,7 @@ import io.github.fzdwx.inf.common.err.Err;
 import io.github.fzdwx.inf.common.web.model.UserInfo;
 import io.github.fzdwx.inf.middleware.minio.Minio;
 import io.github.fzdwx.lambada.Lang;
-import io.github.fzdwx.logic.domain.entity.ChatLog;
+import io.github.fzdwx.logic.domain.entity.ChatHistory;
 import io.github.fzdwx.logic.msg.ws.WsPacket;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -14,7 +14,7 @@ import org.springframework.http.MediaType;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 import static io.github.fzdwx.inf.common.contants.ChatConst.ContentType.Text;
 import static io.github.fzdwx.inf.common.contants.ChatConst.ContentType.audio;
@@ -56,7 +56,7 @@ public class ChatMessagePacket extends WsPacket {
     /**
      * 发送时间
      */
-    private LocalDateTime sendTime;
+    private Date sendTime;
 
     /**
      * 聊天信息
@@ -86,18 +86,18 @@ public class ChatMessagePacket extends WsPacket {
         }
 
         if (this.sendTime == null) {
-            this.sendTime = LocalDateTime.now();
+            this.sendTime = new Date();
         }
 
         return chatMessage.prepare();
     }
 
-    public ChatLog buildChatLog(final UserInfo userInfo) {
+    public ChatHistory buildChatLog(final UserInfo userInfo) {
         return mapping(userInfo, this.chatMessage);
     }
 
-    private ChatLog mapping(final UserInfo userInfo, final ChatMessage chatMessage) {
-        final ChatLog log = new ChatLog();
+    private ChatHistory mapping(final UserInfo userInfo, final ChatMessage chatMessage) {
+        final ChatHistory log = new ChatHistory();
         log.setContent(chatMessage.getContent());
         log.setContentType(chatMessage.getContentType());
         log.setFromId(userInfo.getIdLong());

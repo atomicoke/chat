@@ -4,9 +4,8 @@ import io.github.fzdwx.inf.common.contants.ChatConst;
 import io.github.fzdwx.inf.common.err.Err;
 import io.github.fzdwx.lambada.Seq;
 import io.github.fzdwx.logic.domain.dao.ChatLogRepo;
-import io.github.fzdwx.logic.domain.entity.ChatLog;
+import io.github.fzdwx.logic.domain.entity.ChatHistory;
 import io.github.fzdwx.logic.msg.domain.resp.ChatMessageResp;
-import io.github.fzdwx.logic.msg.offline.OfflineMessageManager;
 import io.github.fzdwx.logic.msg.ws.UserWsConn;
 import io.github.fzdwx.logic.msg.ws.WsPacket;
 import io.github.fzdwx.logic.msg.ws.packet.ChatMessagePacket;
@@ -39,11 +38,15 @@ public class ChatMessagePacketHandler implements WsPacket.Handler<ChatMessagePac
         final var userInfo = userInfo(packet);
         final var chatLog = packet.buildChatLog(userInfo);
 
-        final var flag = chatLogDao.save(chatLog);
-        if (!flag) {
-            packet.sendError("保存失败");
-            return;
-        } else packet.sendSuccess();
+        // todo save 和 saveBatch 相差10ms 左右
+        // 原因： saveBatch 默认加了事务?会导致变快
+        chatLogDao.insert(chatLog);
+        // final var flag = chatLogDao.saveBatch(Coll.list(chatLog));
+        // if (!flag) {
+        //     packet.sendError("保存失败");
+        //     return;
+        // } else
+            packet.sendSuccess();
         //endregion
 
         //region switch chat type and send to user.
@@ -60,7 +63,7 @@ public class ChatMessagePacketHandler implements WsPacket.Handler<ChatMessagePac
     private void sendPersonal(final ChatMessagePacket packet, final ChatMessageResp resp) {
         final var conn = UserWsConn.get(packet);
         if (conn == null) {
-            OfflineMessageManager.push(resp,resp.getToId());
+            // OfflineMessageManager.push(resp, resp.getToId(), resp.getFromId());
             return;
         }
 
@@ -71,7 +74,7 @@ public class ChatMessagePacketHandler implements WsPacket.Handler<ChatMessagePac
     private void sendGroup(final ChatMessagePacket packet, final ChatMessageResp resp) {
         final var chatMessages = packet.buildChatLog(userInfo(packet));
         // TODO: 2022/4/17 群聊
-        chatLogDao.saveBatch(Seq.of(chatMessages).typeOf(ChatLog.class).toList());
+        chatLogDao.saveBatch(Seq.of(chatMessages).typeOf(ChatHistory.class).toList());
     }
 
     private void sendAll(final ChatMessagePacket packet, final ChatMessageResp resp) {

@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * 用户加的好友表
@@ -44,12 +44,12 @@ public class Friend implements Serializable {
     /**
      * 添加时间
      */
-    private LocalDateTime addTime;
+    private Date addTime;
 
     /**
      * 更新时间
      */
-    private LocalDateTime updateTime;
+    private Date updateTime;
 
     /**
      * 是否逻辑删除

@@ -8,16 +8,16 @@ import io.github.fzdwx.logic.msg.domain.resp.ChatMessageResp;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * 聊天记录
  *
- * @TableName chat_log
+ * @TableName chat_history
  */
 @TableName(value = "chat_log")
 @Data
-public class ChatLog implements Serializable {
+public class ChatHistory implements Serializable {
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
@@ -37,7 +37,7 @@ public class ChatLog implements Serializable {
      */
     private Integer sessionType;
     /**
-     * 接收者id
+     * 接收者id 当为单聊时为userId,当为群聊是为群id
      */
     private Long toId;
     /**
@@ -70,7 +70,7 @@ public class ChatLog implements Serializable {
     /**
      * 发送时间
      */
-    private LocalDateTime sendTime;
+    private Date sendTime;
 
     public ChatMessageResp.ChatMessage toResp() {
         final var resp = new ChatMessageResp.ChatMessage();

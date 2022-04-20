@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="io.github.fzdwx.logic.domain.mapper.ChatLogMapper">
-    <resultMap id="BaseResultMap" type="io.github.fzdwx.logic.domain.entity.ChatLog">
+    <resultMap id="BaseResultMap" type="io.github.fzdwx.logic.domain.entity.ChatHistory">
         <!--@Table chat_log-->
         <id property="id" column="id" jdbcType="BIGINT"/>
         <result property="fromId" column="from_id" jdbcType="BIGINT"/>
@@ -29,4 +29,20 @@
         file_size,
         send_time
     </sql>
+
+    <insert id="save">
+        INSERT INTO
+            chat_log (
+            id,
+            from_id,
+            session_type,
+            to_id,
+            msg_from,
+            content_type,
+            content,
+            send_time
+        )
+        VALUES
+            (#{chatLog.id}, #{chatLog.fromId}, #{chatLog.sessionType}, #{chatLog.toId}, #{chatLog.msgFrom}, #{chatLog.contentType}, #{chatLog.content}, #{chatLog.sendTime})
+    </insert>
 </mapper>

@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * 群聊
@@ -51,7 +51,7 @@ public class GroupChatMember implements Serializable {
     /**
      * 入群时间
      */
-    private LocalDateTime addTime;
+    private Date addTime;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
