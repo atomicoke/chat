@@ -5,11 +5,11 @@ import io.github.fzdwx.inf.common.err.Err;
 import io.github.fzdwx.lambada.Seq;
 import io.github.fzdwx.logic.domain.dao.ChatLogRepo;
 import io.github.fzdwx.logic.domain.entity.ChatLog;
+import io.github.fzdwx.logic.msg.domain.resp.ChatMessageResp;
 import io.github.fzdwx.logic.msg.offline.OfflineMessageManager;
 import io.github.fzdwx.logic.msg.ws.UserWsConn;
 import io.github.fzdwx.logic.msg.ws.WsPacket;
 import io.github.fzdwx.logic.msg.ws.packet.ChatMessagePacket;
-import io.github.fzdwx.logic.msg.ws.packet.resp.ChatMessageResp;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -60,7 +60,7 @@ public class ChatMessagePacketHandler implements WsPacket.Handler<ChatMessagePac
     private void sendPersonal(final ChatMessagePacket packet, final ChatMessageResp resp) {
         final var conn = UserWsConn.get(packet);
         if (conn == null) {
-            OfflineMessageManager.push(resp);
+            OfflineMessageManager.push(resp,resp.getToId());
             return;
         }
 

@@ -1,5 +1,6 @@
-package io.github.fzdwx.logic.msg.ws.packet.resp;
+package io.github.fzdwx.logic.msg.domain.resp;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.github.fzdwx.inf.common.contants.ChatConst;
 import io.github.fzdwx.inf.common.web.model.UserInfo;
 import io.github.fzdwx.inf.middleware.minio.Minio;
@@ -8,7 +9,7 @@ import io.github.fzdwx.logic.msg.ws.packet.ChatMessagePacket;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import static io.github.fzdwx.inf.common.contants.ChatConst.ContentType.Text;
 import static io.github.fzdwx.lambada.Lang.eq;
@@ -21,22 +22,32 @@ import static io.github.fzdwx.lambada.Lang.eq;
 @Slf4j
 public class ChatMessageResp {
 
+    /**
+     * 实际接收人id
+     */
+    @JsonIgnore
+    private String receiverId;
+
+    /**
+     * 消息id
+     */
+    private Long messageId;
     private String fromId;
     private String fromUname;
     private String fromAvatar;
+    /**
+     * 根据sessionType有不同的含义
+     * {@link io.github.fzdwx.inf.common.contants.ChatConst.SessionType#personal} 实际接收人id
+     * {@link io.github.fzdwx.inf.common.contants.ChatConst.SessionType#group} 群聊id
+     */
     private String toId;
     private int sessionType;
     private int msgFrom;
-    private Date sendTime;
+    private LocalDateTime sendTime;
     private ChatMessage chatMessage;
 
     @Data
     public static class ChatMessage {
-
-        /**
-         * 消息id
-         */
-        private Long id;
 
         /**
          * 消息体
@@ -68,6 +79,7 @@ public class ChatMessageResp {
 
     public static ChatMessageResp from(final UserInfo userInfo, final ChatMessagePacket packet, final ChatLog chatLog) {
         final var resp = new ChatMessageResp();
+        resp.setMessageId(chatLog.getId());
         resp.setFromId(userInfo.getId());
         resp.setFromUname(userInfo.getUname());
         resp.setFromAvatar(userInfo.getAvatar());

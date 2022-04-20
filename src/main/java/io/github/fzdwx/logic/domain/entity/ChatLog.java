@@ -4,11 +4,11 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.github.fzdwx.inf.common.contants.ChatConst;
-import io.github.fzdwx.logic.msg.ws.packet.resp.ChatMessageResp;
+import io.github.fzdwx.logic.msg.domain.resp.ChatMessageResp;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * 聊天记录
@@ -70,12 +70,11 @@ public class ChatLog implements Serializable {
     /**
      * 发送时间
      */
-    private Date sendTime;
+    private LocalDateTime sendTime;
 
     public ChatMessageResp.ChatMessage toResp() {
         final var resp = new ChatMessageResp.ChatMessage();
 
-        resp.setId(id);
         resp.setFileName(fileName);
         resp.setFileSize(fileSize);
         resp.setContentType(this.contentType);

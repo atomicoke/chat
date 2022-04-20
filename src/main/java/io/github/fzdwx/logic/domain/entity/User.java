@@ -16,7 +16,7 @@ import lombok.experimental.Accessors;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * 简单演示表
@@ -62,11 +62,11 @@ public class User implements Serializable {
     /**
      * 创建时间
      */
-    private Date createTime;
+    private LocalDateTime createTime;
     /**
      * 更新时间
      */
-    private Date updateTime;
+    private LocalDateTime updateTime;
 
     /**
      * 是否逻辑删除
@@ -84,7 +84,7 @@ public class User implements Serializable {
         return new User()
                 .setUname(req.getUname())
                 .setSalt(salt)
-                .setCreateTime(new Date())
+                .setCreateTime(LocalDateTime.now())
                 .setRoleKey(RoleConstant.COMMON)
                 .setPasswd(encodePasswd(req.getPasswd(), salt));
     }
@@ -93,7 +93,7 @@ public class User implements Serializable {
         final var newUser = new User();
 
         newUser.setId(user.getId())
-                .setUpdateTime(new Date())
+                .setUpdateTime(LocalDateTime.now())
                 .setUname(user.getUname());
 
         if (req.getPasswd() != null) {

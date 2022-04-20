@@ -1,8 +1,10 @@
 package io.github.fzdwx.logic.msg.offline;
 
+import cn.hutool.extra.spring.SpringUtil;
 import io.github.fzdwx.inf.middleware.redis.Redis;
-import io.github.fzdwx.logic.msg.ws.packet.resp.ChatMessageResp;
+import io.github.fzdwx.logic.msg.domain.resp.ChatMessageResp;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Component;
 
 /**
@@ -14,14 +16,25 @@ public class OfflineMessageManager implements InitializingBean {
 
     // 未读消息最小的id
     private final static String MIN_ID_KEY_PREFIX = "msg:minId:";
+    private final static String COLLECTION = "chat";
+
+    private static MongoTemplate mongoTemplate;
 
     @Override
     public void afterPropertiesSet() throws Exception {
-
+        mongoTemplate = SpringUtil.getBean(MongoTemplate.class);
     }
 
-    public static void push(final ChatMessageResp resp) {
-        // TODO: 2022/4/20  存储到mongo
+    /**
+     * 推
+     *
+     * @param resp       chat message resp
+     * @param receiverId 实际接收者id
+     */
+    public static void push(final ChatMessageResp resp, final String receiverId) {
+        resp.setReceiverId(receiverId);
+        mongoTemplate.insert(resp, COLLECTION);
+        // mongoTemplate.insert()
     }
 
     private static void setMinMessageId(final String recvUserId, String channelId, final Long minId) {
