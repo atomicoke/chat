@@ -1,11 +1,10 @@
 package io.github.fzdwx.logic.msg.ws.packet;
 
+import io.github.fzdwx.inf.common.contants.ChatConst;
 import io.github.fzdwx.inf.common.err.Err;
 import io.github.fzdwx.inf.common.web.model.UserInfo;
 import io.github.fzdwx.inf.middleware.minio.Minio;
 import io.github.fzdwx.lambada.Lang;
-import io.github.fzdwx.lambada.Seq;
-import io.github.fzdwx.inf.common.contants.ChatConst;
 import io.github.fzdwx.logic.domain.entity.ChatLog;
 import io.github.fzdwx.logic.msg.ws.WsPacket;
 import lombok.Data;
@@ -15,16 +14,14 @@ import org.springframework.http.MediaType;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 
-import static io.github.fzdwx.lambada.Lang.eq;
 import static io.github.fzdwx.inf.common.contants.ChatConst.ContentType.Text;
 import static io.github.fzdwx.inf.common.contants.ChatConst.ContentType.audio;
 import static io.github.fzdwx.inf.common.contants.ChatConst.ContentType.file;
 import static io.github.fzdwx.inf.common.contants.ChatConst.ContentType.image;
 import static io.github.fzdwx.inf.common.contants.ChatConst.ContentType.video;
+import static io.github.fzdwx.lambada.Lang.eq;
 
 /**
  * @author <a href="mailto:likelovec@gmail.com">fzdwx</a>
@@ -61,7 +58,10 @@ public class ChatMessagePacket extends WsPacket {
      */
     private Date sendTime;
 
-    private List<ChatMessage> chatMessages;
+    /**
+     * 聊天信息
+     */
+    private ChatMessage chatMessage;
 
     @Override
     public String type() {
@@ -73,8 +73,8 @@ public class ChatMessagePacket extends WsPacket {
             return Err.verify("randomId is null");
         }
 
-        if (this.chatMessages == null || this.chatMessages.isEmpty()) {
-            return Err.verify("chatMessages can not be null");
+        if (this.chatMessage == null) {
+            return Err.verify("chatMessage can not be null");
         }
 
         if (this.toId == null || this.toId.isEmpty()) {
@@ -89,22 +89,11 @@ public class ChatMessagePacket extends WsPacket {
             this.sendTime = new Date();
         }
 
-        for (final ChatMessage chatMessage : chatMessages) {
-            final Err err = chatMessage.prepare();
-            if (err != null) {
-                return err;
-            }
-        }
-
-        return null;
+        return chatMessage.prepare();
     }
 
-    public Collection<ChatLog> buildChatLogs(final UserInfo userInfo) {
-        return Seq.of(this.chatMessages).map(c -> mapping(userInfo, c)).toList();
-    }
-
-    public int size() {
-        return this.chatMessages.size();
+    public ChatLog buildChatLog(final UserInfo userInfo) {
+        return mapping(userInfo, this.chatMessage);
     }
 
     private ChatLog mapping(final UserInfo userInfo, final ChatMessage chatMessage) {

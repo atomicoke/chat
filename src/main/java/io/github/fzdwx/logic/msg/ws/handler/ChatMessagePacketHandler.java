@@ -1,8 +1,8 @@
 package io.github.fzdwx.logic.msg.ws.handler;
 
+import io.github.fzdwx.inf.common.contants.ChatConst;
 import io.github.fzdwx.inf.common.err.Err;
 import io.github.fzdwx.lambada.Seq;
-import io.github.fzdwx.inf.common.contants.ChatConst;
 import io.github.fzdwx.logic.domain.dao.ChatLogRepo;
 import io.github.fzdwx.logic.domain.entity.ChatLog;
 import io.github.fzdwx.logic.msg.offline.OfflineMessageManager;
@@ -37,9 +37,9 @@ public class ChatMessagePacketHandler implements WsPacket.Handler<ChatMessagePac
 
         //region save chat log to mysql
         final var userInfo = userInfo(packet);
-        final var chatMessages = packet.buildChatLogs(userInfo);
+        final var chatLog = packet.buildChatLog(userInfo);
 
-        final var flag = chatLogDao.saveBatch(chatMessages);
+        final var flag = chatLogDao.save(chatLog);
         if (!flag) {
             packet.sendError("保存失败");
             return;
@@ -47,7 +47,7 @@ public class ChatMessagePacketHandler implements WsPacket.Handler<ChatMessagePac
         //endregion
 
         //region switch chat type and send to user.
-        final var resp = ChatMessageResp.from(userInfo, packet, chatMessages);
+        final var resp = ChatMessageResp.from(userInfo, packet, chatLog);
         switch (packet.getSessionType()) {
             case ChatConst.SessionType.broadcast -> sendAll(packet, resp);
             case ChatConst.SessionType.group -> sendGroup(packet, resp);
@@ -60,16 +60,16 @@ public class ChatMessagePacketHandler implements WsPacket.Handler<ChatMessagePac
     private void sendPersonal(final ChatMessagePacket packet, final ChatMessageResp resp) {
         final var conn = UserWsConn.get(packet);
         if (conn == null) {
-            OfflineMessageManager.push(resp.getToId(), resp.getFromId(), String.valueOf(resp.getSessionType()), resp.getMinMessageId(), resp.getChatMessages().size());
+            OfflineMessageManager.push(resp);
             return;
         }
 
-        final var data = packet.newSuccessPacket(resp).encode();
+        final var data = packet.newSuccessPacket(resp.fixUrl()).encode();
         conn.send(data);
     }
 
     private void sendGroup(final ChatMessagePacket packet, final ChatMessageResp resp) {
-        final var chatMessages = packet.buildChatLogs(userInfo(packet));
+        final var chatMessages = packet.buildChatLog(userInfo(packet));
         // TODO: 2022/4/17 群聊
         chatLogDao.saveBatch(Seq.of(chatMessages).typeOf(ChatLog.class).toList());
     }

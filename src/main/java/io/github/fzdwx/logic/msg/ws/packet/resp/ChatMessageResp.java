@@ -1,17 +1,17 @@
 package io.github.fzdwx.logic.msg.ws.packet.resp;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import io.github.fzdwx.inf.common.web.model.UserInfo;
-import io.github.fzdwx.lambada.Coll;
 import io.github.fzdwx.inf.common.contants.ChatConst;
+import io.github.fzdwx.inf.common.web.model.UserInfo;
+import io.github.fzdwx.inf.middleware.minio.Minio;
 import io.github.fzdwx.logic.domain.entity.ChatLog;
 import io.github.fzdwx.logic.msg.ws.packet.ChatMessagePacket;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Collection;
 import java.util.Date;
-import java.util.List;
+
+import static io.github.fzdwx.inf.common.contants.ChatConst.ContentType.Text;
+import static io.github.fzdwx.lambada.Lang.eq;
 
 /**
  * @author <a href="mailto:likelovec@gmail.com">fzdwx</a>
@@ -28,10 +28,7 @@ public class ChatMessageResp {
     private int sessionType;
     private int msgFrom;
     private Date sendTime;
-    private List<ChatMessage> chatMessages;
-
-    @JsonIgnore
-    private Long minMessageId;
+    private ChatMessage chatMessage;
 
     @Data
     public static class ChatMessage {
@@ -51,16 +48,26 @@ public class ChatMessageResp {
          *
          * @see ChatConst.ContentType
          */
-        private int contentType;
+        private Integer contentType;
 
         private String fileName;
 
         private Integer fileSize;
+
+        public void fixUrl() {
+            if (!eq(contentType.intValue(), Text)) {
+                this.content = Minio.getAccessUrl(this.content);
+            }
+        }
     }
 
-    public static ChatMessageResp from(final UserInfo userInfo, final ChatMessagePacket packet, final Collection<ChatLog> chatMessages) {
-        final var resp = new ChatMessageResp();
+    public ChatMessageResp fixUrl() {
+        this.chatMessage.fixUrl();
+        return this;
+    }
 
+    public static ChatMessageResp from(final UserInfo userInfo, final ChatMessagePacket packet, final ChatLog chatLog) {
+        final var resp = new ChatMessageResp();
         resp.setFromId(userInfo.getId());
         resp.setFromUname(userInfo.getUname());
         resp.setFromAvatar(userInfo.getAvatar());
@@ -68,18 +75,7 @@ public class ChatMessageResp {
         resp.setSessionType(packet.getSessionType());
         resp.setMsgFrom(packet.getMsgFrom());
         resp.setSendTime(packet.getSendTime());
-
-        final List<ChatMessage> list = Coll.list();
-        Long minMessageId = Long.MAX_VALUE;
-        for (final ChatLog log : chatMessages) {
-            list.add(log.toResp());
-            if (log.getId() < minMessageId) {
-                minMessageId = log.getId();
-            }
-        }
-
-        resp.setMinMessageId(minMessageId);
-        resp.setChatMessages(list);
+        resp.setChatMessage(chatLog.toResp());
         return resp;
     }
 }

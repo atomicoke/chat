@@ -67,3 +67,9 @@ sa-token:
   token-style: uuid
   # 是否输出操作日志
   is-log: false
+  is-print: false
+
+
+mybatis-plus:
+  global-config:
+    banner: false

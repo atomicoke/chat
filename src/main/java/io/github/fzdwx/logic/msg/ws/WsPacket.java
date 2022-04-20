@@ -77,12 +77,10 @@ public abstract class WsPacket {
     public <OUT> SuccessPacket<OUT> newSuccessPacket(OUT data) {
         return WsPacket.newSuccessPacket(data, this);
     }
-
     public WsPacket mountWebsocket(WebSocket ws) {
         this.ws = ws;
         return this;
     }
-
     public static <Packet extends WsPacket> void routing(Packet p) {
         final Handler<WsPacket> handler = TypePacketHandlerMapping.get(p.type());
         if (handler == null) {
