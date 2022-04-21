@@ -77,10 +77,12 @@ public abstract class WsPacket {
     public <OUT> SuccessPacket<OUT> newSuccessPacket(OUT data) {
         return WsPacket.newSuccessPacket(data, this);
     }
+
     public WsPacket mountWebsocket(WebSocket ws) {
         this.ws = ws;
         return this;
     }
+
     public static <Packet extends WsPacket> void routing(Packet p) {
         final Handler<WsPacket> handler = TypePacketHandlerMapping.get(p.type());
         if (handler == null) {
@@ -126,8 +128,12 @@ public abstract class WsPacket {
         return this.ws.send(new ErrorPacket(errorMessage, this.randomId).encode());
     }
 
-    public void sendSuccess() {
-        this.ws.send(this.newSuccessPacket(null).encode());
+    public ChannelFuture sendSuccess() {
+        return this.ws.send(this.newSuccessPacket(null).encode());
+    }
+
+    public <OUT> ChannelFuture sendSuccess(OUT data) {
+        return this.ws.send(this.newSuccessPacket(data).encode());
     }
 
     public interface Type {

@@ -42,9 +42,11 @@
             msg_from,
             content_type,
             content,
-            send_time
+            send_time,
+            random_id
         ) values (
-            #{chatHistory.id}, #{chatHistory.fromId}, #{chatHistory.sessionType}, #{chatHistory.toId}, #{chatHistory.msgFrom}, #{chatHistory.contentType}, #{chatHistory.content}, #{chatHistory.sendTime}
+            #{chatHistory.id}, #{chatHistory.fromId}, #{chatHistory.sessionType}, #{chatHistory.toId},
+            #{chatHistory.msgFrom}, #{chatHistory.contentType}, #{chatHistory.content}, #{chatHistory.sendTime},#{chatHistory.randomId}
         )
     </insert>
 </mapper>

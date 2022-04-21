@@ -7,6 +7,7 @@ import io.github.fzdwx.inf.middleware.minio.Minio;
 import io.github.fzdwx.lambada.Lang;
 import io.github.fzdwx.logic.domain.entity.ChatHistory;
 import io.github.fzdwx.logic.msg.ws.WsPacket;
+import io.netty.channel.ChannelFuture;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
@@ -111,6 +112,9 @@ public class ChatMessagePacket extends WsPacket {
         return log;
     }
 
+    public ChannelFuture sendSuccess(final Long chatHistoryId) {
+        return super.sendSuccess(chatHistoryId);
+    }
 
     @Data
     public static class ChatMessage {

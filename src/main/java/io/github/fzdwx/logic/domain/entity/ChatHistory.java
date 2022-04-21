@@ -1,11 +1,13 @@
 package io.github.fzdwx.logic.domain.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.github.fzdwx.inf.common.contants.ChatConst;
 import io.github.fzdwx.logic.msg.domain.resp.ChatMessageResp;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -17,6 +19,7 @@ import java.util.Date;
  */
 @TableName(value = "chat_history")
 @Data
+@Accessors(chain = true)
 public class ChatHistory implements Serializable {
 
     @TableField(exist = false)
@@ -24,7 +27,7 @@ public class ChatHistory implements Serializable {
     /**
      * 主键
      */
-    @TableId
+    @TableId(type = IdType.ASSIGN_ID)
     private Long id;
     /**
      * 发送人
