@@ -1,4 +1,4 @@
-package io.github.fzdwx.logic.modules.chathistory.domain.mapper;
+package io.github.fzdwx.logic.modules.chathistory.domain.dao.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import io.github.fzdwx.logic.modules.chathistory.domain.entity.ChatHistory;

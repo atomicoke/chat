@@ -1,8 +1,8 @@
 package io.github.fzdwx.logic.modules.chathistory.domain.dao;
 
 import io.github.fzdwx.inf.middleware.db.BaseRepo;
+import io.github.fzdwx.logic.modules.chathistory.domain.dao.mapper.ChatHistoryMapper;
 import io.github.fzdwx.logic.modules.chathistory.domain.entity.ChatHistory;
-import io.github.fzdwx.logic.modules.chathistory.domain.mapper.ChatHistoryMapper;
 import org.springframework.stereotype.Repository;
 
 /**

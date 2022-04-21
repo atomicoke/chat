@@ -1,8 +1,8 @@
-package io.github.fzdwx.logic.modules.group.doman.dao;
+package io.github.fzdwx.logic.modules.group.domain.dao;
 
 import io.github.fzdwx.inf.middleware.db.BaseRepo;
-import io.github.fzdwx.logic.modules.group.doman.dao.mapper.GroupChatMapper;
-import io.github.fzdwx.logic.modules.group.doman.entity.GroupChat;
+import io.github.fzdwx.logic.modules.group.domain.dao.mapper.GroupChatMapper;
+import io.github.fzdwx.logic.modules.group.domain.entity.GroupChat;
 import org.springframework.stereotype.Repository;
 
 /**

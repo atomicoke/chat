@@ -1,4 +1,4 @@
-package io.github.fzdwx.logic.modules.group.doman.entity;
+package io.github.fzdwx.logic.modules.group.domain.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
