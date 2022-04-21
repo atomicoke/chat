@@ -10,7 +10,7 @@ import org.apache.ibatis.annotations.Param;
  * @createDate 2022-04-10 13:16:13
  * @Entity generator.domain.ChatLog
  */
-public interface ChatLogMapper extends BaseMapper<ChatHistory> {
+public interface ChatHistoryMapper extends BaseMapper<ChatHistory> {
 
-    void save(@Param("chatLog") ChatHistory chatLog);
+    int saveIgnore(@Param("chatHistory") ChatHistory chatHistory);
 }

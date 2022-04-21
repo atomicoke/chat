@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="io.github.fzdwx.logic.domain.mapper.ChatLogMapper">
+<mapper namespace="io.github.fzdwx.logic.domain.mapper.ChatHistoryMapper">
     <resultMap id="BaseResultMap" type="io.github.fzdwx.logic.domain.entity.ChatHistory">
-        <!--@Table chat_log-->
+        <!--@Table chat_history-->
         <id property="id" column="id" jdbcType="BIGINT"/>
         <result property="fromId" column="from_id" jdbcType="BIGINT"/>
         <result property="content" column="content" jdbcType="VARCHAR"/>
@@ -15,6 +15,7 @@
         <result property="fileName" column="file_name" jdbcType="VARCHAR"/>
         <result property="fileSize" column="file_size" jdbcType="INTEGER"/>
         <result property="sendTime" column="send_time" jdbcType="TIMESTAMP"/>
+        <result property="randomId" column="random_id" jdbcType="VARCHAR"/>
     </resultMap>
 
     <sql id="Base_Column_List">
@@ -27,12 +28,13 @@
         content_type,
         file_name,
         file_size,
-        send_time
+        send_time,
+        random_id
     </sql>
 
-    <insert id="save">
-        INSERT INTO
-            chat_log (
+    <insert id="saveIgnore">
+        insert ignore into
+            chat_history (
             id,
             from_id,
             session_type,
@@ -41,8 +43,8 @@
             content_type,
             content,
             send_time
+        ) values (
+            #{chatHistory.id}, #{chatHistory.fromId}, #{chatHistory.sessionType}, #{chatHistory.toId}, #{chatHistory.msgFrom}, #{chatHistory.contentType}, #{chatHistory.content}, #{chatHistory.sendTime}
         )
-        VALUES
-            (#{chatLog.id}, #{chatLog.fromId}, #{chatLog.sessionType}, #{chatLog.toId}, #{chatLog.msgFrom}, #{chatLog.contentType}, #{chatLog.content}, #{chatLog.sendTime})
     </insert>
 </mapper>

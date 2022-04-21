@@ -92,26 +92,25 @@ public class ChatMessagePacket extends WsPacket {
         return chatMessage.prepare();
     }
 
-    public ChatHistory buildChatLog(final UserInfo userInfo) {
-        return mapping(userInfo, this.chatMessage);
-    }
-
-    private ChatHistory mapping(final UserInfo userInfo, final ChatMessage chatMessage) {
+    public ChatHistory buildChatHistory(final UserInfo userInfo) {
         final ChatHistory log = new ChatHistory();
-        log.setContent(chatMessage.getContent());
-        log.setContentType(chatMessage.getContentType());
+        log.setRandomId(this.randomId);
         log.setFromId(userInfo.getIdLong());
         log.setMsgFrom(this.msgFrom);
         log.setSendTime(this.sendTime);
         log.setSessionType(this.sessionType);
         log.setToId(Long.valueOf(this.toId));
 
+        // chat message
+        log.setContentType(chatMessage.getContentType());
+        log.setContent(chatMessage.getContent());
         if (!Lang.eq(chatMessage.getContentType(), Text)) {
             log.setFileName(chatMessage.getFileName());
             log.setFileSize(chatMessage.getAttrByte().length);
         }
         return log;
     }
+
 
     @Data
     public static class ChatMessage {

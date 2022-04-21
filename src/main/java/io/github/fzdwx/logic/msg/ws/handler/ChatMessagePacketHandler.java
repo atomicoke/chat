@@ -3,7 +3,7 @@ package io.github.fzdwx.logic.msg.ws.handler;
 import io.github.fzdwx.inf.common.contants.ChatConst;
 import io.github.fzdwx.inf.common.err.Err;
 import io.github.fzdwx.lambada.Seq;
-import io.github.fzdwx.logic.domain.dao.ChatLogRepo;
+import io.github.fzdwx.logic.domain.dao.ChatHistoryRepo;
 import io.github.fzdwx.logic.domain.entity.ChatHistory;
 import io.github.fzdwx.logic.msg.domain.resp.ChatMessageResp;
 import io.github.fzdwx.logic.msg.ws.UserWsConn;
@@ -22,7 +22,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class ChatMessagePacketHandler implements WsPacket.Handler<ChatMessagePacket> {
 
-    private final ChatLogRepo chatLogDao;
+    private final ChatHistoryRepo chatHistoryDao;
 
     @Override
     public void handle(final ChatMessagePacket packet) {
@@ -36,21 +36,22 @@ public class ChatMessagePacketHandler implements WsPacket.Handler<ChatMessagePac
 
         //region save chat log to mysql
         final var userInfo = userInfo(packet);
-        final var chatLog = packet.buildChatLog(userInfo);
+        final var chatHistory = packet.buildChatHistory(userInfo);
 
-        // todo save 和 saveBatch 相差10ms 左右
-        // 原因： saveBatch 默认加了事务?会导致变快
-        chatLogDao.insert(chatLog);
-        // final var flag = chatLogDao.saveBatch(Coll.list(chatLog));
+        // phenomenon: save 和 saveBatch 相差10ms 左右
+        // possible: saveBatch 默认加了事务?会导致变快
+        final var flag = chatHistoryDao.saveIgnore(chatHistory);
+
+        System.out.println("flag = " + flag);
         // if (!flag) {
         //     packet.sendError("保存失败");
         //     return;
         // } else
-            packet.sendSuccess();
+        //     packet.sendSuccess();
         //endregion
 
         //region switch chat type and send to user.
-        final var resp = ChatMessageResp.from(userInfo, packet, chatLog);
+        final var resp = ChatMessageResp.from(userInfo, packet, chatHistory);
         switch (packet.getSessionType()) {
             case ChatConst.SessionType.broadcast -> sendAll(packet, resp);
             case ChatConst.SessionType.group -> sendGroup(packet, resp);
@@ -72,9 +73,9 @@ public class ChatMessagePacketHandler implements WsPacket.Handler<ChatMessagePac
     }
 
     private void sendGroup(final ChatMessagePacket packet, final ChatMessageResp resp) {
-        final var chatMessages = packet.buildChatLog(userInfo(packet));
+        final var chatMessages = packet.buildChatHistory(userInfo(packet));
         // TODO: 2022/4/17 群聊
-        chatLogDao.saveBatch(Seq.of(chatMessages).typeOf(ChatHistory.class).toList());
+        chatHistoryDao.saveBatch(Seq.of(chatMessages).typeOf(ChatHistory.class).toList());
     }
 
     private void sendAll(final ChatMessagePacket packet, final ChatMessageResp resp) {

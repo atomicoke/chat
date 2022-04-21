@@ -15,14 +15,14 @@ import java.util.Date;
  *
  * @TableName chat_history
  */
-@TableName(value = "chat_log")
+@TableName(value = "chat_history")
 @Data
 public class ChatHistory implements Serializable {
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
     /**
-     *
+     * 主键
      */
     @TableId
     private Long id;
@@ -71,6 +71,11 @@ public class ChatHistory implements Serializable {
      * 发送时间
      */
     private Date sendTime;
+
+    /**
+     * 随机id(用于去重)
+     */
+    private String randomId;
 
     public ChatMessageResp.ChatMessage toResp() {
         final var resp = new ChatMessageResp.ChatMessage();
