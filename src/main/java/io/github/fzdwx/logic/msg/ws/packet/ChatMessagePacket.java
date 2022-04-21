@@ -5,7 +5,7 @@ import io.github.fzdwx.inf.common.err.Err;
 import io.github.fzdwx.inf.common.web.model.UserInfo;
 import io.github.fzdwx.inf.middleware.minio.Minio;
 import io.github.fzdwx.lambada.Lang;
-import io.github.fzdwx.logic.domain.entity.ChatHistory;
+import io.github.fzdwx.logic.modules.chathistory.domain.entity.ChatHistory;
 import io.github.fzdwx.logic.msg.ws.WsPacket;
 import io.netty.channel.ChannelFuture;
 import lombok.Data;
@@ -15,7 +15,7 @@ import org.springframework.http.MediaType;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import static io.github.fzdwx.inf.common.contants.ChatConst.ContentType.Text;
 import static io.github.fzdwx.inf.common.contants.ChatConst.ContentType.audio;
@@ -57,7 +57,7 @@ public class ChatMessagePacket extends WsPacket {
     /**
      * 发送时间
      */
-    private Date sendTime;
+    private LocalDateTime sendTime;
 
     /**
      * 聊天信息
@@ -87,7 +87,7 @@ public class ChatMessagePacket extends WsPacket {
         }
 
         if (this.sendTime == null) {
-            this.sendTime = new Date();
+            this.sendTime = LocalDateTime.now();
         }
 
         return chatMessage.prepare();

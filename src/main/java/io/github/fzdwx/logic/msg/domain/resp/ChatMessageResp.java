@@ -4,13 +4,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.github.fzdwx.inf.common.contants.ChatConst;
 import io.github.fzdwx.inf.common.web.model.UserInfo;
 import io.github.fzdwx.inf.middleware.minio.Minio;
-import io.github.fzdwx.logic.domain.entity.ChatHistory;
+import io.github.fzdwx.logic.modules.chathistory.domain.entity.ChatHistory;
 import io.github.fzdwx.logic.msg.ws.packet.ChatMessagePacket;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import static io.github.fzdwx.inf.common.contants.ChatConst.ContentType.Text;
 import static io.github.fzdwx.lambada.Lang.eq;
@@ -39,13 +39,13 @@ public class ChatMessageResp {
     private String fromAvatar;
     /**
      * 根据sessionType有不同的含义
-     * {@link io.github.fzdwx.inf.common.contants.ChatConst.SessionType#personal} 实际接收人id
+     * {@link io.github.fzdwx.inf.common.contants.ChatConst.SessionType#single} 实际接收人id
      * {@link io.github.fzdwx.inf.common.contants.ChatConst.SessionType#group} 群聊id
      */
     private String toId;
     private int sessionType;
     private int msgFrom;
-    private Date sendTime;
+    private LocalDateTime sendTime;
     private ChatMessage chatMessage;
 
     public ChatMessageResp copy(final Integer boxOwnerId) {
