@@ -9,7 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @date 2022/4/3 16:06
  */
 @SpringBootApplication
-@MapperScan("io.github.fzdwx.logic.domain.mapper")
+@MapperScan("io.github.fzdwx.logic.modules.*.domain.dao.mapper")
 public class Application {
 
     public static void main(String[] args) throws InterruptedException {

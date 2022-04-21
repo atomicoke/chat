@@ -1,7 +1,7 @@
-package io.github.fzdwx.logic.modules.group.doman.dao.mapper;
+package io.github.fzdwx.logic.modules.group.domain.dao.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import io.github.fzdwx.logic.modules.group.doman.entity.GroupChatMember;
+import io.github.fzdwx.logic.modules.group.domain.entity.GroupChatMember;
 
 /**
 * @author 98065
