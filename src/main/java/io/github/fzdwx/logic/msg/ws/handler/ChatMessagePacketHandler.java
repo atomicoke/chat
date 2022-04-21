@@ -7,8 +7,9 @@ import io.github.fzdwx.inf.middleware.id.IdGenerate;
 import io.github.fzdwx.inf.middleware.redis.Redis;
 import io.github.fzdwx.lambada.Lang;
 import io.github.fzdwx.lambada.Seq;
-import io.github.fzdwx.logic.domain.dao.ChatHistoryRepo;
-import io.github.fzdwx.logic.domain.entity.ChatHistory;
+import io.github.fzdwx.logic.config.ProjectConfiguration;
+import io.github.fzdwx.logic.modules.chathistory.domain.dao.ChatHistoryRepo;
+import io.github.fzdwx.logic.modules.chathistory.domain.entity.ChatHistory;
 import io.github.fzdwx.logic.msg.domain.resp.ChatMessageResp;
 import io.github.fzdwx.logic.msg.ws.UserWsConn;
 import io.github.fzdwx.logic.msg.ws.WsPacket;
@@ -63,7 +64,7 @@ public class ChatMessagePacketHandler implements WsPacket.Handler<ChatMessagePac
         }
         // endregion
 
-        saveSuccess(packet, chatHistoryId);
+        sendSuccessRespToClient(packet, chatHistoryId);
 
         if (!flag) {
             // TODO  2022/4/21 写入mongo,作为最近N天聊天记录
@@ -80,7 +81,7 @@ public class ChatMessagePacketHandler implements WsPacket.Handler<ChatMessagePac
         switch (packet.getSessionType()) {
             case ChatConst.SessionType.broadcast -> sendAll(packet, resp);
             case ChatConst.SessionType.group -> sendGroup(packet, resp);
-            case ChatConst.SessionType.personal -> sendPersonal(packet, resp);
+            case ChatConst.SessionType.single -> sendPersonal(packet, resp);
             default -> packet.sendError("未知的会话类型:" + packet.getSessionType());
         }
     }
@@ -115,7 +116,7 @@ public class ChatMessagePacketHandler implements WsPacket.Handler<ChatMessagePac
     /**
      * 保存数据到mysql后,返回成功响应给客户端
      */
-    private static void saveSuccess(final ChatMessagePacket packet, final Long chatHistoryId) {
+    private static void sendSuccessRespToClient(final ChatMessagePacket packet, final Long chatHistoryId) {
         packet.sendSuccess(chatHistoryId).addListener(f -> {
             if (f.isSuccess()) {
                 setRandomIdToChatHistoryId(packet.getRandomId(), chatHistoryId);
@@ -134,7 +135,7 @@ public class ChatMessagePacketHandler implements WsPacket.Handler<ChatMessagePac
             return;
         }
 
-        Redis.set(randomId, chatHistoryId.toString(), Duration.ofSeconds(30));
+        Redis.set(randomId, chatHistoryId.toString(), Duration.ofSeconds(ProjectConfiguration.getProjectProps().getRandomIdToChatHistoryIdExpire()));
     }
 
     /**

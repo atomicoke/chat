@@ -1,7 +1,7 @@
 package io.github.fzdwx.inf.common.web.model;
 
 import io.github.fzdwx.inf.middleware.minio.Minio;
-import io.github.fzdwx.logic.domain.entity.User;
+import io.github.fzdwx.logic.modules.user.domain.entity.User;
 import lombok.Data;
 
 /**

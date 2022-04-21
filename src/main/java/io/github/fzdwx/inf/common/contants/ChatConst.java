@@ -1,7 +1,7 @@
 package io.github.fzdwx.inf.common.contants;
 
 
-import io.github.fzdwx.logic.domain.entity.ChatHistory;
+import io.github.fzdwx.logic.modules.chathistory.domain.entity.ChatHistory;
 
 /**
  * @author <a href="mailto:likelovec@gmail.com">fzdwx</a>
@@ -15,14 +15,14 @@ public interface ChatConst {
     interface SessionType {
 
         /**
-         * 私聊
+         * 私聊,一对一的会话类型。聊天双方分别为两个用户和个体
          */
-        int personal = 1;
+        int single = 1;
 
-        String personalStr = "1";
+        String singleStr = "1";
 
         /**
-         * 群聊/频道
+         * 群聊/频道,群组会话类型，发送在这个会话的消息会分发到所有的群成员
          */
         int group = 2;
 
