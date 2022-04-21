@@ -3,6 +3,9 @@ server:
   ws:
     port: 8081
 
+project:
+  randomIdToChatHistoryIdExpire: 50
+
 spring:
   data:
     mongodb:
