@@ -39,9 +39,8 @@ public class ChatMessagePacketHandler implements WsPacket.Handler<ChatMessagePac
             return;
         }
 
-        packet.setMsgFrom(ChatConst.MsgFrom.USER);
-
         //region save chat log to mysql (根据randomId保证幂等)
+        packet.setMsgFrom(ChatConst.MsgFrom.USER);
         final var userInfo = userInfo(packet);
         final var chatHistory = packet.buildChatHistory(userInfo);
 
@@ -49,21 +48,28 @@ public class ChatMessagePacketHandler implements WsPacket.Handler<ChatMessagePac
           phenomenon: save 和 saveBatch 相差10ms 左右
           possible:   saveBatch 默认加了事务?会导致变快
          */
-        final var flag = chatHistoryDao.saveIgnore(chatHistory.setId(IdGenerate.nextId()));
+        final var cnt = chatHistoryDao.saveIgnore(chatHistory.setId(IdGenerate.nextId()));
 
-        var chatHistoryId = chatHistory.getId();
-        if (Lang.eq(flag, 0)) { // 该randomId已经存在
+        final Long chatHistoryId;
+        final var flag = Lang.eq(cnt, 0);
+        if (flag) { // 该randomId已经存在
             chatHistoryId = getChatHistoryIdByRandomId(chatHistory.getRandomId());
             if (chatHistoryId == null) {
                 packet.sendError("这条消息的缓存id已经过期,或randomId错误");
                 return;
             }
+        } else {
+            chatHistoryId = chatHistory.getId();
         }
         // endregion
 
-        saveSuccess(packet, chatHistory, chatHistoryId);
+        saveSuccess(packet, chatHistoryId);
 
-        this.switchHandler(packet, userInfo, chatHistory);
+        if (!flag) {
+            // TODO  2022/4/21 写入mongo,作为最近N天聊天记录
+
+            switchHandler(packet, userInfo, chatHistory);
+        }
     }
 
     /**
@@ -109,10 +115,13 @@ public class ChatMessagePacketHandler implements WsPacket.Handler<ChatMessagePac
     /**
      * 保存数据到mysql后,返回成功响应给客户端
      */
-    private static void saveSuccess(final ChatMessagePacket packet, final ChatHistory chatHistory, final Long chatHistoryId) {
+    private static void saveSuccess(final ChatMessagePacket packet, final Long chatHistoryId) {
         packet.sendSuccess(chatHistoryId).addListener(f -> {
             if (f.isSuccess()) {
-                setRandomIdToChatHistoryId(chatHistory.getRandomId(), chatHistoryId);
+                setRandomIdToChatHistoryId(packet.getRandomId(), chatHistoryId);
+            } else {
+                log.error("发送成功响应失败: randomId:{},chatHistoryId:{}", packet.getRandomId(), chatHistoryId, f.cause());
+                // saveSuccess(packet, chatHistoryId);
             }
         });
     }

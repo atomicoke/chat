@@ -14,7 +14,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring.boot.version>2.5.7</spring.boot.version>
 
-        <lambda.version>0.09.2</lambda.version>
+        <lambda.version>0.09.3</lambda.version>
         <sky.version>0.09</sky.version>
 
         <HikariCP.version>5.0.1</HikariCP.version>
