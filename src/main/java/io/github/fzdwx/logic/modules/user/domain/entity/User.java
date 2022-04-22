@@ -72,7 +72,7 @@ public class User implements Serializable {
      * 是否逻辑删除
      */
     @TableLogic(value = "0", delval = "1")
-    private Integer isDeleted;
+    private Integer delFlag;
 
     /**
      * 性别 0:未知 1:男 2:女

@@ -1,12 +1,14 @@
 package io.github.fzdwx.logic.modules.user.domain.model;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 /**
  * @author <a href="mailto:likelovec@gmail.com">fzdwx</a>
  * @date 2022/4/4 22:46
  */
 @Data
+@Accessors(chain = true)
 public class SingInReq {
 
     /**

@@ -64,7 +64,7 @@ public class UserController {
      */
     @GetMapping("getUserInfo")
     public Rest<UserInfo> getUserInfo() {
-        return Rest.of(userService.refreshUserInfo());
+        return Rest.of(userService.getUserInfo());
     }
 
 }

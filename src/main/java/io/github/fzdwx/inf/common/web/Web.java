@@ -1,7 +1,7 @@
 package io.github.fzdwx.inf.common.web;
 
 import cn.dev33.satoken.stp.StpUtil;
-import io.github.fzdwx.inf.common.err.impl.ForbiddenException;
+import io.github.fzdwx.inf.common.err.Err;
 import io.github.fzdwx.inf.common.web.core.Context;
 import io.github.fzdwx.inf.common.web.model.UserInfo;
 import io.github.fzdwx.logic.modules.user.domain.entity.User;
@@ -43,7 +43,7 @@ public class Web {
 
         final var sessionUser = StpUtil.getSession().get(USER);
         if (sessionUser == null) {
-            throw new ForbiddenException("操作非法");
+            throw Err.forbidden("操作非法,用户信息丢失");
         }
 
         Context.user((UserInfo) sessionUser);
