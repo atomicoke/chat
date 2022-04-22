@@ -4,11 +4,11 @@ import io.github.fzdwx.inf.common.err.Err;
 import io.github.fzdwx.inf.common.err.impl.VerifyException;
 import io.github.fzdwx.inf.common.web.Web;
 import io.github.fzdwx.inf.common.web.model.UserInfo;
-import io.github.fzdwx.logic.api.user.model.EditUserInfoReq;
-import io.github.fzdwx.logic.api.user.model.SingInReq;
-import io.github.fzdwx.logic.api.user.model.SingUpReq;
 import io.github.fzdwx.logic.modules.user.domain.dao.UserRepo;
 import io.github.fzdwx.logic.modules.user.domain.entity.User;
+import io.github.fzdwx.logic.modules.user.domain.model.EditUserInfoReq;
+import io.github.fzdwx.logic.modules.user.domain.model.SingInReq;
+import io.github.fzdwx.logic.modules.user.domain.model.SingUpReq;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

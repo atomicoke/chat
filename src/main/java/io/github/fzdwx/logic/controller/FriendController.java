@@ -1,4 +1,4 @@
-package io.github.fzdwx.logic.api.friend;
+package io.github.fzdwx.logic.controller;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("friend")
-public class FriendApi {
+public class FriendController {
 
     @PostMapping("request")
     public void request() {

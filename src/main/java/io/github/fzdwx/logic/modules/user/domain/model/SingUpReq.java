@@ -1,4 +1,4 @@
-package io.github.fzdwx.logic.api.user.model;
+package io.github.fzdwx.logic.modules.user.domain.model;
 
 import lombok.Data;
 

@@ -1,11 +1,11 @@
-package io.github.fzdwx.logic.api.user;
+package io.github.fzdwx.logic.controller;
 
 import cn.dev33.satoken.annotation.SaCheckRole;
 import io.github.fzdwx.inf.common.web.Web;
 import io.github.fzdwx.inf.common.web.model.Rest;
 import io.github.fzdwx.inf.common.web.model.RoleConstant;
 import io.github.fzdwx.inf.common.web.model.UserInfo;
-import io.github.fzdwx.logic.api.user.model.EditUserInfoReq;
+import io.github.fzdwx.logic.modules.user.domain.model.EditUserInfoReq;
 import io.github.fzdwx.logic.modules.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,14 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 /**
- * @author <a href="mailto:likelovec@gmail.com">fzdwx</a>
- * @date 2022/4/5 9:05
+ * @author <a href="mailto:likelovec@gmail.com">韦朕</a>
+ * @date 2022/4/22 11:01
  */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/user")
-public class UserApi {
-
+public class UserController {
     private final UserService userService;
 
     /**
@@ -67,4 +66,5 @@ public class UserApi {
     public Rest<UserInfo> getUserInfo() {
         return Rest.of(userService.refreshUserInfo());
     }
+
 }
