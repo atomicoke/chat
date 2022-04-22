@@ -18,7 +18,17 @@ public class PacketTest {
     @Test
     void test() {
         final var json = """
-                {"type":"chat","fromId":1511197272837996544,"fromUname":"可能常何","fromAvatar":null,"toId":3,"content":"你好啊我操","contentType":1,"sessionType":3,"msgFrom":1,"sendTime":"2014-02-03 06:10:14"}""";
+                        {
+                          "randomId": "4444",
+                          "type": "chat",
+                          "toId": "1511197272837996544",
+                          "sessionType": "1",
+                          "chatMessage": {
+                            "content": "helasdlo",
+                            "contentType": 1
+                          }
+                        }
+                """;
         for (int i = 0; i < 100; i++) {
             final var s = StopWatch.get("task-" + i);
             final var decode = WsPacket.decode(json);
@@ -28,7 +38,7 @@ public class PacketTest {
 
     @Test
     void test_image_bytearray() {
-        final byte[] bytes = HttpUtil.createGet("http://114.132.249.192:9000/chat/1649232453000/1511616587868495872-65269574.jpg")
+        final byte[] bytes = HttpUtil.createGet("http://114.132.249.192:9000/chat/1650189894000/3061283827420200961511616587868495872-65269574.jpg")
                 .execute()
                 .bodyBytes();
         final BufferedImage bufferedImage = ImgUtil.toImage(bytes);
