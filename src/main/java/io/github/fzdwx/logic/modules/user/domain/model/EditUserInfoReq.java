@@ -1,4 +1,4 @@
-package io.github.fzdwx.logic.api.user.model;
+package io.github.fzdwx.logic.modules.user.domain.model;
 
 import io.github.fzdwx.inf.common.err.Err;
 import lombok.Data;

@@ -54,7 +54,7 @@ public class EchoWs implements HttpHandler {
                     ws.mountText(s -> {
                         final var wsPacket = WsPacket.decode(s);
                         if (wsPacket == null) {
-                            // todo send can not decode.
+                            log.error("[decode packet] | unrecognized : {}", s);
                         } else {
                             WsPacket.routing(wsPacket.mountWebsocket(ws));
                         }

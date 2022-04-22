@@ -9,8 +9,8 @@ import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.github.fzdwx.inf.common.web.model.RoleConstant;
 import io.github.fzdwx.lambada.Lang;
-import io.github.fzdwx.logic.api.user.model.EditUserInfoReq;
-import io.github.fzdwx.logic.api.user.model.SingUpReq;
+import io.github.fzdwx.logic.modules.user.domain.model.EditUserInfoReq;
+import io.github.fzdwx.logic.modules.user.domain.model.SingUpReq;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.jetbrains.annotations.NotNull;
@@ -72,7 +72,7 @@ public class User implements Serializable {
      * 是否逻辑删除
      */
     @TableLogic(value = "0", delval = "1")
-    private Integer isDeleted;
+    private Integer delFlag;
 
     /**
      * 性别 0:未知 1:男 2:女

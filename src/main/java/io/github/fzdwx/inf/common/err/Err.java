@@ -46,4 +46,8 @@ public class Err extends RuntimeException {
     public static UnsupportedOperationException unsupported() {
         return new UnsupportedOperationException();
     }
+
+    public static void thrVerify(final String message) {
+        throw verify(message);
+    }
 }

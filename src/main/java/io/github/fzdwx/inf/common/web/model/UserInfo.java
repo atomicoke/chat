@@ -3,12 +3,14 @@ package io.github.fzdwx.inf.common.web.model;
 import io.github.fzdwx.inf.middleware.minio.Minio;
 import io.github.fzdwx.logic.modules.user.domain.entity.User;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 /**
  * @author <a href="mailto:likelovec@gmail.com">fzdwx</a>
  * @date 2022/4/4 23:36
  */
 @Data
+@Accessors(chain = true)
 public class UserInfo {
 
     private String id;

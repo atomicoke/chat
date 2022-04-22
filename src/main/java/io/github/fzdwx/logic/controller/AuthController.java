@@ -1,10 +1,10 @@
-package io.github.fzdwx.logic.api.user;
+package io.github.fzdwx.logic.controller;
 
 import io.github.fzdwx.inf.common.web.Web;
 import io.github.fzdwx.inf.common.web.model.Rest;
 import io.github.fzdwx.inf.middleware.redis.lock.ApiIdempotent;
-import io.github.fzdwx.logic.api.user.model.SingInReq;
-import io.github.fzdwx.logic.api.user.model.SingUpReq;
+import io.github.fzdwx.logic.modules.user.domain.model.SingInReq;
+import io.github.fzdwx.logic.modules.user.domain.model.SingUpReq;
 import io.github.fzdwx.logic.modules.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * @author <a href="mailto:likelovec@gmail.com">fzdwx</a>
- * @date 2022/4/4 22:25
+ * @author <a href="mailto:likelovec@gmail.com">韦朕</a>
+ * @date 2022/4/22 10:59
  */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/auth")
-public class AuthApi {
+public class AuthController {
 
     private final UserService userService;
 

@@ -14,7 +14,7 @@
             <result property="roleKey" column="role_key" jdbcType="VARCHAR"/>
             <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
             <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
-            <result property="isDeleted" column="is_deleted" jdbcType="TINYINT"/>
+            <result property="delFlag" column="del_flag" jdbcType="TINYINT"/>
             <result property="gender" column="gender" jdbcType="TINYINT"/>
     </resultMap>
 
@@ -22,6 +22,6 @@
         id,uname,mobile,
         avatar,passwd,salt,
         role_key,create_time,update_time,
-        is_deleted,gender
+        del_flag,gender
     </sql>
 </mapper>
