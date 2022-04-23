@@ -42,10 +42,10 @@ public class ReplayChatPacket extends WsPacket {
 
         private String boxOwnerSeq;
 
-        public Data(final String messageId, final Long boxOwnerId, final Long seq) {
+        public Data(final String messageId, final String boxOwnerId, final String seq) {
             this.messageId = messageId;
-            this.boxOwnerSeq = seq.toString();
-            this.boxOwnerId = boxOwnerId.toString();
+            this.boxOwnerSeq = seq;
+            this.boxOwnerId = boxOwnerId;
         }
     }
 }
