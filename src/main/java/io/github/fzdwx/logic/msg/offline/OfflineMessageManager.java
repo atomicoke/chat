@@ -33,7 +33,7 @@ public class OfflineMessageManager implements InitializingBean {
 
         saveToMongo(resp.copy(userId, seq));
 
-        return new ReplayChatPacket.Data(resp.getMessageId(), seq);
+        return new ReplayChatPacket.Data(resp.getMessageId(),resp.getBoxOwnerId(), seq);
     }
 
     public static Long incrSeq(final String userId) {

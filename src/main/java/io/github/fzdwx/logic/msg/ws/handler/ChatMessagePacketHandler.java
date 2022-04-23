@@ -102,7 +102,7 @@ public class ChatMessagePacketHandler implements WsPacket.Handler<ChatMessagePac
             return resp;
         }
 
-        final var copyResp = resp.copy(toUserId, OfflineMessageManager.incrSeq(resp.getToId()));
+        final var copyResp = resp.copy(toUserId, OfflineMessageManager.incrSeq(toUserId.toString()));
 
         conn.send(packet.newSuccessPacket(copyResp.fixUrl()).encode());
 

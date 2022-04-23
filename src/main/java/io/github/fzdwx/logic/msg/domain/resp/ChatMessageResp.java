@@ -1,6 +1,5 @@
 package io.github.fzdwx.logic.msg.domain.resp;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.github.fzdwx.inf.common.contants.ChatConst;
 import io.github.fzdwx.inf.common.web.model.UserInfo;
 import io.github.fzdwx.inf.middleware.minio.Minio;
@@ -27,13 +26,11 @@ public class ChatMessageResp {
     /**
      * 当前信箱所属人id
      */
-    @JsonIgnore
     private Long boxOwnerId;
 
     /**
      * 当前信箱所属人 全局seq(每收到或发送一条消息则加1)
      */
-    @JsonIgnore
     private Long boxOwnerSeq;
 
     /**
