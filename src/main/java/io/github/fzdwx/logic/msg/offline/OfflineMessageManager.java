@@ -31,9 +31,11 @@ public class OfflineMessageManager implements InitializingBean {
     public static ReplayChatPacket.Data incrSeqAndSaveToMongo(final Long userId, final ChatMessageResp resp) {
         final var seq = incrSeq(userId.toString());
 
-        saveToMongo(resp.copy(userId, seq));
+        final var chatMessageResp = resp.copy(userId, seq);
 
-        return new ReplayChatPacket.Data(resp.getMessageId(),resp.getBoxOwnerId(), seq);
+        saveToMongo(chatMessageResp);
+
+        return new ReplayChatPacket.Data(chatMessageResp.getMessageId(),chatMessageResp.getBoxOwnerId(), seq);
     }
 
     public static Long incrSeq(final String userId) {
