@@ -95,16 +95,15 @@ public class ChatMessagePacketHandler implements WsPacket.Handler<ChatMessagePac
     }
 
     private ChatMessageResp sendPersonal(final ChatMessagePacket packet, final ChatMessageResp resp, Long toUserId) {
+        final var copyResp = resp.copy(toUserId, OfflineMessageManager.incrSeq(toUserId.toString()));
+
         final var conn = UserWsConn.get(toUserId);
         if (conn == null) {
             // TODO: 2022/4/23 离线推送
             log.warn("用户[{}]没有连接", toUserId);
-            return resp;
+        } else {
+            conn.send(packet.newSuccessPacket(copyResp.fixUrl()).encode());
         }
-
-        final var copyResp = resp.copy(toUserId, OfflineMessageManager.incrSeq(toUserId.toString()));
-
-        conn.send(packet.newSuccessPacket(copyResp.fixUrl()).encode());
 
         return copyResp;
     }
