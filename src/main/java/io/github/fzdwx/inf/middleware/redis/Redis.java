@@ -108,6 +108,10 @@ public final class Redis implements InitializingBean {
                                              =======================================================
      */
 
+    public static Long incr(final String key) {
+        return STRING.increment(key);
+    }
+
     /**
      * 为key设置value.
      */

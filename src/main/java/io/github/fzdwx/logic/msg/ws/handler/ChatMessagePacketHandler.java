@@ -11,6 +11,7 @@ import io.github.fzdwx.logic.config.ProjectConfiguration;
 import io.github.fzdwx.logic.modules.chathistory.domain.dao.ChatHistoryRepo;
 import io.github.fzdwx.logic.modules.chathistory.domain.entity.ChatHistory;
 import io.github.fzdwx.logic.msg.domain.resp.ChatMessageResp;
+import io.github.fzdwx.logic.msg.offline.OfflineMessageManager;
 import io.github.fzdwx.logic.msg.ws.UserWsConn;
 import io.github.fzdwx.logic.msg.ws.WsPacket;
 import io.github.fzdwx.logic.msg.ws.packet.ChatMessagePacket;
@@ -64,11 +65,10 @@ public class ChatMessagePacketHandler implements WsPacket.Handler<ChatMessagePac
         }
         // endregion
 
+        // ack to client
         sendSuccessRespToClient(packet, chatHistoryId);
 
         if (!flag) {
-            // TODO  2022/4/21 写入mongo,作为最近N天聊天记录
-
             switchHandler(packet, userInfo, chatHistory);
         }
     }
@@ -80,33 +80,48 @@ public class ChatMessagePacketHandler implements WsPacket.Handler<ChatMessagePac
         final var resp = ChatMessageResp.from(userInfo, packet, chatHistory);
         switch (packet.getSessionType()) {
             case ChatConst.SessionType.broadcast -> sendAll(packet, resp);
-            case ChatConst.SessionType.group -> sendGroup(packet, resp);
-            case ChatConst.SessionType.single -> sendPersonal(packet, resp);
+            case ChatConst.SessionType.group -> {
+                // 返回给发送人的响应
+                packet.replay(OfflineMessageManager.incrSeqAndSaveToMongo(chatHistory.getFromId(), resp));
+                sendGroup(packet, resp);
+            }
+            case ChatConst.SessionType.single -> {
+                // 返回给发送人的响应
+                packet.replay(OfflineMessageManager.incrSeqAndSaveToMongo(chatHistory.getFromId(), resp));
+                OfflineMessageManager.saveToMongo(sendPersonal(packet, resp, packet.getToId()));
+            }
             default -> packet.sendError("未知的会话类型:" + packet.getSessionType());
         }
     }
 
-    private void sendPersonal(final ChatMessagePacket packet, final ChatMessageResp resp) {
-        final var conn = UserWsConn.get(packet);
+    private ChatMessageResp sendPersonal(final ChatMessagePacket packet, final ChatMessageResp resp, Long toUserId) {
+        final var conn = UserWsConn.get(toUserId);
         if (conn == null) {
-            // OfflineMessageManager.push(resp, resp.getToId(), resp.getFromId());
-            return;
+            // TODO: 2022/4/23 离线推送
+            log.warn("用户[{}]没有连接", toUserId);
+            return resp;
         }
 
-        final var data = packet.newSuccessPacket(resp.fixUrl()).encode();
-        conn.send(data);
+        final var copyResp = resp.copy(toUserId, OfflineMessageManager.incrSeq(resp.getToId()));
+
+        conn.send(packet.newSuccessPacket(copyResp.fixUrl()).encode());
+
+        return copyResp;
     }
 
     private void sendGroup(final ChatMessagePacket packet, final ChatMessageResp resp) {
-        final var chatMessages = packet.buildChatHistory(userInfo(packet));
-        // TODO: 2022/4/17 群聊
-        chatHistoryDao.saveBatch(Seq.of(chatMessages).typeOf(ChatHistory.class).toList());
+        final var chatMessageResps = Seq.of(packet.getToIdList())
+                .map(toUserId -> sendPersonal(packet, resp, toUserId))
+                .toList();
+
+        OfflineMessageManager.saveToMongo(chatMessageResps);
     }
 
     private void sendAll(final ChatMessagePacket packet, final ChatMessageResp resp) {
         final var data = packet.newSuccessPacket(resp).encode();
+        final var fromIdLong = Long.parseLong(resp.getFromId());
         UserWsConn.foreach((id, ws) -> {
-            if (id.equals(resp.getFromId())) {
+            if (id.equals(fromIdLong)) {
                 return;
             }
             ws.send(data);
@@ -117,9 +132,9 @@ public class ChatMessagePacketHandler implements WsPacket.Handler<ChatMessagePac
      * 保存数据到mysql后,返回成功响应给客户端
      */
     private static void sendSuccessRespToClient(final ChatMessagePacket packet, final Long chatHistoryId) {
-        packet.sendSuccess(chatHistoryId).addListener(f -> {
+        packet.sendSuccess().addListener(f -> {
             if (f.isSuccess()) {
-                setRandomIdToChatHistoryId(packet.getRandomId(), chatHistoryId);
+                cacheRandomIdToChatHistoryId(packet.getRandomId(), chatHistoryId);
             } else {
                 log.error("发送成功响应失败: randomId:{},chatHistoryId:{}", packet.getRandomId(), chatHistoryId, f.cause());
                 // saveSuccess(packet, chatHistoryId);
@@ -130,7 +145,7 @@ public class ChatMessagePacketHandler implements WsPacket.Handler<ChatMessagePac
     /**
      * 在redis 中缓存 randomId对应的chatHistoryId,过期时间为30s
      */
-    private static void setRandomIdToChatHistoryId(String randomId, Long chatHistoryId) {
+    private static void cacheRandomIdToChatHistoryId(String randomId, Long chatHistoryId) {
         if (Lang.isEmpty(randomId) || Lang.isNull(chatHistoryId)) {
             return;
         }

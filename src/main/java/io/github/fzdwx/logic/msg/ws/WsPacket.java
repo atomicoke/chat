@@ -8,6 +8,7 @@ import io.github.fzdwx.inf.msg.WebSocket;
 import io.github.fzdwx.logic.msg.ws.handler.ChatMessagePacketHandler;
 import io.github.fzdwx.logic.msg.ws.packet.ChatMessagePacket;
 import io.github.fzdwx.logic.msg.ws.packet.ErrorPacket;
+import io.github.fzdwx.logic.msg.ws.packet.ReplayChatPacket;
 import io.github.fzdwx.logic.msg.ws.packet.SuccessPacket;
 import io.netty.channel.ChannelFuture;
 import lombok.Getter;
@@ -70,6 +71,13 @@ public abstract class WsPacket {
             throw Err.verify("packet is null");
         }
         return new SuccessPacket<OUT>(data, packet.randomId);
+    }
+
+    public static ReplayChatPacket newReplayChatPacket(ReplayChatPacket.Data data, WsPacket packet) {
+        if (packet == null) {
+            throw Err.verify("packet is null");
+        }
+        return new ReplayChatPacket(data, packet.randomId);
     }
 
     /**
@@ -144,6 +152,8 @@ public abstract class WsPacket {
         String success = "success";
 
         String chat = "chat";
+
+        String replayChat = "replayChat";
     }
 
     public interface Handler<Packet extends WsPacket> {

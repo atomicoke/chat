@@ -3,7 +3,6 @@ package io.github.fzdwx.logic.msg.ws.packet;
 import io.github.fzdwx.inf.common.contants.ChatConst;
 import io.github.fzdwx.inf.common.err.Err;
 import io.github.fzdwx.inf.common.web.model.UserInfo;
-import io.github.fzdwx.inf.middleware.minio.Minio;
 import io.github.fzdwx.lambada.Lang;
 import io.github.fzdwx.logic.modules.chathistory.domain.entity.ChatHistory;
 import io.github.fzdwx.logic.msg.ws.WsPacket;
@@ -11,17 +10,11 @@ import io.netty.channel.ChannelFuture;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.MediaType;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static io.github.fzdwx.inf.common.contants.ChatConst.ContentType.Text;
-import static io.github.fzdwx.inf.common.contants.ChatConst.ContentType.audio;
-import static io.github.fzdwx.inf.common.contants.ChatConst.ContentType.file;
-import static io.github.fzdwx.inf.common.contants.ChatConst.ContentType.image;
-import static io.github.fzdwx.inf.common.contants.ChatConst.ContentType.video;
 import static io.github.fzdwx.lambada.Lang.eq;
 
 /**
@@ -35,10 +28,22 @@ public class ChatMessagePacket extends WsPacket {
 
     private String type = Type.chat;
 
+
     /**
-     * 接收者 id
+     * 单聊时有效，接收者
      */
-    private String toId;
+    private Long toId;
+
+    /**
+     * 接收者 id列表
+     * 群聊时有效，为群聊中所有成员的id
+     */
+    private List<Long> toIdList;
+
+    /**
+     * 群聊时有效，为群聊的id
+     */
+    private Long groupId;
 
     /**
      * 会话类型
@@ -78,12 +83,20 @@ public class ChatMessagePacket extends WsPacket {
             return Err.verify("chatMessage can not be null");
         }
 
-        if (this.toId == null || this.toId.isEmpty()) {
-            return Err.verify("toId can not be null");
-        }
 
         if (this.sessionType == 0) {
             return Err.verify("sessionType can not be null");
+        }
+
+        if (eq(ChatConst.SessionType.group, this.sessionType)) {
+            if (this.toIdList == null || this.toIdList.isEmpty() || this.groupId == null) {
+                return Err.verify("groupId can not be null");
+            }
+        }
+
+        if (eq(ChatConst.SessionType.single, this.sessionType)
+            && this.toId == null) {
+            return Err.verify("toId can not be null");
         }
 
         if (this.sendTime == null) {
@@ -100,20 +113,24 @@ public class ChatMessagePacket extends WsPacket {
         log.setMsgFrom(this.msgFrom);
         log.setSendTime(this.sendTime);
         log.setSessionType(this.sessionType);
-        log.setToId(Long.valueOf(this.toId));
+        log.setToId(this.toId);
 
         // chat message
         log.setContentType(chatMessage.getContentType());
         log.setContent(chatMessage.getContent());
         if (!Lang.eq(chatMessage.getContentType(), Text)) {
             log.setFileName(chatMessage.getFileName());
-            log.setFileSize(chatMessage.getAttrByte().length);
+            log.setFileSize(chatMessage.getFileSize());
         }
         return log;
     }
 
     public ChannelFuture sendSuccess(final Long chatHistoryId) {
         return super.sendSuccess(chatHistoryId);
+    }
+
+    public ChannelFuture replay(final ReplayChatPacket.Data data) {
+        return this.ws.send(newReplayChatPacket(data,this).encode());
     }
 
     @Data
@@ -131,10 +148,7 @@ public class ChatMessagePacket extends WsPacket {
          */
         private int contentType;
 
-        /**
-         * 附件如果是文件
-         */
-        private byte[] attrByte;
+        private int fileSize;
 
         private String fileName;
 
@@ -146,48 +160,16 @@ public class ChatMessagePacket extends WsPacket {
             } else if (contentType == 0) {
                 throw Err.verify("contentType is null");
             } else {
-                if (attrByte == null || attrByte.length == 0) {
-                    throw Err.verify("attrByte is null");
+                if (fileSize == 0) {
+                    throw Err.verify("fileSize is null");
                 }
 
                 if (fileName == null) {
                     throw Err.verify("fileName is null");
                 }
-
-                try {
-                    doUpload();
-                } catch (Exception e) {
-                    log.error("upload file error", e);
-                    return Err.verify("upload file error : " + e.getMessage());
-                }
             }
 
             return null;
-        }
-
-        private void doUpload() throws IOException {
-            final ByteArrayInputStream inputStream = new ByteArrayInputStream(attrByte);
-
-            switch (contentType) {
-                case image -> {
-                    Minio.checkImage(inputStream);
-                }
-                case audio -> {
-                    throw Err.verify("audio not support");
-                    // TODO: 2022/4/9 上传音频
-                }
-                case video -> {
-                    // TODO: 2022/4/9 上传视频
-                    throw Err.verify("video is not support");
-                }
-                case file -> {
-                    // TODO: 2022/4/9 上传文件
-                    throw Err.verify("file is not support");
-                }
-            }
-
-            // todo 文件格式
-            this.content = Minio.uploadPrivate(inputStream, fileName, MediaType.APPLICATION_OCTET_STREAM_VALUE).getObjectName();
         }
     }
 }

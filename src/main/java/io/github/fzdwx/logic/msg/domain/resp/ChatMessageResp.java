@@ -28,12 +28,18 @@ public class ChatMessageResp {
      * 当前信箱所属人id
      */
     @JsonIgnore
-    private String boxOwnerId;
+    private Long boxOwnerId;
+
+    /**
+     * 当前信箱所属人 全局seq(每收到或发送一条消息则加1)
+     */
+    @JsonIgnore
+    private Long boxOwnerSeq;
 
     /**
      * 消息id
      */
-    private Long messageId;
+    private String messageId;
     private String fromId;
     private String fromUname;
     private String fromAvatar;
@@ -48,9 +54,10 @@ public class ChatMessageResp {
     private LocalDateTime sendTime;
     private ChatMessage chatMessage;
 
-    public ChatMessageResp copy(final Integer boxOwnerId) {
+    public ChatMessageResp copy(final Long boxOwnerId,final Long boxOwnerSeq) {
         final ChatMessageResp chatMessageResp = new ChatMessageResp();
-        chatMessageResp.setBoxOwnerId(boxOwnerId.toString());
+        chatMessageResp.setBoxOwnerId(boxOwnerId);
+        chatMessageResp.setBoxOwnerSeq(boxOwnerSeq);
         chatMessageResp.setMessageId(this.messageId);
         chatMessageResp.setFromId(this.fromId);
         chatMessageResp.setFromUname(this.fromUname);
@@ -96,11 +103,11 @@ public class ChatMessageResp {
 
     public static ChatMessageResp from(final UserInfo userInfo, final ChatMessagePacket packet, final ChatHistory chatHistory) {
         final var resp = new ChatMessageResp();
-        resp.setMessageId(chatHistory.getId());
+        resp.setMessageId(String.valueOf(chatHistory.getId()));
         resp.setFromId(userInfo.getId());
         resp.setFromUname(userInfo.getUname());
         resp.setFromAvatar(userInfo.getAvatar());
-        resp.setToId(packet.getToId());
+        resp.setToId(String.valueOf(chatHistory.getToId()));
         resp.setSessionType(packet.getSessionType());
         resp.setMsgFrom(packet.getMsgFrom());
         resp.setSendTime(packet.getSendTime());

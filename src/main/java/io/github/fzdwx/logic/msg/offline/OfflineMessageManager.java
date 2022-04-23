@@ -2,12 +2,13 @@ package io.github.fzdwx.logic.msg.offline;
 
 import cn.hutool.extra.spring.SpringUtil;
 import io.github.fzdwx.inf.middleware.redis.Redis;
-import io.github.fzdwx.lambada.Seq;
-import io.github.fzdwx.lambada.lang.StopWatch;
 import io.github.fzdwx.logic.msg.domain.resp.ChatMessageResp;
+import io.github.fzdwx.logic.msg.ws.packet.ReplayChatPacket;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /**
  * @author <a href="mailto:likelovec@gmail.com">韦朕</a>
@@ -17,7 +18,7 @@ import org.springframework.stereotype.Component;
 public class OfflineMessageManager implements InitializingBean {
 
     // 未读消息最小的id
-    private final static String MIN_ID_KEY_PREFIX = "msg:minId:";
+    private final static String MIN_ID_KEY_PREFIX = "msg:seq:";
     private final static String COLLECTION = "chat";
 
     private static MongoTemplate mongoTemplate;
@@ -27,38 +28,27 @@ public class OfflineMessageManager implements InitializingBean {
         mongoTemplate = SpringUtil.getBean(MongoTemplate.class);
     }
 
-    /**
-     * 推
-     *
-     * @param resp        chat message resp
-     * @param boxOwnerIds 需要发往的各个信箱id
-     */
-    public static void push(final ChatMessageResp resp, final String... boxOwnerIds) {
-        final StopWatch stopWatch = StopWatch.get("insert mongo");
-        mongoTemplate.insert(Seq.range(2000).mapToObj(resp::copy).toList(), COLLECTION);
-        stopWatch.stopAndPrint();
+    public static ReplayChatPacket.Data incrSeqAndSaveToMongo(final Long userId, final ChatMessageResp resp) {
+        final var seq = incrSeq(userId.toString());
+
+        saveToMongo(resp.copy(userId, seq));
+
+        return new ReplayChatPacket.Data(resp.getMessageId(), seq);
     }
 
-    private static void setMinMessageId(final String recvUserId, String channelId, final Long minId) {
-        String key = minIdKey(recvUserId);
-
-        // 当 msgId 为null 或 msgId > minMsgId 时，更新 msgId
-        final String msgId = Redis.hGet(key, channelId);
-        if (msgId == null || Long.parseLong(msgId) > minId) {
-            Redis.hSet(key, channelId, minId.toString());
-        }
+    public static Long incrSeq(final String userId) {
+        return Redis.incr(getSeqKey(userId));
     }
 
-    /*
-    key生成规则：
-        如果是单聊：
-            key: offline:msg:recvUserId:SessionType.personal
-            filed: channelId | value:  min message id
-        如果是群聊：
-            key: offline:msg:recvUserId:SessionType.group
-            filed: channelId | value:  min message id
-     */
-    private static String minIdKey(final String recvUserId) {
+    public static void saveToMongo(final ChatMessageResp chatMessageResp) {
+        mongoTemplate.insert(chatMessageResp, COLLECTION);
+    }
+
+    public static void saveToMongo(final List<ChatMessageResp> chatMessageResps) {
+        mongoTemplate.insert(chatMessageResps, COLLECTION);
+    }
+
+    private static String getSeqKey(final String recvUserId) {
         return MIN_ID_KEY_PREFIX + recvUserId;
     }
 }
