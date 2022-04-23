@@ -11,7 +11,7 @@ import io.github.fzdwx.logic.config.ProjectConfiguration;
 import io.github.fzdwx.logic.modules.chathistory.domain.dao.ChatHistoryRepo;
 import io.github.fzdwx.logic.modules.chathistory.domain.entity.ChatHistory;
 import io.github.fzdwx.logic.msg.domain.resp.ChatMessageResp;
-import io.github.fzdwx.logic.msg.offline.OfflineMessageManager;
+import io.github.fzdwx.logic.msg.sync.MessageSyncer;
 import io.github.fzdwx.logic.msg.ws.UserWsConn;
 import io.github.fzdwx.logic.msg.ws.WsPacket;
 import io.github.fzdwx.logic.msg.ws.packet.ChatMessagePacket;
@@ -82,20 +82,20 @@ public class ChatMessagePacketHandler implements WsPacket.Handler<ChatMessagePac
             case ChatConst.SessionType.broadcast -> sendAll(packet, resp);
             case ChatConst.SessionType.group -> {
                 // 返回给发送人的响应
-                packet.replay(OfflineMessageManager.incrSeqAndSaveToMongo(chatHistory.getFromId(), resp));
+                packet.replay(MessageSyncer.incrSeqAndSaveToMongo(chatHistory.getFromId(), resp));
                 sendGroup(packet, resp);
             }
             case ChatConst.SessionType.single -> {
                 // 返回给发送人的响应
-                packet.replay(OfflineMessageManager.incrSeqAndSaveToMongo(chatHistory.getFromId(), resp));
-                OfflineMessageManager.saveToMongo(sendPersonal(packet, resp, packet.getToId()));
+                packet.replay(MessageSyncer.incrSeqAndSaveToMongo(chatHistory.getFromId(), resp));
+                MessageSyncer.saveToMongo(sendPersonal(packet, resp, packet.getToId()));
             }
             default -> packet.sendError("未知的会话类型:" + packet.getSessionType());
         }
     }
 
     private ChatMessageResp sendPersonal(final ChatMessagePacket packet, final ChatMessageResp resp, Long toUserId) {
-        final var copyResp = resp.copy(toUserId, OfflineMessageManager.incrSeq(toUserId.toString()));
+        final var copyResp = resp.copy(toUserId, MessageSyncer.incrSeq(toUserId.toString()));
 
         final var conn = UserWsConn.get(toUserId);
         if (conn == null) {
@@ -113,7 +113,7 @@ public class ChatMessagePacketHandler implements WsPacket.Handler<ChatMessagePac
                 .map(toUserId -> sendPersonal(packet, resp, toUserId))
                 .toList();
 
-        OfflineMessageManager.saveToMongo(chatMessageResps);
+        MessageSyncer.saveToMongo(chatMessageResps);
     }
 
     private void sendAll(final ChatMessagePacket packet, final ChatMessageResp resp) {

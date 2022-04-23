@@ -37,8 +37,17 @@ public class ChatMessageResp {
      * 消息id
      */
     private String messageId;
+    /**
+     * 消息发送人id
+     */
     private String fromId;
+    /**
+     * 消息发送人用户名
+     */
     private String fromUname;
+    /**
+     * 消息发送人头像
+     */
     private String fromAvatar;
     /**
      * 根据sessionType有不同的含义
@@ -46,12 +55,15 @@ public class ChatMessageResp {
      * {@link io.github.fzdwx.inf.common.contants.ChatConst.SessionType#group} 群聊id
      */
     private String toId;
+    /**
+     * @see ChatConst.SessionType
+     */
     private int sessionType;
     private int msgFrom;
     private LocalDateTime sendTime;
     private ChatMessage chatMessage;
 
-    public ChatMessageResp copy(final Long boxOwnerId,final Long boxOwnerSeq) {
+    public ChatMessageResp copy(final Long boxOwnerId, final Long boxOwnerSeq) {
         final ChatMessageResp chatMessageResp = new ChatMessageResp();
         chatMessageResp.setBoxOwnerId(boxOwnerId.toString());
         chatMessageResp.setBoxOwnerSeq(boxOwnerSeq.toString());
