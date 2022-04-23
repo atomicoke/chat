@@ -149,8 +149,14 @@ public class ChatMessagePacketHandler implements WsPacket.Handler<ChatMessagePac
             return;
         }
 
-        Redis.set(randomId, chatHistoryId.toString(), Duration.ofSeconds(ProjectConfiguration.getProjectProps().getRandomIdToChatHistoryIdExpire()));
+        Redis.set(getKey(randomId), chatHistoryId.toString(), Duration.ofSeconds(ProjectConfiguration.getProjectProps().getRandomIdToChatHistoryIdExpire()));
     }
+
+    private static String getKey(final String randomId) {
+        return RANDOM_ID_MAP_CHAT_HISTORY_ID + randomId;
+    }
+
+    private static final String RANDOM_ID_MAP_CHAT_HISTORY_ID = "msg:map:";
 
     /**
      * 获取在redis 中缓存的randomId对应的chatHistoryId
@@ -163,7 +169,7 @@ public class ChatMessagePacketHandler implements WsPacket.Handler<ChatMessagePac
             return null;
         }
 
-        final String s = Redis.get(randomId);
+        final String s = Redis.get(getKey(randomId));
         if (s == null) {
             return null;
         }
