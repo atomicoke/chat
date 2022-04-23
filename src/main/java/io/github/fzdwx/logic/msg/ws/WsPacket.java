@@ -49,12 +49,13 @@ public abstract class WsPacket {
     public static <T extends WsPacket> T decode(String s) {
         try {
             final var jsonObject = Json.parseObj(s);
-            final var type = jsonObject.getStr("type");
+            final var type = jsonObject.getString("type");
             if (type == null) {
                 return null;
             }
 
-            return jsonObject.toBean(TypeClassMapping.map.get(type), true);
+            final Class<? extends WsPacket> clazz = TypeClassMapping.map.get(type);
+            return (T) jsonObject.toJavaObject(clazz);
         } catch (Exception e) {
             log.error("decode json to ws packet error", e);
             return null;
