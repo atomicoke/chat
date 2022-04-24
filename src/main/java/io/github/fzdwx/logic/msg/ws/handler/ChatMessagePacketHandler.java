@@ -7,7 +7,7 @@ import io.github.fzdwx.inf.middleware.id.IdGenerate;
 import io.github.fzdwx.inf.middleware.redis.Redis;
 import io.github.fzdwx.lambada.Lang;
 import io.github.fzdwx.lambada.Seq;
-import io.github.fzdwx.logic.config.ProjectConfiguration;
+import io.github.fzdwx.logic.config.ProjectProps;
 import io.github.fzdwx.logic.modules.chathistory.domain.dao.ChatHistoryRepo;
 import io.github.fzdwx.logic.modules.chathistory.domain.entity.ChatHistory;
 import io.github.fzdwx.logic.msg.domain.resp.ChatMessageResp;
@@ -15,7 +15,6 @@ import io.github.fzdwx.logic.msg.sync.MessageSyncer;
 import io.github.fzdwx.logic.msg.ws.UserWsConn;
 import io.github.fzdwx.logic.msg.ws.WsPacket;
 import io.github.fzdwx.logic.msg.ws.packet.ChatMessagePacket;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.springframework.stereotype.Component;
@@ -28,10 +27,15 @@ import java.time.Duration;
  */
 @Slf4j
 @Component
-@RequiredArgsConstructor
 public class ChatMessagePacketHandler implements WsPacket.Handler<ChatMessagePacket> {
 
     private final ChatHistoryRepo chatHistoryDao;
+    private static Duration randomIdToChatHistoryIdExpire;
+
+    public ChatMessagePacketHandler(final ChatHistoryRepo chatHistoryDao, final ProjectProps projectProps) {
+        this.chatHistoryDao = chatHistoryDao;
+        randomIdToChatHistoryIdExpire = Duration.ofSeconds(projectProps.getRandomIdToChatHistoryIdExpire());
+    }
 
     @Override
     public void handle(final ChatMessagePacket packet) {
@@ -149,7 +153,7 @@ public class ChatMessagePacketHandler implements WsPacket.Handler<ChatMessagePac
             return;
         }
 
-        Redis.set(getKey(randomId), chatHistoryId.toString(), Duration.ofSeconds(ProjectConfiguration.getProjectProps().getRandomIdToChatHistoryIdExpire()));
+        Redis.set(getKey(randomId), chatHistoryId.toString(), randomIdToChatHistoryIdExpire);
     }
 
     private static String getKey(final String randomId) {
