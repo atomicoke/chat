@@ -1,4 +1,4 @@
-package io.github.fzdwx.logic.msg.ws.packet;
+package io.github.fzdwx.logic.msg.ws.packet.status;
 
 import io.github.fzdwx.inf.common.web.model.Rest;
 import io.github.fzdwx.inf.msg.WebSocket;

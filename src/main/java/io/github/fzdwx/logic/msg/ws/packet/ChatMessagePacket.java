@@ -6,6 +6,7 @@ import io.github.fzdwx.inf.common.web.model.UserInfo;
 import io.github.fzdwx.lambada.Lang;
 import io.github.fzdwx.logic.modules.chathistory.domain.entity.ChatHistory;
 import io.github.fzdwx.logic.msg.ws.WsPacket;
+import io.github.fzdwx.logic.msg.ws.packet.status.ReplayPacket;
 import io.netty.channel.ChannelFuture;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -128,7 +129,7 @@ public class ChatMessagePacket extends WsPacket {
         return super.sendSuccess(chatHistoryId);
     }
 
-    public ChannelFuture replay(final ReplayChatPacket.Data data) {
+    public ChannelFuture replay(final ReplayPacket.Data data) {
         return this.ws.send(newReplayChatPacket(data,this).encode());
     }
 
