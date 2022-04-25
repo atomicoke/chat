@@ -1,6 +1,7 @@
 package io.github.fzdwx.logic.msg.sync;
 
 import cn.hutool.extra.spring.SpringUtil;
+import io.github.fzdwx.inf.common.util.Json;
 import io.github.fzdwx.inf.middleware.redis.Redis;
 import io.github.fzdwx.logic.msg.domain.resp.ChatMessageResp;
 import io.github.fzdwx.logic.msg.sync.model.MessageSyncReq;
@@ -37,7 +38,7 @@ public class MessageSyncer implements InitializingBean {
     }
 
     public static void saveToMongo(final ChatMessageResp chatMessageResp) {
-        mongoTemplate.insert(chatMessageResp, COLLECTION);
+        mongoTemplate.insert(Json.toJson(chatMessageResp), COLLECTION);
     }
 
     public static ReplayPacket.Data incrSeqAndSaveToMongo(final Long userId, final ChatMessageResp resp) {

@@ -7,6 +7,7 @@ import io.netty.channel.ChannelFuture;
 import io.netty.util.AttributeKey;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.Nullable;
 import java.util.Map;
@@ -25,12 +26,13 @@ import static io.github.fzdwx.lambada.fun.State.success;
  * @date 2022/4/5 18:05
  */
 @Slf4j
+@Component
 public class UserWsConn {
 
     private final static Map<Long, WebSocket> WEB_SOCKET_MAP = new ConcurrentSkipListMap<>();
     private final static AttributeKey<UserInfo> KEY_USER_INFO = AttributeKey.valueOf("userInfo");
 
-    public static void add(final Long userId,final WebSocket webSocket) {
+    public static void add(final Long userId, final WebSocket webSocket) {
         if (isNull(userId) || isNull(webSocket)) {
             throw verify("userId or webSocket is null");
         }
