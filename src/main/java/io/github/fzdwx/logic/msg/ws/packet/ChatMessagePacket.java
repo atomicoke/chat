@@ -28,7 +28,6 @@ public class ChatMessagePacket extends WsPacket {
 
     private String type = Type.chat;
 
-
     /**
      * 单聊时有效，接收者
      */
