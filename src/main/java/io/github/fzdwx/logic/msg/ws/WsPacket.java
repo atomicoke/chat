@@ -7,9 +7,9 @@ import io.github.fzdwx.inf.common.web.model.UserInfo;
 import io.github.fzdwx.inf.msg.WebSocket;
 import io.github.fzdwx.logic.msg.ws.handler.ChatMessagePacketHandler;
 import io.github.fzdwx.logic.msg.ws.packet.ChatMessagePacket;
-import io.github.fzdwx.logic.msg.ws.packet.ErrorPacket;
-import io.github.fzdwx.logic.msg.ws.packet.ReplayChatPacket;
-import io.github.fzdwx.logic.msg.ws.packet.SuccessPacket;
+import io.github.fzdwx.logic.msg.ws.packet.status.ErrorPacket;
+import io.github.fzdwx.logic.msg.ws.packet.status.ReplayPacket;
+import io.github.fzdwx.logic.msg.ws.packet.status.SuccessPacket;
 import io.netty.channel.ChannelFuture;
 import lombok.Getter;
 import lombok.Setter;
@@ -73,11 +73,11 @@ public abstract class WsPacket {
         return new SuccessPacket<OUT>(data, packet.randomId);
     }
 
-    public static ReplayChatPacket newReplayChatPacket(ReplayChatPacket.Data data, WsPacket packet) {
+    public static ReplayPacket newReplayChatPacket(ReplayPacket.Data data, WsPacket packet) {
         if (packet == null) {
             throw Err.verify("packet is null");
         }
-        return new ReplayChatPacket(data, packet.randomId);
+        return new ReplayPacket(data, packet.randomId);
     }
 
     /**
@@ -151,9 +151,13 @@ public abstract class WsPacket {
 
         String success = "success";
 
-        String chat = "chat";
+        String replay = "replay";
 
-        String replayChat = "replayChat";
+        String chat = "chat";
+        /**
+         * 发送好友请求
+         */
+        String friendRequest = "friendRequest";
     }
 
     public interface Handler<Packet extends WsPacket> {

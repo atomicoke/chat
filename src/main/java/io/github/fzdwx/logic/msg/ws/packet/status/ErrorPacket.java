@@ -1,4 +1,4 @@
-package io.github.fzdwx.logic.msg.ws.packet;
+package io.github.fzdwx.logic.msg.ws.packet.status;
 
 import cn.hutool.core.util.ArrayUtil;
 import io.github.fzdwx.inf.msg.WebSocket;

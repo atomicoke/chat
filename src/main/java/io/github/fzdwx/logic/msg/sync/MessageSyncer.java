@@ -5,7 +5,7 @@ import io.github.fzdwx.inf.middleware.redis.Redis;
 import io.github.fzdwx.logic.msg.domain.resp.ChatMessageResp;
 import io.github.fzdwx.logic.msg.sync.model.MessageSyncReq;
 import io.github.fzdwx.logic.msg.sync.model.MessageSyncResp;
-import io.github.fzdwx.logic.msg.ws.packet.ReplayChatPacket;
+import io.github.fzdwx.logic.msg.ws.packet.status.ReplayPacket;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Component;
@@ -40,14 +40,14 @@ public class MessageSyncer implements InitializingBean {
         mongoTemplate.insert(chatMessageResp, COLLECTION);
     }
 
-    public static ReplayChatPacket.Data incrSeqAndSaveToMongo(final Long userId, final ChatMessageResp resp) {
+    public static ReplayPacket.Data incrSeqAndSaveToMongo(final Long userId, final ChatMessageResp resp) {
         final var seq = incrSeq(userId.toString());
 
         final var chatMessageResp = resp.copy(userId, seq);
 
         saveToMongo(chatMessageResp);
 
-        return new ReplayChatPacket.Data(chatMessageResp.getMessageId(), chatMessageResp.getBoxOwnerId(), chatMessageResp.getBoxOwnerSeq());
+        return new ReplayPacket.Data(chatMessageResp.getMessageId(), chatMessageResp.getBoxOwnerId(), chatMessageResp.getBoxOwnerSeq());
     }
 
     public static void saveToMongo(final List<ChatMessageResp> chatMessageResps) {
