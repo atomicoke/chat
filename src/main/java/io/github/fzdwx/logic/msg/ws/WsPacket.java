@@ -8,6 +8,7 @@ import io.github.fzdwx.inf.msg.WebSocket;
 import io.github.fzdwx.logic.msg.ws.handler.ChatMessagePacketHandler;
 import io.github.fzdwx.logic.msg.ws.packet.ChatMessagePacket;
 import io.github.fzdwx.logic.msg.ws.packet.ErrorPacket;
+import io.github.fzdwx.logic.msg.ws.packet.ReplayChatPacket;
 import io.github.fzdwx.logic.msg.ws.packet.SuccessPacket;
 import io.netty.channel.ChannelFuture;
 import lombok.Getter;
@@ -49,12 +50,13 @@ public abstract class WsPacket {
     public static <T extends WsPacket> T decode(String s) {
         try {
             final var jsonObject = Json.parseObj(s);
-            final var type = jsonObject.getStr("type");
+            final var type = jsonObject.getString("type");
             if (type == null) {
                 return null;
             }
 
-            return jsonObject.toBean(TypeClassMapping.map.get(type), true);
+            final Class<? extends WsPacket> clazz = TypeClassMapping.map.get(type);
+            return (T) jsonObject.toJavaObject(clazz);
         } catch (Exception e) {
             log.error("decode json to ws packet error", e);
             return null;
@@ -69,6 +71,13 @@ public abstract class WsPacket {
             throw Err.verify("packet is null");
         }
         return new SuccessPacket<OUT>(data, packet.randomId);
+    }
+
+    public static ReplayChatPacket newReplayChatPacket(ReplayChatPacket.Data data, WsPacket packet) {
+        if (packet == null) {
+            throw Err.verify("packet is null");
+        }
+        return new ReplayChatPacket(data, packet.randomId);
     }
 
     /**
@@ -143,6 +152,8 @@ public abstract class WsPacket {
         String success = "success";
 
         String chat = "chat";
+
+        String replayChat = "replayChat";
     }
 
     public interface Handler<Packet extends WsPacket> {

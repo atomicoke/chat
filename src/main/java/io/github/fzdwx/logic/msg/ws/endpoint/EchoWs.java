@@ -37,7 +37,7 @@ public class EchoWs implements HttpHandler {
 
                     UserWsConn.attachUserInfo(ws, userInfo);
 
-                    final var id = userInfo.getId();
+                    final var id = userInfo.getIdLong();
 
                     ws.mountOpen(h -> {
                         UserWsConn.add(id, ws);

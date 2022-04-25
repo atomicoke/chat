@@ -3,6 +3,7 @@ package io.github.fzdwx.inf.middleware.redis;
 import cn.hutool.extra.spring.SpringUtil;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jetbrains.annotations.NotNull;
+import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.ListOperations;
@@ -31,6 +32,8 @@ public final class Redis implements InitializingBean {
     private static HashOperations<String, String, String> HASH;
     private static SetOperations<String, String> SET;
     private static ListOperations<String, String> LIST;
+
+    private static RedissonClient redissonClient;
 
 
     private Redis() {
@@ -104,6 +107,10 @@ public final class Redis implements InitializingBean {
                                              ==============                             ============
                                              =======================================================
      */
+
+    public static Long incr(final String key) {
+        return STRING.increment(key);
+    }
 
     /**
      * 为key设置value.
@@ -293,6 +300,7 @@ public final class Redis implements InitializingBean {
     @Override
     public void afterPropertiesSet() throws Exception {
         REDIS_TEMPLATE = SpringUtil.getBean("stringRedisTemplate");
+        redissonClient = SpringUtil.getBean(RedissonClient.class);
         STRING = REDIS_TEMPLATE.opsForValue();
         HASH = REDIS_TEMPLATE.opsForHash();
         SET = REDIS_TEMPLATE.opsForSet();
