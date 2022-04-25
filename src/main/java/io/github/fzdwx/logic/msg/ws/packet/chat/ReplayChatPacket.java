@@ -1,4 +1,4 @@
-package io.github.fzdwx.logic.msg.ws.packet.status;
+package io.github.fzdwx.logic.msg.ws.packet.chat;
 
 import io.github.fzdwx.inf.msg.WebSocket;
 import io.github.fzdwx.logic.msg.ws.WsPacket;
@@ -7,17 +7,17 @@ import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class ReplayPacket extends WsPacket {
+public class ReplayChatPacket extends WsPacket {
 
     private String message;
 
     private String randomId;
 
-    private String type = Type.replay;
+    private String type = Type.replayChat;
 
     private Data data;
 
-    public ReplayPacket(final Data data, final String randomId) {
+    public ReplayChatPacket(final Data data, final String randomId) {
         this.data = data;
         this.randomId = randomId;
     }

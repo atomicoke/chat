@@ -4,7 +4,7 @@ import io.github.fzdwx.inf.common.contants.ChatConst;
 import io.github.fzdwx.inf.common.web.model.UserInfo;
 import io.github.fzdwx.inf.middleware.minio.Minio;
 import io.github.fzdwx.logic.modules.chathistory.domain.entity.ChatHistory;
-import io.github.fzdwx.logic.msg.ws.packet.ChatMessagePacket;
+import io.github.fzdwx.logic.msg.ws.packet.chat.ChatMessagePacket;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;

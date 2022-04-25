@@ -1,6 +1,6 @@
 package io.github.fzdwx.logic.msg.ws.handler;
 
-import io.github.fzdwx.logic.msg.ws.packet.ChatMessagePacket;
+import io.github.fzdwx.logic.msg.ws.packet.chat.ChatMessagePacket;
 import org.junit.jupiter.api.Test;
 
 import static org.mockito.Mockito.mock;

@@ -14,7 +14,7 @@ import io.github.fzdwx.logic.msg.domain.resp.ChatMessageResp;
 import io.github.fzdwx.logic.msg.sync.MessageSyncer;
 import io.github.fzdwx.logic.msg.ws.UserWsConn;
 import io.github.fzdwx.logic.msg.ws.WsPacket;
-import io.github.fzdwx.logic.msg.ws.packet.ChatMessagePacket;
+import io.github.fzdwx.logic.msg.ws.packet.chat.ChatMessagePacket;
 import lombok.extern.slf4j.Slf4j;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.springframework.stereotype.Component;
