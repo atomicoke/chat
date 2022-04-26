@@ -12,12 +12,12 @@
             <result property="addWay" column="add_way" jdbcType="INTEGER"/>
             <result property="addTime" column="add_time" jdbcType="TIMESTAMP"/>
             <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
-            <result property="isDeleted" column="is_deleted" jdbcType="TINYINT"/>
+            <result property="delFlag" column="del_flag" jdbcType="TINYINT"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         id,owner_id,friend_id,
         remark,add_way,add_time,
-        update_time,is_deleted
+        update_time,del_flag
     </sql>
 </mapper>
