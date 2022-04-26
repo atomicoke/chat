@@ -20,13 +20,13 @@
 
         <HikariCP.version>5.0.1</HikariCP.version>
         <lombok.version>1.18.22</lombok.version>
-        <minio.version>8.3.7</minio.version>
+        <minio.version>8.3.8</minio.version>
         <okhttp.version>4.9.3</okhttp.version>
         <sa-token.version>1.29.0</sa-token.version>
         <ttl.version>2.12.6</ttl.version>
         <redisson.version>3.17.0</redisson.version>
         <mybatis-plus-boot-starter.version>3.5.1</mybatis-plus-boot-starter.version>
-        <cosid.version>1.8.11</cosid.version>
+        <cosid.version>1.8.15</cosid.version>
         <skipTests>true</skipTests>
         <fastjson2.version>2.0.1</fastjson2.version>
     </properties>
@@ -74,14 +74,13 @@
             <resource>
                 <directory>src/main/resources</directory>
                 <excludes>
-                    <exclude>application*.yml</exclude>
+                    <exclude>application.yml</exclude>
                 </excludes>
             </resource>
             <resource>
                 <directory>src/main/resources</directory>
                 <filtering>true</filtering>
                 <includes>
-                    <include>application.yml</include>
                     <include>application-${profiles.active}.yml</include>
                 </includes>
             </resource>
