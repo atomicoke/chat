@@ -7,9 +7,9 @@
 #tar zxvf /home/admin/app/package.tgz -C /home/admin/chat-0.01/
 #sh /home/admin/chat-0.01/deploy.sh restart
 
-Path=/target/chat-0.01.jar
+Path=./target/chat-0.01.jar
 ACTION=$0
-JAVA_OUT=/start.log  #应用的启动日志
+JAVA_OUT=./start.log  #应用的启动日志
 
 
 usage() {
