@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="io.github.fzdwx.logic.modules.group.domain.dao.mapper.GroupChatMapper">
+<mapper namespace="org.atomicode.logic.modules.group.domain.dao.mapper.GroupChatMapper">
 
-    <resultMap id="BaseResultMap" type="io.github.fzdwx.logic.modules.group.domain.entity.GroupChat">
+    <resultMap id="BaseResultMap" type="org.atomicode.logic.modules.group.domain.entity.GroupChat">
             <id property="id" column="id" jdbcType="BIGINT"/>
             <result property="name" column="name" jdbcType="VARCHAR"/>
             <result property="avatar" column="avatar" jdbcType="VARCHAR"/>
