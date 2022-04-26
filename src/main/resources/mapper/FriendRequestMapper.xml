@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="org.atomicode.logic.modules.friend.domain.dao.mapper.FriendRequestMapper">
+<mapper namespace="org.atomicoke.logic.modules.friend.domain.dao.mapper.FriendRequestMapper">
 
-    <resultMap id="BaseResultMap" type="org.atomicode.logic.modules.friend.domain.entity.FriendRequest">
+    <resultMap id="BaseResultMap" type="org.atomicoke.logic.modules.friend.domain.entity.FriendRequest">
             <id property="id" column="id" jdbcType="BIGINT"/>
             <result property="reqId" column="req_id" jdbcType="BIGINT"/>
             <result property="userId" column="user_id" jdbcType="BIGINT"/>

@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <artifactId>chat</artifactId>
-    <groupId>org.atomicode</groupId>
+    <groupId>org.atomicoke</groupId>
     <version>0.01</version>
     <modelVersion>4.0.0</modelVersion>
 
