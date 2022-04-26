@@ -2,11 +2,8 @@ package io.github.fzdwx.logic.modules.user.domain.entity;
 
 import cn.dev33.satoken.secure.SaSecureUtil;
 import cn.hutool.core.util.RandomUtil;
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableLogic;
-import com.baomidou.mybatisplus.annotation.TableName;
+import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.annotation.*;
 import io.github.fzdwx.inf.common.web.model.RoleConstant;
 import io.github.fzdwx.lambada.Lang;
 import io.github.fzdwx.logic.modules.user.domain.model.EditUserInfoReq;
@@ -39,6 +36,11 @@ public class User implements Serializable {
      * 用户名
      */
     private String uname;
+
+    /**
+     * 用户昵称
+     */
+    private String nickName;
     /**
      * 手机号
      */
@@ -81,8 +83,10 @@ public class User implements Serializable {
 
     public static User from(final SingUpReq req) {
         final var salt = RandomUtil.randomString(8);
+        String nickName = StrUtil.isEmpty(req.getNickName()) ? req.getUname() : req.getNickName();
         return new User()
                 .setUname(req.getUname())
+                .setNickName(nickName)
                 .setSalt(salt)
                 .setCreateTime(LocalDateTime.now())
                 .setRoleKey(RoleConstant.COMMON)
@@ -95,6 +99,10 @@ public class User implements Serializable {
         newUser.setId(user.getId())
                 .setUpdateTime(LocalDateTime.now())
                 .setUname(user.getUname());
+
+        if (req.getNickName() != null) {
+            newUser.setNickName(req.getNickName());
+        } else newUser.setNickName(user.getNickName());
 
         if (req.getPasswd() != null) {
             newUser.setPasswd(encodePasswd(req.getPasswd(), user.getSalt()));

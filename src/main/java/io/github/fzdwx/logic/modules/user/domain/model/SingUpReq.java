@@ -15,6 +15,12 @@ public class SingUpReq {
      * 用户名
      */
     private String uname;
+
+    /**
+     * 昵称
+     */
+    private String nickName;
+
     /**
      * 密码
      */
