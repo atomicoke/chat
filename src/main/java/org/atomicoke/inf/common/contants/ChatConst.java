@@ -83,4 +83,55 @@ public interface ChatConst {
         Integer left = 1;
         Integer right = 2;
     }
+
+    interface ContactType {
+
+        /**
+         * 添加好友请求
+         */
+        int addFriend = 11001;
+
+        /**
+         * 同意好友请求
+         */
+        int agreeFriend = 11002;
+
+        /**
+         * 拒绝好友请求
+         */
+        int rejectFriend = 11003;
+
+        /**
+         * 入群请求
+         */
+        int joinGroup = 12001;
+
+        /**
+         * 同意入群请求
+         */
+        int agreeGroup = 12002;
+
+        /**
+         * 拒绝入群请求
+         */
+        int rejectGroup = 12003;
+    }
+
+    interface FriendAndGroupApplyResult {
+        /**
+         * 未操作
+         */
+        int unOperated = 1;
+
+        /**
+         * 同意
+         */
+        int agree = 2;
+
+        /**
+         * 拒绝
+         */
+        int reject = 3;
+
+    }
 }

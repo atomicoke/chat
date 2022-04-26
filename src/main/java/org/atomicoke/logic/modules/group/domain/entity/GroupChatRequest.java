@@ -11,13 +11,14 @@ import java.time.LocalDateTime;
 
 /**
  * 用户发起加群申请表
+ *
  * @TableName group_chat_request
  */
 @Data
-@TableName(value ="group_chat_request")
+@TableName(value = "group_chat_request")
 public class GroupChatRequest implements Serializable {
     /**
-     * 
+     *
      */
     @TableId(type = IdType.ASSIGN_ID)
     private Long id;
@@ -38,7 +39,7 @@ public class GroupChatRequest implements Serializable {
     private String reqMessage;
 
     /**
-     * 操作结果 1:未操作 2:接收 3:拒绝
+     * 操作结果 1:未操作 2:同意 3:拒绝
      */
     private Integer handlerResult;
 
@@ -53,11 +54,6 @@ public class GroupChatRequest implements Serializable {
     private LocalDateTime handlerTime;
 
     /**
-     * 拒绝可以携带msg给发起申请的人
-     */
-    private String handlerMsg;
-
-    /**
      * 处理人
      */
     private Long handlerUser;
@@ -66,6 +62,11 @@ public class GroupChatRequest implements Serializable {
      * 创建时间
      */
     private LocalDateTime createTime;
+
+    /**
+     * 随机id(用于去重)
+     */
+    private String randomId;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;

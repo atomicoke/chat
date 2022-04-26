@@ -23,7 +23,7 @@ import java.util.List;
 @Slf4j
 public class ChatMessagePacket extends WsPacket {
 
-    private String type = Type.chat;
+    private static final String type = Type.chat;
 
     /**
      * 单聊时有效，接收者
@@ -49,7 +49,7 @@ public class ChatMessagePacket extends WsPacket {
     private int sessionType;
 
     /**
-     * 消息发送者
+     * 消息发送者类型
      *
      * @see ChatConst.MsgFrom
      */
@@ -91,7 +91,7 @@ public class ChatMessagePacket extends WsPacket {
         }
 
         if (Lang.eq(ChatConst.SessionType.single, this.sessionType)
-            && this.toId == null) {
+                && this.toId == null) {
             return Err.verify("toId can not be null");
         }
 
@@ -126,7 +126,7 @@ public class ChatMessagePacket extends WsPacket {
     }
 
     public ChannelFuture replay(final ReplayChatPacket.Data data) {
-        return this.ws.send(newReplayChatPacket(data,this).encode());
+        return this.ws.send(newReplayChatPacket(data, this).encode());
     }
 
     @Data

@@ -10,10 +10,12 @@ import org.atomicoke.inf.common.err.Err;
 import org.atomicoke.inf.common.util.Json;
 import org.atomicoke.inf.common.web.model.UserInfo;
 import org.atomicoke.logic.msg.ws.handler.ChatMessagePacketHandler;
+import org.atomicoke.logic.msg.ws.handler.SysContactPacketHandler;
 import org.atomicoke.logic.msg.ws.packet.chat.ChatMessagePacket;
 import org.atomicoke.logic.msg.ws.packet.chat.ReplayChatPacket;
 import org.atomicoke.logic.msg.ws.packet.status.ErrorPacket;
 import org.atomicoke.logic.msg.ws.packet.status.SuccessPacket;
+import org.atomicoke.logic.msg.ws.packet.sys.SysContactPacket;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
@@ -47,6 +49,7 @@ public abstract class WsPacket {
      * @apiNote if not have type,then return null.
      */
     @Nullable
+    @SuppressWarnings("unchecked")
     public static <T extends WsPacket> T decode(String s) {
         try {
             final var jsonObject = Json.parseObj(s);
@@ -155,9 +158,9 @@ public abstract class WsPacket {
 
         String chat = "chat";
         /**
-         * 发送好友请求
+         * 系统通讯录请求
          */
-        String friendRequest = "friendRequest";
+        String sysContact = "sysContact";
     }
 
     public interface Handler<Packet extends WsPacket> {
@@ -175,6 +178,9 @@ public abstract class WsPacket {
 
         static {
             map.put(Type.chat, ChatMessagePacket.class);
+
+            //系统通讯录消息
+            map.put(Type.sysContact, SysContactPacket.class);
         }
     }
 
@@ -184,7 +190,9 @@ public abstract class WsPacket {
 
         static {
             Handler<ChatMessagePacket> bean = SpringUtil.getBean(ChatMessagePacketHandler.class);
+            Handler<SysContactPacket> sysContactPacketHandler = SpringUtil.getBean(SysContactPacketHandler.class);
             map.put(Type.chat, bean);
+            map.put(Type.sysContact, sysContactPacketHandler);
         }
 
         public static <Packet extends WsPacket> Handler<Packet> get(String type) {

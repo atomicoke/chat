@@ -43,7 +43,7 @@ public class FriendRequest implements Serializable {
     private Integer addWay;
 
     /**
-     * 操作结果 1:未读 2:已读 3:接收 4:拒绝
+     * 操作结果 1:未操作 2:同意 3:拒绝
      */
     private Integer handlerResult;
 
@@ -53,14 +53,14 @@ public class FriendRequest implements Serializable {
     private LocalDateTime handlerTime;
 
     /**
-     * 拒绝可以携带msg给发起申请的人
-     */
-    private String handlerMsg;
-
-    /**
      * 创建时间
      */
     private LocalDateTime createTime;
+
+    /**
+     * 随机id(用于去重)
+     */
+    private String randomId;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;

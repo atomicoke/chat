@@ -5,20 +5,28 @@
 <mapper namespace="org.atomicoke.logic.modules.friend.domain.dao.mapper.FriendRequestMapper">
 
     <resultMap id="BaseResultMap" type="org.atomicoke.logic.modules.friend.domain.entity.FriendRequest">
-            <id property="id" column="id" jdbcType="BIGINT"/>
-            <result property="reqId" column="req_id" jdbcType="BIGINT"/>
-            <result property="userId" column="user_id" jdbcType="BIGINT"/>
-            <result property="reqMessage" column="req_message" jdbcType="VARCHAR"/>
-            <result property="addWay" column="add_way" jdbcType="INTEGER"/>
-            <result property="handlerResult" column="handler_result" jdbcType="INTEGER"/>
-            <result property="handlerTime" column="handler_time" jdbcType="TIMESTAMP"/>
-            <result property="handlerMsg" column="handler_msg" jdbcType="VARCHAR"/>
-            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="reqId" column="req_id" jdbcType="BIGINT"/>
+        <result property="userId" column="user_id" jdbcType="BIGINT"/>
+        <result property="reqMessage" column="req_message" jdbcType="VARCHAR"/>
+        <result property="addWay" column="add_way" jdbcType="INTEGER"/>
+        <result property="handlerResult" column="handler_result" jdbcType="INTEGER"/>
+        <result property="handlerTime" column="handler_time" jdbcType="TIMESTAMP"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="randomId" column="random_id" jdbcType="VARCHAR"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         id,req_id,user_id,
         req_message,add_way,handler_result,
-        handler_time,handler_msg,create_time
+        handler_time,create_time, random_id
     </sql>
+    <insert id="insertIgnore">
+        insert ignore into friend_request
+        (<include refid="Base_Column_List"/>)
+        values
+        (#{id},#{reqId},#{userId},#{reqMessage},
+        #{addWay},#{handlerResult},#{handlerTime},
+        #{createTime},#{randomId});
+    </insert>
 </mapper>
