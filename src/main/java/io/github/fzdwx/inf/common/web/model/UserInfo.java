@@ -15,6 +15,7 @@ public class UserInfo {
 
     private String id;
     private String uname;
+    private String nickName;
     private Long mobile;
     private Integer gender;
     private String roleKey;
@@ -26,6 +27,7 @@ public class UserInfo {
         userInfo.setId(String.valueOf(userEntity.getId()));
         userInfo.setIdLong(userEntity.getId());
         userInfo.setUname(userEntity.getUname());
+        userInfo.setNickName(userEntity.getNickName());
         userInfo.setMobile(userEntity.getMobile());
         userInfo.setRoleKey(userEntity.getRoleKey());
         userInfo.setGender(userEntity.getGender());

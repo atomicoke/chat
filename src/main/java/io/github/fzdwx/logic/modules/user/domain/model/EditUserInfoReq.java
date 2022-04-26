@@ -21,6 +21,11 @@ public class EditUserInfoReq {
     private String avatar;
 
     /**
+     * 昵称
+     */
+    private String nickName;
+
+    /**
      * 手机号码
      */
     private Long mobile;
