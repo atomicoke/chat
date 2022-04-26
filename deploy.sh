@@ -8,7 +8,7 @@
 #sh /home/admin/chat-0.01/deploy.sh restart
 
 Path=./target/chat-0.01.jar
-ACTION=$1
+ACTION=$0
 JAVA_OUT=./start.log  #应用的启动日志
 
 
