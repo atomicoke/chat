@@ -1,7 +1,6 @@
 package io.github.fzdwx.logic.controller;
 
 import cn.dev33.satoken.annotation.SaCheckRole;
-import io.github.fzdwx.inf.common.web.Web;
 import io.github.fzdwx.inf.common.web.model.Rest;
 import io.github.fzdwx.inf.common.web.model.RoleConstant;
 import io.github.fzdwx.inf.common.web.model.UserInfo;
@@ -53,8 +52,8 @@ public class UserController {
      * @apiNote 只能修改自己的信息
      */
     @PostMapping("editSelfInfo")
-    public Rest<Boolean> editSelfInfo(@RequestBody EditUserInfoReq req) {
-        req.setId(Long.parseLong(Web.getUserInfo().getId()));
+    public Rest<Boolean> editSelfInfo(UserInfo userInfo, @RequestBody EditUserInfoReq req) {
+        req.setId(userInfo.getIdLong());
         req.setRoleKey(null);
         return Rest.of(this.userService.editUserInfo(req));
     }
