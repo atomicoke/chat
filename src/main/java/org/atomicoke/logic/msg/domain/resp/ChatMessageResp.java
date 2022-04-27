@@ -40,9 +40,9 @@ public class ChatMessageResp {
      */
     private String fromId;
     /**
-     * 消息发送人用户名
+     * 从尼克名字
      */
-    private String fromUname;
+    private String fromNickName;
     /**
      * 消息发送人头像
      */
@@ -67,7 +67,7 @@ public class ChatMessageResp {
         chatMessageResp.setBoxOwnerSeq(boxOwnerSeq.toString());
         chatMessageResp.setMessageId(this.messageId);
         chatMessageResp.setFromId(this.fromId);
-        chatMessageResp.setFromUname(this.fromUname);
+        chatMessageResp.setFromNickName(this.fromNickName);
         chatMessageResp.setFromAvatar(this.fromAvatar);
         chatMessageResp.setToId(this.toId);
         chatMessageResp.setSessionType(this.sessionType);
@@ -112,7 +112,7 @@ public class ChatMessageResp {
         final var resp = new ChatMessageResp();
         resp.setMessageId(String.valueOf(chatHistory.getId()));
         resp.setFromId(userInfo.getId());
-        resp.setFromUname(userInfo.getUname());
+        resp.setFromNickName(userInfo.getNickName());
         resp.setFromAvatar(userInfo.getAvatar());
         resp.setToId(String.valueOf(chatHistory.getToId()));
         resp.setSessionType(packet.getSessionType());
