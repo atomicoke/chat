@@ -2,6 +2,7 @@ package org.atomicoke.logic.msg.ws;
 
 import cn.hutool.extra.spring.SpringUtil;
 import io.github.fzdwx.inf.msg.WebSocket;
+import io.github.fzdwx.lambada.Lang;
 import io.netty.channel.ChannelFuture;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,16 +10,18 @@ import lombok.extern.slf4j.Slf4j;
 import org.atomicoke.inf.common.err.Err;
 import org.atomicoke.inf.common.util.Json;
 import org.atomicoke.inf.common.web.model.UserInfo;
+import org.atomicoke.inf.middleware.redis.Redis;
 import org.atomicoke.logic.msg.ws.handler.ChatMessagePacketHandler;
 import org.atomicoke.logic.msg.ws.handler.SysContactPacketHandler;
 import org.atomicoke.logic.msg.ws.packet.chat.ChatMessagePacket;
-import org.atomicoke.logic.msg.ws.packet.chat.ReplayChatPacket;
+import org.atomicoke.logic.msg.ws.packet.chat.ReplayPacket;
 import org.atomicoke.logic.msg.ws.packet.status.ErrorPacket;
 import org.atomicoke.logic.msg.ws.packet.status.SuccessPacket;
 import org.atomicoke.logic.msg.ws.packet.sys.SysContactPacket;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -76,11 +79,18 @@ public abstract class WsPacket {
         return new SuccessPacket<OUT>(data, packet.randomId);
     }
 
-    public static ReplayChatPacket newReplayChatPacket(ReplayChatPacket.Data data, WsPacket packet) {
+    public static ReplayPacket newReplayChatPacket(ReplayPacket.Data data, WsPacket packet) {
         if (packet == null) {
             throw Err.verify("packet is null");
         }
-        return new ReplayChatPacket(data, packet.randomId);
+        return new ReplayPacket(data, packet.randomId, Type.replayChat);
+    }
+
+    public static ReplayPacket newReplaySysInfoPacket(ReplayPacket.Data data, WsPacket packet) {
+        if (packet == null) {
+            throw Err.verify("packet is null");
+        }
+        return new ReplayPacket(data, packet.randomId, Type.replaySys);
     }
 
     /**
@@ -161,14 +171,49 @@ public abstract class WsPacket {
          * 系统通讯录请求
          */
         String sysContact = "sysContact";
+
+        String replaySys = "replaySys";
     }
 
     public interface Handler<Packet extends WsPacket> {
+        String RANDOM_ID_MAP_CHAT_HISTORY_ID = "msg:map:";
 
         void handle(Packet packet);
 
+        Duration getExpire();
+
         default UserInfo userInfo(@NotNull Packet packet) {
             return UserWsConn.userInfo(packet.webSocket());
+        }
+
+        /**
+         * 获取在redis 中缓存的randomId对应的chatHistoryId
+         *
+         * @apiNote 可能返回null, 当返回null时, 说明没有这条消息或者消息已经过期
+         */
+        @org.checkerframework.checker.nullness.qual.Nullable
+        default Long getMessageId(String randomId) {
+            if (randomId == null || randomId.isEmpty()) {
+                return null;
+            }
+            String key = RANDOM_ID_MAP_CHAT_HISTORY_ID + randomId;
+            final String s = Redis.get(key);
+            if (s == null) {
+                return null;
+            }
+
+            return Long.parseLong(s);
+        }
+
+        /**
+         * 在redis 中缓存 randomId对应的chatHistoryId,过期时间为30s
+         */
+        default void cacheRandomIdToChatHistoryId(String randomId, Long chatHistoryId) {
+            if (Lang.isEmpty(randomId) || Lang.isNull(chatHistoryId)) {
+                return;
+            }
+            String key = RANDOM_ID_MAP_CHAT_HISTORY_ID + randomId;
+            Redis.set(key, chatHistoryId.toString(), getExpire());
         }
     }
 

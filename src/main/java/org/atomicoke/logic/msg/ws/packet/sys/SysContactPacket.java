@@ -1,5 +1,6 @@
 package org.atomicoke.logic.msg.ws.packet.sys;
 
+import io.netty.channel.ChannelFuture;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
@@ -8,6 +9,7 @@ import org.atomicoke.inf.common.err.Err;
 import org.atomicoke.logic.modules.friend.domain.entity.FriendRequest;
 import org.atomicoke.logic.modules.group.domain.entity.GroupChatRequest;
 import org.atomicoke.logic.msg.ws.WsPacket;
+import org.atomicoke.logic.msg.ws.packet.chat.ReplayPacket;
 
 import java.time.LocalDateTime;
 
@@ -54,6 +56,10 @@ public class SysContactPacket extends WsPacket {
      * @see ChatConst.ContactType
      */
     private int contactType;
+
+    public ChannelFuture replay(final ReplayPacket.Data data) {
+        return this.ws.send(newReplaySysInfoPacket(data, this).encode());
+    }
 
 
     @Override

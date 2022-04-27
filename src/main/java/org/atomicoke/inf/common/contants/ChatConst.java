@@ -142,4 +142,9 @@ public interface ChatConst {
         int reject = 3;
 
     }
+
+    interface Sys {
+        Long SYS_ID = 0L;
+        String SYS_NAME = "系统";
+    }
 }

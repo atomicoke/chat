@@ -7,19 +7,20 @@ import org.atomicoke.logic.msg.ws.WsPacket;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class ReplayChatPacket extends WsPacket {
+public class ReplayPacket extends WsPacket {
 
     private String message;
 
     private String randomId;
 
-    private String type = Type.replayChat;
+    private String type;
 
     private Data data;
 
-    public ReplayChatPacket(final Data data, final String randomId) {
+    public ReplayPacket(final Data data, final String randomId, final String type) {
         this.data = data;
         this.randomId = randomId;
+        this.type = type;
     }
 
 

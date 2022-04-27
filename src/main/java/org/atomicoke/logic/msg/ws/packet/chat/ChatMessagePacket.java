@@ -125,7 +125,7 @@ public class ChatMessagePacket extends WsPacket {
         return super.sendSuccess(chatHistoryId);
     }
 
-    public ChannelFuture replay(final ReplayChatPacket.Data data) {
+    public ChannelFuture replay(final ReplayPacket.Data data) {
         return this.ws.send(newReplayChatPacket(data, this).encode());
     }
 

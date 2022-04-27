@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
+import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.conditions.update.LambdaUpdateChainWrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -84,6 +85,9 @@ public class BaseRepo<M extends BaseMapper<E>, E> extends ServiceImpl<M, E> impl
         return SqlHelper.retCount(baseMapper.selectCount(query)) >= 1;
     }
 
+    protected LambdaQueryChainWrapper<E> lq() {
+        return ChainWrappers.lambdaQueryChain(baseMapper);
+    }
     protected LambdaUpdateChainWrapper<E> lu() {
         return ChainWrappers.lambdaUpdateChain(baseMapper);
     }

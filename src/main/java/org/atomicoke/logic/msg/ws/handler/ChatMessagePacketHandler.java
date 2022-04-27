@@ -7,7 +7,6 @@ import org.atomicoke.inf.common.contants.ChatConst;
 import org.atomicoke.inf.common.err.Err;
 import org.atomicoke.inf.common.web.model.UserInfo;
 import org.atomicoke.inf.middleware.id.IdGenerate;
-import org.atomicoke.inf.middleware.redis.Redis;
 import org.atomicoke.logic.config.ProjectProps;
 import org.atomicoke.logic.modules.chathistory.domain.dao.ChatHistoryRepo;
 import org.atomicoke.logic.modules.chathistory.domain.entity.ChatHistory;
@@ -16,7 +15,6 @@ import org.atomicoke.logic.msg.sync.MessageSyncer;
 import org.atomicoke.logic.msg.ws.UserWsConn;
 import org.atomicoke.logic.msg.ws.WsPacket;
 import org.atomicoke.logic.msg.ws.packet.chat.ChatMessagePacket;
-import org.checkerframework.checker.nullness.qual.Nullable;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
@@ -59,7 +57,7 @@ public class ChatMessagePacketHandler implements WsPacket.Handler<ChatMessagePac
         final Long chatHistoryId;
         final var flag = Lang.eq(cnt, 0);
         if (flag) { // 该randomId已经存在
-            chatHistoryId = getChatHistoryIdByRandomId(chatHistory.getRandomId());
+            chatHistoryId = this.getMessageId(chatHistory.getRandomId());
             if (chatHistoryId == null) {
                 packet.sendError("这条消息的缓存id已经过期,或randomId错误");
                 return;
@@ -77,6 +75,11 @@ public class ChatMessagePacketHandler implements WsPacket.Handler<ChatMessagePac
         }
     }
 
+    @Override
+    public Duration getExpire() {
+        return randomIdToChatHistoryIdExpire;
+    }
+
     /**
      * switch chat type and send to user.
      */
@@ -92,7 +95,7 @@ public class ChatMessagePacketHandler implements WsPacket.Handler<ChatMessagePac
             case ChatConst.SessionType.single -> {
                 // 返回给发送人的响应
                 packet.replay(MessageSyncer.incrSeqAndSaveToMongo(chatHistory.getFromId(), resp));
-                MessageSyncer.saveToMongo(sendPersonal(packet, resp, packet.getToId()));
+                MessageSyncer.saveChatToMongo(sendPersonal(packet, resp, packet.getToId()));
             }
             default -> packet.sendError("未知的会话类型:" + packet.getSessionType());
         }
@@ -113,11 +116,12 @@ public class ChatMessagePacketHandler implements WsPacket.Handler<ChatMessagePac
     }
 
     private void sendGroup(final ChatMessagePacket packet, final ChatMessageResp resp) {
+        // todo toIdList 要不要前端传入
         final var chatMessageResps = Seq.of(packet.getToIdList())
                 .map(toUserId -> sendPersonal(packet, resp, toUserId))
                 .toList();
 
-        MessageSyncer.saveToMongo(chatMessageResps);
+        MessageSyncer.saveChatToMongo(chatMessageResps);
     }
 
     private void sendAll(final ChatMessagePacket packet, final ChatMessageResp resp) {
@@ -134,50 +138,12 @@ public class ChatMessagePacketHandler implements WsPacket.Handler<ChatMessagePac
     /**
      * 保存数据到mysql后,返回成功响应给客户端
      */
-    private static void sendSuccessRespToClient(final ChatMessagePacket packet, final Long chatHistoryId) {
+    private void sendSuccessRespToClient(final ChatMessagePacket packet, final Long chatHistoryId) {
         packet.sendSuccess().addListener(f -> {
-            if (f.isSuccess()) {
-                cacheRandomIdToChatHistoryId(packet.getRandomId(), chatHistoryId);
-            } else {
+            cacheRandomIdToChatHistoryId(packet.getRandomId(), chatHistoryId);
+            if (!f.isSuccess()) {
                 log.error("发送成功响应失败: randomId:{},chatHistoryId:{}", packet.getRandomId(), chatHistoryId, f.cause());
-                // saveSuccess(packet, chatHistoryId);
             }
         });
-    }
-
-    /**
-     * 在redis 中缓存 randomId对应的chatHistoryId,过期时间为30s
-     */
-    private static void cacheRandomIdToChatHistoryId(String randomId, Long chatHistoryId) {
-        if (Lang.isEmpty(randomId) || Lang.isNull(chatHistoryId)) {
-            return;
-        }
-
-        Redis.set(getKey(randomId), chatHistoryId.toString(), randomIdToChatHistoryIdExpire);
-    }
-
-    private static String getKey(final String randomId) {
-        return RANDOM_ID_MAP_CHAT_HISTORY_ID + randomId;
-    }
-
-    private static final String RANDOM_ID_MAP_CHAT_HISTORY_ID = "msg:map:";
-
-    /**
-     * 获取在redis 中缓存的randomId对应的chatHistoryId
-     *
-     * @apiNote 可能返回null, 当返回null时, 说明没有这条消息或者消息已经过期
-     */
-    @Nullable
-    private static Long getChatHistoryIdByRandomId(String randomId) {
-        if (randomId == null || randomId.isEmpty()) {
-            return null;
-        }
-
-        final String s = Redis.get(getKey(randomId));
-        if (s == null) {
-            return null;
-        }
-
-        return Long.parseLong(s);
     }
 }
