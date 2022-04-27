@@ -9,7 +9,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -43,8 +42,6 @@ class UserApiTest {
         resp.setMessageId("123123123");
         resp.setSendTime(LocalDateTime.now());
         resp.setMsgFrom(2);
-        resp.setToIdList(List.of("111", "222"));
-        resp.setContent("123123123");
         MessageSyncer.saveSysInfoToMongo(resp);
     }
 }
