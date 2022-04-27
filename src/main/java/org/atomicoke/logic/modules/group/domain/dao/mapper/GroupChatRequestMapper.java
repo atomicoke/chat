@@ -11,4 +11,5 @@ import org.atomicoke.logic.modules.group.domain.entity.GroupChatRequest;
 */
 public interface GroupChatRequestMapper extends BaseMapper<GroupChatRequest> {
 
+    Integer insertIgnore(GroupChatRequest groupChatRequest);
 }

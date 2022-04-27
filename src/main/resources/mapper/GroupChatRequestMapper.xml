@@ -23,4 +23,12 @@
         handler_time,handler_user,
         create_time,random_id
     </sql>
+    <insert id="insertIgnore">
+        insert ignore into group_chat_request
+        (<include refid="Base_Column_List"/>)
+        values
+        (#{id},#{groupId},#{reqId},#{reqMessage},
+        #{handlerResult},#{addWay},#{handlerTime},
+        #{handler_user},#{createTime},#{randomId});
+    </insert>
 </mapper>

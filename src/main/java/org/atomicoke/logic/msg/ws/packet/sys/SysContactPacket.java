@@ -1,15 +1,15 @@
 package org.atomicoke.logic.msg.ws.packet.sys;
 
-import io.github.fzdwx.lambada.Lang;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
 import org.atomicoke.inf.common.contants.ChatConst;
 import org.atomicoke.inf.common.err.Err;
+import org.atomicoke.logic.modules.friend.domain.entity.FriendRequest;
+import org.atomicoke.logic.modules.group.domain.entity.GroupChatRequest;
 import org.atomicoke.logic.msg.ws.WsPacket;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 /**
  * @author oneIdler
@@ -28,9 +28,9 @@ public class SysContactPacket extends WsPacket {
     private Long requestId;
 
     /**
-     * 接收者
+     * 接收者 被添加人id或者群id
      */
-    private List<Long> toIdList;
+    private Long toId;
 
     /**
      * 发起申请携带的申请信息
@@ -70,13 +70,35 @@ public class SysContactPacket extends WsPacket {
             return Err.verify("contactType can not be null");
         }
 
-        if (Lang.isEmpty(toIdList)) {
-            throw Err.verify("toIdList is empty");
+        if (this.toId ==null) {
+            throw Err.verify("toId must not be null");
         }
 
         if (this.sendTime == null) {
             this.sendTime = LocalDateTime.now();
         }
         return null;
+    }
+
+    public static FriendRequest buildFriendRequest(SysContactPacket packet, Long reqId) {
+        FriendRequest friendRequest = new FriendRequest();
+        friendRequest.setId(packet.getRequestId());
+        friendRequest.setReqMessage(packet.getRequestMessage());
+        friendRequest.setHandlerResult(ChatConst.FriendAndGroupApplyResult.unOperated);
+        friendRequest.setCreateTime(packet.getSendTime());
+        friendRequest.setReqId(reqId);
+        friendRequest.setUserId(packet.getToId());
+        return friendRequest;
+    }
+
+    public static GroupChatRequest buildGroupRequest(SysContactPacket packet, Long groupId) {
+        GroupChatRequest groupChatRequest = new GroupChatRequest();
+        groupChatRequest.setId(packet.getRequestId());
+        groupChatRequest.setReqMessage(packet.getRequestMessage());
+        groupChatRequest.setHandlerResult(ChatConst.FriendAndGroupApplyResult.unOperated);
+        groupChatRequest.setCreateTime(packet.getSendTime());
+        groupChatRequest.setReqId(packet.getToId());
+        groupChatRequest.setGroupId(groupId);
+        return groupChatRequest;
     }
 }

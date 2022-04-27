@@ -115,6 +115,14 @@ public interface ChatConst {
          * 拒绝入群请求
          */
         int rejectGroup = 12003;
+
+        static boolean isFriendOperator(int code) {
+            return code >= 11001 && code <= 11003;
+        }
+
+        static boolean isGroupOperator(int code) {
+            return code >= 12001 && code <= 12003;
+        }
     }
 
     interface FriendAndGroupApplyResult {

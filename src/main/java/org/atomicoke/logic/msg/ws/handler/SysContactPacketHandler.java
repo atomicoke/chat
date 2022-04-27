@@ -12,6 +12,7 @@ import org.atomicoke.logic.modules.chathistory.domain.entity.ChatHistory;
 import org.atomicoke.logic.modules.friend.domain.dao.FriendRequestRepo;
 import org.atomicoke.logic.modules.friend.domain.entity.FriendRequest;
 import org.atomicoke.logic.modules.group.domain.dao.GroupChatRequestRepo;
+import org.atomicoke.logic.modules.group.domain.entity.GroupChatRequest;
 import org.atomicoke.logic.msg.domain.resp.ChatMessageResp;
 import org.atomicoke.logic.msg.sync.MessageSyncer;
 import org.atomicoke.logic.msg.ws.UserWsConn;
@@ -55,13 +56,50 @@ public class SysContactPacketHandler implements WsPacket.Handler<SysContactPacke
         final var userInfo = userInfo(packet);
         FriendRequest friendRequest = this.fetchEntity(packet, userInfo.getIdLong());
         boolean success = false;
+        if (ChatConst.ContactType.isFriendOperator(packet.getContactType())) {
+            success = updateFriend(packet, userInfo.getIdLong());
+        } else if (ChatConst.ContactType.isGroupOperator(packet.getContactType())) {
+            success = updateGroup(packet, userInfo.getIdLong());
+        }
+
+
+    }
+
+    private boolean updateGroup(SysContactPacket packet, Long userId) {
+        GroupChatRequest groupChatRequest = SysContactPacket.buildGroupRequest(packet, userId);
         switch (packet.getContactType()) {
-            case ChatConst.ContactType.addFriend -> success = friendRequestDao.saveIgnore(friendRequest);
-            case ChatConst.ContactType.agreeFriend ->
-                    success = friendRequestDao.updateResult(packet.getRequestId(), packet.getSendTime(), ChatConst.FriendAndGroupApplyResult.agree);
-            case ChatConst.ContactType.rejectFriend ->
-                    success = friendRequestDao.updateResult(packet.getRequestId(), packet.getSendTime(), ChatConst.FriendAndGroupApplyResult.reject);
-            default -> packet.sendError("未知的消息类型:" + packet.getContactType());
+            case ChatConst.ContactType.joinGroup -> {
+                return groupChatRequestDao.saveIgnore(groupChatRequest);
+            }
+            case ChatConst.ContactType.agreeGroup -> {
+                return groupChatRequestDao.updateResult(packet.getRequestId(), userId, packet.getSendTime(), ChatConst.FriendAndGroupApplyResult.agree);
+            }
+            case ChatConst.ContactType.rejectGroup -> {
+                return groupChatRequestDao.updateResult(packet.getRequestId(), userId, packet.getSendTime(), ChatConst.FriendAndGroupApplyResult.reject);
+            }
+            default -> {
+                packet.sendError("未知的消息类型:" + packet.getContactType());
+                return false;
+            }
+        }
+    }
+
+    private boolean updateFriend(SysContactPacket packet, Long userId) {
+        FriendRequest friendRequest = SysContactPacket.buildFriendRequest(packet, userId);
+        switch (packet.getContactType()) {
+            case ChatConst.ContactType.addFriend -> {
+                return friendRequestDao.saveIgnore(friendRequest);
+            }
+            case ChatConst.ContactType.agreeFriend -> {
+                return friendRequestDao.updateResult(packet.getRequestId(), packet.getSendTime(), ChatConst.FriendAndGroupApplyResult.agree);
+            }
+            case ChatConst.ContactType.rejectFriend -> {
+                return friendRequestDao.updateResult(packet.getRequestId(), packet.getSendTime(), ChatConst.FriendAndGroupApplyResult.reject);
+            }
+            default -> {
+                packet.sendError("未知的消息类型:" + packet.getContactType());
+                return false;
+            }
         }
 
     }
@@ -74,7 +112,7 @@ public class SysContactPacketHandler implements WsPacket.Handler<SysContactPacke
         friendRequest.setHandlerResult(1);
         friendRequest.setCreateTime(packet.getSendTime());
         friendRequest.setReqId(reqId);
-        friendRequest.setUserId(packet.getToIdList().get(0));
+        friendRequest.setUserId(packet.getToId());
         return friendRequest;
     }
 
