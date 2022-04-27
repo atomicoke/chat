@@ -1,5 +1,6 @@
 package org.atomicoke.logic.msg.ws;
 
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import io.github.fzdwx.inf.msg.WebSocket;
 import io.github.fzdwx.lambada.Lang;
@@ -37,13 +38,13 @@ public abstract class WsPacket {
     @Getter
     @Setter
     protected String randomId;
-    @Getter
-    @Setter
-    protected String type;
+
     protected WebSocket ws;
 
+    private final static int typeLength = 6;
+
     public String encode() {
-        return Json.toJson(this);
+        return type() + Json.toJson(this);
     }
 
     /**
@@ -55,14 +56,15 @@ public abstract class WsPacket {
     @SuppressWarnings("unchecked")
     public static <T extends WsPacket> T decode(String s) {
         try {
-            final var jsonObject = Json.parseObj(s);
-            final var type = jsonObject.getString("type");
-            if (type == null) {
+            final var type = StrUtil.subPre(s, typeLength);
+            final Class<? extends WsPacket> clazz = TypeClassMapping.map.get(type);
+            if (clazz == null) {
                 return null;
             }
 
-            final Class<? extends WsPacket> clazz = TypeClassMapping.map.get(type);
-            return (T) jsonObject.toJavaObject(clazz);
+            final var json = StrUtil.subSuf(s, typeLength);
+            final var packet = Json.parse(json, clazz);
+            return (T) packet;
         } catch (Exception e) {
             log.error("decode json to ws packet error", e);
             return null;
@@ -160,22 +162,24 @@ public abstract class WsPacket {
 
     public interface Type {
 
-        String err = "err";
+        String err = "777777";
 
-        String success = "success";
+        String success = "666666";
 
-        String replayChat = "replayChat";
+        String chat = "100101";
 
-        String chat = "chat";
+        String replayChat = "100102";
+
         /**
          * 系统通讯录请求
          */
-        String sysContact = "sysContact";
+        String sysContact = "100201";
 
-        String replaySys = "replaySys";
+        String replaySys = "100202";
     }
 
     public interface Handler<Packet extends WsPacket> {
+
         String RANDOM_ID_MAP_CHAT_HISTORY_ID = "msg:map:";
 
         void handle(Packet packet);

@@ -14,7 +14,7 @@ public class SuccessPacket<OUT> extends WsPacket {
 
     private String randomId;
 
-    private String type = Type.success;
+    private final static String type = Type.success;
 
     private OUT data;
 

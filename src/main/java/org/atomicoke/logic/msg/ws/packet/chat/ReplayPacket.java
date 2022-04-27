@@ -1,5 +1,6 @@
 package org.atomicoke.logic.msg.ws.packet.chat;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.github.fzdwx.inf.msg.WebSocket;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -13,6 +14,7 @@ public class ReplayPacket extends WsPacket {
 
     private String randomId;
 
+    @JsonIgnore
     private String type;
 
     private Data data;

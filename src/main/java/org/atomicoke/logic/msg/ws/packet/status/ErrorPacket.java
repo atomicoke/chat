@@ -16,7 +16,7 @@ public class ErrorPacket extends WsPacket {
 
     private StackTraceElement[] stackTrace;
 
-    private String type = Type.err;
+    private final static String type = Type.err;
 
     public ErrorPacket(final Exception err, final String randomId) {
         this.randomId = randomId;
