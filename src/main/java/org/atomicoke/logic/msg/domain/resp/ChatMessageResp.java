@@ -40,7 +40,7 @@ public class ChatMessageResp {
      */
     private String fromId;
     /**
-     * 从尼克名字
+     * 发送人昵称
      */
     private String fromNickName;
     /**
