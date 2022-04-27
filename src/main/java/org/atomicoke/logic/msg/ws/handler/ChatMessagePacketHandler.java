@@ -102,7 +102,7 @@ public class ChatMessagePacketHandler implements WsPacket.Handler<ChatMessagePac
     }
 
     private ChatMessageResp sendPersonal(final ChatMessagePacket packet, final ChatMessageResp resp, Long toUserId) {
-        final var copyResp = resp.copy(toUserId, MessageSyncer.incrSeq(toUserId.toString()));
+        final var copyResp = resp.copy(toUserId, MessageSyncer.incrChatSeq(toUserId.toString()));
 
         final var conn = UserWsConn.get(toUserId);
         if (conn == null) {

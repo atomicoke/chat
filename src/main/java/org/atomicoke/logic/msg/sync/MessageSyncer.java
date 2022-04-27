@@ -37,8 +37,12 @@ public class MessageSyncer implements InitializingBean {
         mongoTemplate = SpringUtil.getBean(MongoTemplate.class);
     }
 
-    public static Long incrSeq(final String userId) {
-        return Redis.incr(getSeqKey(userId));
+    public static Long incrChatSeq(final String userId) {
+        return Redis.incr(getChatSeqKey(userId));
+    }
+
+    public static Long incrSysInfoSeq(final String userId) {
+        return Redis.incr(getSysInfoSeqKey(userId));
     }
 
     public static void saveChatToMongo(final ChatMessageResp chatMessageResp) {
@@ -55,23 +59,13 @@ public class MessageSyncer implements InitializingBean {
 
 
     public static ReplayPacket.Data incrSeqAndSaveToMongo(final Long userId, final ChatMessageResp resp) {
-        final var seq = incrSeq(userId.toString());
+        final var seq = incrChatSeq(userId.toString());
 
         final var chatMessageResp = resp.copy(userId, seq);
 
         saveChatToMongo(chatMessageResp);
 
         return new ReplayPacket.Data(chatMessageResp.getMessageId(), chatMessageResp.getBoxOwnerId(), chatMessageResp.getBoxOwnerSeq());
-    }
-
-    public static ReplayPacket.Data incrSeqAndSaveToMongo(final Long userId, final SysInfoResp resp) {
-        final var seq = incrSeq(userId.toString());
-
-        final var sysInfoResp = resp.copy(userId, seq);
-
-        saveSysInfoToMongo(sysInfoResp);
-
-        return new ReplayPacket.Data(sysInfoResp.getMessageId(), sysInfoResp.getBoxOwnerId(), sysInfoResp.getBoxOwnerSeq());
     }
 
     public static void saveChatToMongo(final List<ChatMessageResp> chatMessageResps) {
@@ -87,14 +81,18 @@ public class MessageSyncer implements InitializingBean {
 
         final var chatMessageResps = mongoTemplate.find(req.toQuery(), ChatMessageResp.class, CHAT_COLLECTION);
 
-        return MessageSyncResp.of(chatMessageResps, getSeq(req.getUserId()));
+        return MessageSyncResp.of(chatMessageResps, getChatSeq(req.getUserId()));
     }
 
-    private static String getSeq(final String userId) {
-        return Redis.get(getSeqKey(userId));
+    private static String getChatSeq(final String userId) {
+        return Redis.get(getChatSeqKey(userId));
     }
 
-    private static String getSeqKey(final String recvUserId) {
+    private static String getChatSeqKey(final String recvUserId) {
         return CHAT_SEQ_PREFIX + recvUserId;
+    }
+
+    private static String getSysInfoSeqKey(final String recvUserId) {
+        return SYS_INFO_SEQ_PREFIX + recvUserId;
     }
 }

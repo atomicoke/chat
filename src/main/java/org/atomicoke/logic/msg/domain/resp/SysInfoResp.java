@@ -79,26 +79,14 @@ public class SysInfoResp {
         private String requestNickName;
     }
 
-
-    public SysInfoResp copy(final Long boxOwnerId, final Long boxOwnerSeq) {
-        final SysInfoResp chatMessageResp = new SysInfoResp();
-        chatMessageResp.setBoxOwnerId(boxOwnerId.toString());
-        chatMessageResp.setBoxOwnerSeq(boxOwnerSeq.toString());
-        chatMessageResp.setMessageId(this.messageId);
-        chatMessageResp.setFromId(this.fromId);
-        chatMessageResp.setFromUname(this.fromUname);
-        chatMessageResp.setFromAvatar(this.fromAvatar);
-        chatMessageResp.setToId(this.toId);
-        chatMessageResp.setContactType(this.contactType);
-        chatMessageResp.setMsgFrom(this.msgFrom);
-        chatMessageResp.setSendTime(this.sendTime);
-        return chatMessageResp;
-    }
-
-    public static SysInfoResp from(SysContactPacket packet,
+    public static SysInfoResp from(final Long boxOwnerId,
+                                   final Long boxOwnerSeq,
+                                   SysContactPacket packet,
                                    Long messageId, Long toId,
                                    final UserInfo userInfo) {
         final var resp = new SysInfoResp();
+        resp.setBoxOwnerId(boxOwnerId.toString());
+        resp.setBoxOwnerSeq(boxOwnerSeq.toString());
         resp.setMessageId(String.valueOf(messageId));
         resp.setFromId(String.valueOf(ChatConst.Sys.SYS_ID));
         resp.setFromUname(ChatConst.Sys.SYS_NAME);

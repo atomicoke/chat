@@ -94,7 +94,8 @@ public class SysContactPacketHandler implements WsPacket.Handler<SysContactPacke
 
     @NotNull
     private SysInfoResp send(SysContactPacket packet, Long toUserId, final UserInfo userInfo) {
-        SysInfoResp resp = SysInfoResp.from(packet, packet.getRequestId(), toUserId, userInfo);
+        Long seq = MessageSyncer.incrSysInfoSeq(String.valueOf(toUserId));
+        SysInfoResp resp = SysInfoResp.from(toUserId, seq, packet, packet.getRequestId(), toUserId, userInfo);
         final var conn = UserWsConn.get(toUserId);
         if (conn == null) {
             // TODO: 2022/4/23 离线推送
