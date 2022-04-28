@@ -2,6 +2,7 @@ package org.atomicoke.logic.modules.group.domain.dao;
 
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import org.atomicoke.inf.common.contants.ChatConst;
+import org.atomicoke.inf.common.err.Err;
 import org.atomicoke.inf.middleware.db.BaseRepo;
 import org.atomicoke.logic.modules.group.domain.dao.mapper.GroupChatRequestMapper;
 import org.atomicoke.logic.modules.group.domain.entity.GroupChatRequest;
@@ -29,5 +30,16 @@ public class GroupChatRequestRepo extends BaseRepo<GroupChatRequestMapper, Group
                 .eq(GroupChatRequest::getId, id)
                 .eq(GroupChatRequest::getHandlerResult, ChatConst.FriendAndGroupApplyResult.unOperated)
                 .update();
+    }
+
+    public Long getReqId(Long id) {
+        GroupChatRequest request = this.lq()
+                .select(GroupChatRequest::getReqId)
+                .eq(GroupChatRequest::getId, id)
+                .one();
+        if (request == null) {
+            throw Err.verify("加群请求不存在!");
+        }
+        return request.getReqId();
     }
 }
