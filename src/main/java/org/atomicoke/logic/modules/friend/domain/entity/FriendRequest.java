@@ -11,13 +11,14 @@ import java.time.LocalDateTime;
 
 /**
  * 用户发起好友申请表
+ *
  * @TableName friend_request
  */
 @Data
-@TableName(value ="friend_request")
+@TableName(value = "friend_request")
 public class FriendRequest implements Serializable {
     /**
-     * 
+     *
      */
     @TableId(type = IdType.ASSIGN_ID)
     private Long id;
@@ -25,7 +26,7 @@ public class FriendRequest implements Serializable {
     /**
      * 添加人
      */
-    private Long reqId;
+    private Long applyId;
 
     /**
      * 被添加人
@@ -35,7 +36,7 @@ public class FriendRequest implements Serializable {
     /**
      * 发送好友申请携带的申请信息
      */
-    private String reqMessage;
+    private String applyMessage;
 
     /**
      * 添加方式

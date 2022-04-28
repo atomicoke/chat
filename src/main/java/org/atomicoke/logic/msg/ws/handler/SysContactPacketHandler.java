@@ -5,11 +5,8 @@ import org.atomicoke.inf.common.contants.ChatConst;
 import org.atomicoke.inf.common.err.Err;
 import org.atomicoke.inf.common.web.model.UserInfo;
 import org.atomicoke.logic.config.ProjectProps;
-import org.atomicoke.logic.modules.friend.domain.dao.FriendRequestRepo;
-import org.atomicoke.logic.modules.friend.domain.entity.FriendRequest;
-import org.atomicoke.logic.modules.group.domain.dao.GroupChatMemberRepo;
-import org.atomicoke.logic.modules.group.domain.dao.GroupChatRequestRepo;
-import org.atomicoke.logic.modules.group.domain.entity.GroupChatRequest;
+import org.atomicoke.logic.modules.friend.service.FriendService;
+import org.atomicoke.logic.modules.group.service.GroupService;
 import org.atomicoke.logic.msg.domain.resp.SysInfoResp;
 import org.atomicoke.logic.msg.sync.MessageSyncer;
 import org.atomicoke.logic.msg.ws.UserWsConn;
@@ -31,16 +28,15 @@ import java.util.stream.Collectors;
 @Component
 public class SysContactPacketHandler implements WsPacket.Handler<SysContactPacket> {
 
-    private final FriendRequestRepo friendRequestDao;
-    private final GroupChatRequestRepo groupChatRequestDao;
-    private final GroupChatMemberRepo groupChatMemberDao;
+    private final FriendService friendService;
+    private final GroupService groupService;
     private static Duration randomIdExpire;
 
-    public SysContactPacketHandler(final FriendRequestRepo friendRequestDao, final GroupChatRequestRepo groupChatRequestDao,
-                                   final GroupChatMemberRepo groupChatMemberDao, final ProjectProps projectProps) {
-        this.friendRequestDao = friendRequestDao;
-        this.groupChatRequestDao = groupChatRequestDao;
-        this.groupChatMemberDao = groupChatMemberDao;
+    public SysContactPacketHandler(final FriendService friendService,
+                                   final GroupService groupService,
+                                   final ProjectProps projectProps) {
+        this.friendService = friendService;
+        this.groupService = groupService;
         randomIdExpire = Duration.ofSeconds(projectProps.getRandomIdToChatHistoryIdExpire());
     }
 
@@ -57,9 +53,17 @@ public class SysContactPacketHandler implements WsPacket.Handler<SysContactPacke
         final var userInfo = packet.userInfo();
         boolean success = false;
         if (ChatConst.ContactType.isFriendOperator(packet.getContactType())) {
-            success = updateFriend(packet, userInfo.getIdLong());
+            try {
+                success = friendService.saveFriendRequest(packet, userInfo.getIdLong());
+            } catch (Exception e) {
+                log.error("save friend request error packet:{} requestUser:{}", packet, userInfo, e);
+            }
         } else if (ChatConst.ContactType.isGroupOperator(packet.getContactType())) {
-            success = updateGroup(packet, userInfo.getIdLong());
+            try {
+                success = groupService.saveGroupRequest(packet, userInfo.getIdLong());
+            } catch (Exception e) {
+                log.error("save group request error packet:{} requestUser:{}", packet, userInfo, e);
+            }
         }
         final Long requestId;
         if (success) {
@@ -110,7 +114,7 @@ public class SysContactPacketHandler implements WsPacket.Handler<SysContactPacke
         if (ChatConst.ContactType.isFriendOperator(contactType)) {
             return Collections.singletonList(toId);
         } else if (ChatConst.ContactType.isGroupOperator(contactType)) {
-            return groupChatMemberDao.getGroupManager(toId);
+            return groupService.getGroupManager(toId);
         }
         throw Err.unsupported();
     }
@@ -119,50 +123,6 @@ public class SysContactPacketHandler implements WsPacket.Handler<SysContactPacke
     public Duration getExpire() {
         return randomIdExpire;
     }
-
-    private boolean updateGroup(SysContactPacket packet, Long userId) {
-        GroupChatRequest groupChatRequest = SysContactPacket.buildGroupRequest(packet, userId);
-        switch (packet.getContactType()) {
-            case ChatConst.ContactType.joinGroup -> {
-                boolean flag = groupChatRequestDao.saveIgnore(groupChatRequest);
-                packet.setRequestId(groupChatRequest.getId());
-                return flag;
-            }
-            case ChatConst.ContactType.agreeGroup -> {
-                return groupChatRequestDao.updateResult(packet.getRequestId(), userId, packet.getSendTime(), ChatConst.FriendAndGroupApplyResult.agree);
-            }
-            case ChatConst.ContactType.rejectGroup -> {
-                return groupChatRequestDao.updateResult(packet.getRequestId(), userId, packet.getSendTime(), ChatConst.FriendAndGroupApplyResult.reject);
-            }
-            default -> {
-                packet.sendError("未知的消息类型:" + packet.getContactType());
-                throw Err.verify("未知的系统消息类型" + packet.getContactType());
-            }
-        }
-    }
-
-    private boolean updateFriend(SysContactPacket packet, Long userId) {
-        FriendRequest friendRequest = SysContactPacket.buildFriendRequest(packet, userId);
-        switch (packet.getContactType()) {
-            case ChatConst.ContactType.addFriend -> {
-                boolean flag = friendRequestDao.saveIgnore(friendRequest);
-                packet.setRequestId(friendRequest.getId());
-                return flag;
-            }
-            case ChatConst.ContactType.agreeFriend -> {
-                return friendRequestDao.updateResult(packet.getRequestId(), packet.getSendTime(), ChatConst.FriendAndGroupApplyResult.agree);
-            }
-            case ChatConst.ContactType.rejectFriend -> {
-                return friendRequestDao.updateResult(packet.getRequestId(), packet.getSendTime(), ChatConst.FriendAndGroupApplyResult.reject);
-            }
-            default -> {
-                packet.sendError("未知的系统消息类型:" + packet.getContactType());
-                throw Err.verify("未知的系统消息类型" + packet.getContactType());
-            }
-        }
-
-    }
-
 
     /**
      * 保存数据到mysql后,返回成功响应给客户端

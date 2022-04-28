@@ -89,10 +89,10 @@ public class SysContactPacket extends WsPacket {
     public static FriendRequest buildFriendRequest(SysContactPacket packet, Long reqId) {
         FriendRequest friendRequest = new FriendRequest();
         friendRequest.setId(packet.getRequestId());
-        friendRequest.setReqMessage(packet.getRequestMessage());
+        friendRequest.setApplyMessage(packet.getRequestMessage());
         friendRequest.setHandlerResult(ChatConst.FriendAndGroupApplyResult.unOperated);
         friendRequest.setCreateTime(packet.getSendTime());
-        friendRequest.setReqId(reqId);
+        friendRequest.setApplyId(reqId);
         friendRequest.setUserId(packet.getToId());
         return friendRequest;
     }
