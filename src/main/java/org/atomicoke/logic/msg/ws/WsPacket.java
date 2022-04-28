@@ -1,8 +1,8 @@
 package org.atomicoke.logic.msg.ws;
 
-import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import io.github.fzdwx.inf.msg.WebSocket;
+import io.github.fzdwx.lambada.Io;
 import io.github.fzdwx.lambada.Lang;
 import io.netty.channel.ChannelFuture;
 import lombok.Getter;
@@ -56,15 +56,14 @@ public abstract class WsPacket {
     @SuppressWarnings("unchecked")
     public static <T extends WsPacket> T decode(String s) {
         try {
-            final var type = StrUtil.subPre(s, typeLength);
+            final var type = Io.read(s, typeLength);
             final Class<? extends WsPacket> clazz = TypeClassMapping.map.get(type);
             if (clazz == null) {
                 return null;
             }
 
-            final var json = StrUtil.subSuf(s, typeLength);
-            final var packet = Json.parse(json, clazz);
-            return (T) packet;
+            final var json = Io.readSuf(s, typeLength);
+            return (T) Json.parse(json, clazz);
         } catch (Exception e) {
             log.error("decode json to ws packet error", e);
             return null;
