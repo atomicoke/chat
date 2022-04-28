@@ -22,6 +22,9 @@ public class GroupHandleReq implements Serializable {
      */
     private Long requestId;
 
+    /**
+     * @see ChatConst.FriendAndGroupApplyResult
+     */
     @NotNull(message = "处理结果不能为空！")
     private Integer handlerResult;
 

@@ -24,6 +24,7 @@ public class FriendHandleReq implements Serializable {
 
     /**
      * 操作结果 1:未操作 2:同意 3:拒绝
+     * @see ChatConst.FriendAndGroupApplyResult
      */
     @NotNull(message = "处理结果不能为空！")
     private Integer handlerResult;
