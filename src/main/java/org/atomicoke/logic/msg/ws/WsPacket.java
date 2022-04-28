@@ -13,12 +13,11 @@ import org.atomicoke.inf.common.util.Json;
 import org.atomicoke.inf.common.web.model.UserInfo;
 import org.atomicoke.inf.middleware.redis.Redis;
 import org.atomicoke.logic.msg.ws.handler.ChatMessagePacketHandler;
-import org.atomicoke.logic.msg.ws.handler.SysContactPacketHandler;
 import org.atomicoke.logic.msg.ws.packet.chat.ChatMessagePacket;
 import org.atomicoke.logic.msg.ws.packet.chat.ReplayPacket;
 import org.atomicoke.logic.msg.ws.packet.status.ErrorPacket;
+import org.atomicoke.logic.msg.ws.packet.status.NotifyPacket;
 import org.atomicoke.logic.msg.ws.packet.status.SuccessPacket;
-import org.atomicoke.logic.msg.ws.packet.sys.SysContactPacket;
 
 import javax.annotation.Nullable;
 import java.time.Duration;
@@ -79,18 +78,19 @@ public abstract class WsPacket {
         return new SuccessPacket<OUT>(data, packet.randomId);
     }
 
+    /**
+     * new a success packet.
+     */
+    public static <OUT> NotifyPacket<OUT> newNotifyPacket(OUT data, String notifyType) {
+        return new NotifyPacket<>(data, notifyType);
+    }
+
+
     public static ReplayPacket newReplayChatPacket(ReplayPacket.Data data, WsPacket packet) {
         if (packet == null) {
             throw Err.verify("packet is null");
         }
         return new ReplayPacket(data, packet.randomId, Type.replayChat);
-    }
-
-    public static ReplayPacket newReplaySysInfoPacket(ReplayPacket.Data data, WsPacket packet) {
-        if (packet == null) {
-            throw Err.verify("packet is null");
-        }
-        return new ReplayPacket(data, packet.randomId, Type.replaySys);
     }
 
     /**
@@ -177,11 +177,9 @@ public abstract class WsPacket {
         String replayChat = "100102";
 
         /**
-         * 系统通讯录请求
+         * 通知
          */
-        String sysContact = "100201";
-
-        String replaySys = "100202";
+        String notify = "100201";
     }
 
     public interface Handler<Packet extends WsPacket> {
@@ -229,9 +227,6 @@ public abstract class WsPacket {
 
         static {
             map.put(Type.chat, ChatMessagePacket.class);
-
-            //系统通讯录消息
-            map.put(Type.sysContact, SysContactPacket.class);
         }
     }
 
@@ -241,9 +236,7 @@ public abstract class WsPacket {
 
         static {
             Handler<ChatMessagePacket> bean = SpringUtil.getBean(ChatMessagePacketHandler.class);
-            Handler<SysContactPacket> sysContactPacketHandler = SpringUtil.getBean(SysContactPacketHandler.class);
             map.put(Type.chat, bean);
-            map.put(Type.sysContact, sysContactPacketHandler);
         }
 
         public static <Packet extends WsPacket> Handler<Packet> get(String type) {

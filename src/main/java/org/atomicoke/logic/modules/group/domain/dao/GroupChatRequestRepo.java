@@ -22,24 +22,24 @@ public class GroupChatRequestRepo extends BaseRepo<GroupChatRequestMapper, Group
 
     }
 
-    public boolean updateResult(Long id, Long handlerUser, LocalDateTime handlerTime, int result) {
+    public boolean updateResult(Long id, Long handlerUser, int result) {
         return this.lu()
-                .set(GroupChatRequest::getHandlerTime, handlerTime)
+                .set(GroupChatRequest::getHandlerTime, LocalDateTime.now())
                 .set(GroupChatRequest::getHandlerResult, result)
                 .set(GroupChatRequest::getHandlerUser, handlerUser)
                 .eq(GroupChatRequest::getId, id)
                 .eq(GroupChatRequest::getHandlerResult, ChatConst.FriendAndGroupApplyResult.unOperated)
                 .update();
     }
-
-    public Long getReqId(Long id) {
+    public GroupChatRequest getApplyIdAndGroupId(Long id) {
         GroupChatRequest request = this.lq()
-                .select(GroupChatRequest::getReqId)
+                .select(GroupChatRequest::getApplyId)
+                .select(GroupChatRequest::getGroupId)
                 .eq(GroupChatRequest::getId, id)
                 .one();
         if (request == null) {
             throw Err.verify("加群请求不存在!");
         }
-        return request.getReqId();
+        return request;
     }
 }

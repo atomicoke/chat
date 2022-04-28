@@ -84,45 +84,45 @@ public interface ChatConst {
         Integer right = 2;
     }
 
-    interface ContactType {
-
+    interface Notify {
         /**
-         * 添加好友请求
+         * 通讯录
+         *
+         * @see Contact
          */
-        int addFriend = 11001;
+        String contact = "contact";
 
-        /**
-         * 同意好友请求
-         */
-        int agreeFriend = 11002;
+        interface Contact {
+            /**
+             * 添加好友请求
+             */
+            int applyFriend = 11001;
 
-        /**
-         * 拒绝好友请求
-         */
-        int rejectFriend = 11003;
+            /**
+             * 处理好友请求
+             */
+            int handleFriend = 11002;
 
-        /**
-         * 入群请求
-         */
-        int joinGroup = 12001;
+            /**
+             * 入群请求
+             */
+            int applyGroup = 12001;
 
-        /**
-         * 同意入群请求
-         */
-        int agreeGroup = 12002;
+            /**
+             * 处理入群请求
+             */
+            int handleGroup = 12002;
 
-        /**
-         * 拒绝入群请求
-         */
-        int rejectGroup = 12003;
+            static boolean isFriendOperator(int code) {
+                return code >= 11001 && code <= 11003;
+            }
 
-        static boolean isFriendOperator(int code) {
-            return code >= 11001 && code <= 11003;
+            static boolean isGroupOperator(int code) {
+                return code >= 12001 && code <= 12003;
+            }
         }
 
-        static boolean isGroupOperator(int code) {
-            return code >= 12001 && code <= 12003;
-        }
+
     }
 
     interface FriendAndGroupApplyResult {
