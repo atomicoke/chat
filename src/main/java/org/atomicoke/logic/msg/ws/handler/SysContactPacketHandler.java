@@ -54,7 +54,7 @@ public class SysContactPacketHandler implements WsPacket.Handler<SysContactPacke
         String randomId = packet.getRandomId();
         //region save chat log to mysql (根据randomId保证幂等)
         packet.setMsgFrom(ChatConst.MsgFrom.SYS);
-        final var userInfo = userInfo(packet);
+        final var userInfo = packet.userInfo();
         boolean success = false;
         if (ChatConst.ContactType.isFriendOperator(packet.getContactType())) {
             success = updateFriend(packet, userInfo.getIdLong());

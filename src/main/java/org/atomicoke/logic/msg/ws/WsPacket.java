@@ -19,7 +19,6 @@ import org.atomicoke.logic.msg.ws.packet.chat.ReplayPacket;
 import org.atomicoke.logic.msg.ws.packet.status.ErrorPacket;
 import org.atomicoke.logic.msg.ws.packet.status.SuccessPacket;
 import org.atomicoke.logic.msg.ws.packet.sys.SysContactPacket;
-import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import java.time.Duration;
@@ -139,6 +138,14 @@ public abstract class WsPacket {
         return ws;
     }
 
+    public UserInfo userInfo() {
+        if (this.ws == null) {
+            throw Err.verify("ws is null");
+        }
+
+        return UserWsConn.userInfo(ws);
+    }
+
     public final String randomId() {
         return randomId;
     }
@@ -185,16 +192,12 @@ public abstract class WsPacket {
 
         Duration getExpire();
 
-        default UserInfo userInfo(@NotNull Packet packet) {
-            return UserWsConn.userInfo(packet.webSocket());
-        }
-
         /**
          * 获取在redis 中缓存的randomId对应的chatHistoryId
          *
          * @apiNote 可能返回null, 当返回null时, 说明没有这条消息或者消息已经过期
          */
-        @org.checkerframework.checker.nullness.qual.Nullable
+        @Nullable
         default Long getMessageId(String randomId) {
             if (randomId == null || randomId.isEmpty()) {
                 return null;

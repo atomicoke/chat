@@ -45,7 +45,7 @@ public class ChatMessagePacketHandler implements WsPacket.Handler<ChatMessagePac
 
         //region save chat log to mysql (根据randomId保证幂等)
         packet.setMsgFrom(ChatConst.MsgFrom.USER);
-        final var userInfo = userInfo(packet);
+        final var userInfo = packet.userInfo();
         final var chatHistory = packet.buildChatHistory(userInfo);
 
         /*
