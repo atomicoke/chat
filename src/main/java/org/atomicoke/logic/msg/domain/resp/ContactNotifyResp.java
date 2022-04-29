@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 import org.atomicoke.inf.common.contants.ChatConst;
+import org.atomicoke.logic.msg.domain.model.Notify;
 
 import java.time.LocalDateTime;
 
@@ -101,5 +102,14 @@ public class ContactNotifyResp implements NotifyResp {
          * 携带的申请信息
          */
         private String applyMessage;
+    }
+
+    public Notify<ContactNotifyResp> toNotify() {
+        Notify<ContactNotifyResp> notify = new Notify<>();
+        notify.setBoxOwnerId(this.getBoxOwnerId());
+        notify.setBoxOwnerSeq(this.getBoxOwnerSeq());
+        notify.setNotifyType(this.type());
+        notify.setData(this);
+        return notify;
     }
 }

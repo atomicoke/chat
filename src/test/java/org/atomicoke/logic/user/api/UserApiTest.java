@@ -1,5 +1,7 @@
 package org.atomicoke.logic.user.api;
 
+import org.atomicoke.inf.common.util.Json;
+import org.atomicoke.logic.msg.domain.model.Notify;
 import org.atomicoke.logic.msg.domain.resp.ContactNotifyResp;
 import org.atomicoke.logic.msg.sync.MessageSyncer;
 import org.junit.jupiter.api.Test;
@@ -9,6 +11,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -33,15 +38,21 @@ class UserApiTest {
 
     @Test
     void test1() throws Exception {
-        ContactNotifyResp resp = new ContactNotifyResp();
-        resp.setBoxOwnerId("1111");
-        resp.setBoxOwnerSeq("1");
-        resp.setContactType(11001);
-        resp.setFromId("0");
-        resp.setFromUname("系统");
-        resp.setRequestId("123123123");
-        resp.setHandlerTime(LocalDateTime.now());
-        resp.setMsgFrom(2);
-        MessageSyncer.saveNotifyToMongo(resp);
+
+        List<String> list = IntStream.range(0, 10)
+                .mapToObj(i -> {
+                    ContactNotifyResp resp = new ContactNotifyResp();
+                    resp.setBoxOwnerId("1111");
+                    resp.setBoxOwnerSeq(String.valueOf(i + 1));
+                    resp.setContactType(11001);
+                    resp.setFromId("0");
+                    resp.setFromUname("系统");
+                    resp.setRequestId("123123123");
+                    resp.setHandlerTime(LocalDateTime.now());
+                    resp.setMsgFrom(2);
+                    Notify<ContactNotifyResp> notify = Notify.of(resp, resp.type());
+                    return Json.toJson(notify);
+                }).collect(Collectors.toList());
+        MessageSyncer.saveNotifyToMongo(list);
     }
 }

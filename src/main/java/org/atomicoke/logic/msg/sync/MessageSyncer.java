@@ -8,6 +8,7 @@ import org.atomicoke.logic.msg.domain.resp.ChatMessageResp;
 import org.atomicoke.logic.msg.domain.resp.ContactNotifyResp;
 import org.atomicoke.logic.msg.sync.model.MessageSyncReq;
 import org.atomicoke.logic.msg.sync.model.MessageSyncResp;
+import org.atomicoke.logic.msg.sync.model.NotifySyncResp;
 import org.atomicoke.logic.msg.ws.packet.chat.ReplayPacket;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -69,20 +70,28 @@ public class MessageSyncer implements InitializingBean {
         return new ReplayPacket.Data(chatMessageResp.getMessageId(), chatMessageResp.getBoxOwnerId(), chatMessageResp.getBoxOwnerSeq());
     }
 
-    public static void saveChatToMongo(final List<ChatMessageResp> chatMessageResps) {
+    public static void saveChatToMongo(final List<String> chatMessageResps) {
         mongoTemplate.insert(chatMessageResps, CHAT_COLLECTION);
     }
 
-    public static void saveNotifyToMongo(final List<Notify<ContactNotifyResp>> notifies) {
+    public static void saveNotifyToMongo(final List<String> notifies) {
         mongoTemplate.insert(notifies, NOTIFY_COLLECTION);
     }
 
-    public static MessageSyncResp sync(final MessageSyncReq req) {
+    public static MessageSyncResp syncMessage(final MessageSyncReq req) {
         req.check();
 
         final var chatMessageResps = mongoTemplate.find(req.toQuery(), ChatMessageResp.class, CHAT_COLLECTION);
 
         return MessageSyncResp.of(chatMessageResps, getChatSeq(req.getUserId()));
+    }
+
+    public static NotifySyncResp syncNotify(final MessageSyncReq req) {
+        req.check();
+
+        final List<String> notifies = mongoTemplate.find(req.toQuery(), String.class, CHAT_COLLECTION);
+
+        return NotifySyncResp.of(notifies, getChatSeq(req.getUserId()));
     }
 
     private static String getChatSeq(final String userId) {

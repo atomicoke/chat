@@ -3,6 +3,7 @@ package org.atomicoke.logic.modules.group.service;
 import io.github.fzdwx.inf.msg.WebSocket;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.atomicoke.inf.common.util.Json;
 import org.atomicoke.inf.common.web.model.UserInfo;
 import org.atomicoke.logic.modules.friend.domain.model.FriendApplyReq;
 import org.atomicoke.logic.modules.friend.domain.model.FriendHandleReq;
@@ -14,7 +15,6 @@ import org.atomicoke.logic.modules.group.domain.model.GroupApplyReq;
 import org.atomicoke.logic.modules.group.domain.model.GroupHandleReq;
 import org.atomicoke.logic.modules.user.domain.dao.UserRepo;
 import org.atomicoke.logic.modules.user.domain.entity.User;
-import org.atomicoke.logic.msg.domain.model.Notify;
 import org.atomicoke.logic.msg.domain.resp.ContactNotifyResp;
 import org.atomicoke.logic.msg.sync.MessageSyncer;
 import org.atomicoke.logic.msg.ws.UserWsConn;
@@ -52,7 +52,7 @@ public class GroupService {
         boolean flag = groupChatRequestDao.saveIgnore(request);
         if (flag) {
             List<Long> toIdList = this.getGroupManager(req.getToId());
-            List<Notify<ContactNotifyResp>> notifies = toIdList.stream()
+            List<String> notifies = toIdList.stream()
                     .map(e -> {
                         WebSocket conn = UserWsConn.get(req.getToId());
                         ContactNotifyResp resp = req.ofResp(request.getId(), e, userInfo);
@@ -62,9 +62,8 @@ public class GroupService {
                         } else {
                             conn.send(WsPacket.newNotifyPacket(resp).encode());
                         }
-                        return Notify.of(resp, resp.type());
+                        return Json.toJson(resp.toNotify());
                     }).collect(Collectors.toList());
-
             MessageSyncer.saveNotifyToMongo(notifies);
         }
     }
@@ -100,7 +99,7 @@ public class GroupService {
         } else {
             conn.send(WsPacket.newNotifyPacket(resp).encode());
         }
-        MessageSyncer.saveNotifyToMongo(Notify.of(resp, resp.type()));
+        MessageSyncer.saveNotifyToMongo(resp.toNotify());
 
     }
 

@@ -5,6 +5,7 @@ import io.github.fzdwx.lambada.Seq;
 import lombok.extern.slf4j.Slf4j;
 import org.atomicoke.inf.common.contants.ChatConst;
 import org.atomicoke.inf.common.err.Err;
+import org.atomicoke.inf.common.util.Json;
 import org.atomicoke.inf.common.web.model.UserInfo;
 import org.atomicoke.inf.middleware.id.IdGenerate;
 import org.atomicoke.logic.config.ProjectProps;
@@ -118,7 +119,7 @@ public class ChatMessagePacketHandler implements WsPacket.Handler<ChatMessagePac
     private void sendGroup(final ChatMessagePacket packet, final ChatMessageResp resp) {
         // todo toIdList 要不要前端传入
         final var chatMessageResps = Seq.of(packet.getToIdList())
-                .map(toUserId -> sendPersonal(packet, resp, toUserId))
+                .map(toUserId -> Json.toJson(sendPersonal(packet, resp, toUserId)))
                 .toList();
 
         MessageSyncer.saveChatToMongo(chatMessageResps);
