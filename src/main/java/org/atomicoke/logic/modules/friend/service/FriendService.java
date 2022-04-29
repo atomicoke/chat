@@ -3,6 +3,7 @@ package org.atomicoke.logic.modules.friend.service;
 import io.github.fzdwx.inf.msg.WebSocket;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.atomicoke.inf.common.Assert;
 import org.atomicoke.inf.common.contants.ChatConst;
 import org.atomicoke.inf.common.web.model.UserInfo;
 import org.atomicoke.logic.modules.friend.domain.dao.FriendRepo;
@@ -42,6 +43,7 @@ public class FriendService {
     @Transactional(rollbackFor = Exception.class)
     public void apply(UserInfo userInfo, FriendApplyReq req) {
         FriendRequest request = req.ofEntity(userInfo.getIdLong());
+        Assert.ensureTrue(friendDao.existFriend(userInfo.getId(), req.getToId()), "已存在好友关系!");
         boolean flag = friendRequestDao.saveIgnore(request);
         if (flag) {
             WebSocket conn = UserWsConn.get(req.getToId());
@@ -65,22 +67,23 @@ public class FriendService {
     @Transactional(rollbackFor = Exception.class)
     public void handle(UserInfo userInfo, FriendHandleReq req) {
         boolean flag = friendRequestDao.updateResult(req.getRequestId(), req.getHandlerResult());
-        if (flag) {
-            //好友请求的原申请人id为toId
-            Long applyId = friendRequestDao.getApplyId(req.getRequestId());
-            if (req.getHandlerResult() == 2) {
-                List<Friend> friends = Friend.of(applyId, userInfo.getIdLong(), LocalDateTime.now());
-                friendDao.saveBatch(friends);
-            }
-            NotifyResp notifyResp = req.ofResp(req.getRequestId(), applyId, userInfo);
-            WebSocket conn = UserWsConn.get(applyId);
-            if (conn == null) {
-                // TODO: 2022/4/23 离线推送
-                log.warn("用户[{}]没有连接", applyId);
-            } else {
-                conn.send(WsPacket.newNotifyPacket(notifyResp, ChatConst.Notify.contact).encode());
-            }
-            MessageSyncer.saveNotifyToMongo(notifyResp);
+        if (!flag) {
+            return;
         }
+        //好友请求的原申请人id为toId
+        Long applyId = friendRequestDao.getApplyId(req.getRequestId());
+        if (req.getHandlerResult() == 2) {
+            List<Friend> friends = Friend.of(applyId, userInfo.getIdLong(), LocalDateTime.now());
+            friendDao.saveBatch(friends);
+        }
+        NotifyResp notifyResp = req.ofResp(req.getRequestId(), applyId, userInfo);
+        WebSocket conn = UserWsConn.get(applyId);
+        if (conn == null) {
+            // TODO: 2022/4/23 离线推送
+            log.warn("用户[{}]没有连接", applyId);
+        } else {
+            conn.send(WsPacket.newNotifyPacket(notifyResp, ChatConst.Notify.contact).encode());
+        }
+        MessageSyncer.saveNotifyToMongo(notifyResp);
     }
 }
