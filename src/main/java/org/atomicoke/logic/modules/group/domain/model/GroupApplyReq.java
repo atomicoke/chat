@@ -53,6 +53,7 @@ public class GroupApplyReq {
         msg.setOperatorId(userInfo.getId());
         msg.setOperatorAvatar(userInfo.getAvatar());
         msg.setOperatorNickName(userInfo.getNickName());
+        msg.setApplyMessage(this.getApplyMessage());
         resp.setMessage(msg);
         return resp;
     }

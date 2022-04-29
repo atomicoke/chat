@@ -11,4 +11,18 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public class FriendRepo extends BaseRepo<FriendMapper, Friend> {
+    /**
+     * 是否存在好友关系
+     *
+     * @param userId1 用户id
+     * @param userId1 用户id
+     * @return bool
+     */
+    public boolean existFriend(String userId1, Long userId2) {
+        Long count = lq()
+                .in(Friend::getOwnerId, userId1, userId2)
+                .in(Friend::getFriendId, userId1, userId2)
+                .count();
+        return count != null && count == 2;
+    }
 }

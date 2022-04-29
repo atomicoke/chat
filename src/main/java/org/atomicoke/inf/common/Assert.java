@@ -15,4 +15,14 @@ public class Assert {
             throw Err.normal(message);
         }
     }
+
+    public static void ensureTrue(final boolean flag, final String message) {
+        ensureFalse(!flag, message);
+    }
+
+    public static void ensureFalse(final boolean flag, final String message) {
+        if (flag) {
+            throw Err.normal(message);
+        }
+    }
 }

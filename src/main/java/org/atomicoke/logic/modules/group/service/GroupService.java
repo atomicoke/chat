@@ -78,28 +78,29 @@ public class GroupService {
     @Transactional(rollbackFor = Exception.class)
     public void handle(UserInfo userInfo, GroupHandleReq req) {
         boolean flag = groupChatRequestDao.updateResult(req.getRequestId(), userInfo.getIdLong(), req.getHandlerResult());
-        if (flag) {
-            GroupChatRequest request = groupChatRequestDao.getApplyIdAndGroupId(req.getRequestId());
-            Long applyId = request.getApplyId();
-            User user = userDao.findOne(applyId);
-            GroupChatMember member = new GroupChatMember();
-            member.setGroupId(request.getGroupId());
-            member.setUserId(applyId);
-            member.setNickName(user.getNickName());
-            member.setRoleType(1);
-            member.setAddTime(LocalDateTime.now());
-            member.setAddWay(0);
-            groupChatMemberDao.save(member);
-            NotifyResp notifyResp = req.ofResp(req.getRequestId(), applyId, userInfo);
-            WebSocket conn = UserWsConn.get(applyId);
-            if (conn == null) {
-                // TODO: 2022/4/23 离线推送
-                log.warn("用户[{}]没有连接", applyId);
-            } else {
-                conn.send(WsPacket.newNotifyPacket(notifyResp, ChatConst.Notify.contact).encode());
-            }
-            MessageSyncer.saveNotifyToMongo(notifyResp);
+        if (!flag) {
+            return;
         }
+        GroupChatRequest request = groupChatRequestDao.getApplyIdAndGroupId(req.getRequestId());
+        Long applyId = request.getApplyId();
+        User user = userDao.findOne(applyId);
+        GroupChatMember member = new GroupChatMember();
+        member.setGroupId(request.getGroupId());
+        member.setUserId(applyId);
+        member.setNickName(user.getNickName());
+        member.setRoleType(1);
+        member.setAddTime(LocalDateTime.now());
+        member.setAddWay(0);
+        groupChatMemberDao.save(member);
+        NotifyResp notifyResp = req.ofResp(req.getRequestId(), applyId, userInfo);
+        WebSocket conn = UserWsConn.get(applyId);
+        if (conn == null) {
+            // TODO: 2022/4/23 离线推送
+            log.warn("用户[{}]没有连接", applyId);
+        } else {
+            conn.send(WsPacket.newNotifyPacket(notifyResp, ChatConst.Notify.contact).encode());
+        }
+        MessageSyncer.saveNotifyToMongo(notifyResp);
 
     }
 

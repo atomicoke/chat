@@ -76,18 +76,23 @@ public class NotifyResp {
     public static class Message {
 
         /**
-         * 申请人id
+         * 操作人id
          */
         private String operatorId;
 
         /**
-         * 申请人头像
+         * 操作人头像
          */
         private String operatorAvatar;
 
         /**
-         * 申请人昵称
+         * 操作人昵称
          */
         private String operatorNickName;
+
+        /**
+         * 携带的申请信息
+         */
+        private String applyMessage;
     }
 }
