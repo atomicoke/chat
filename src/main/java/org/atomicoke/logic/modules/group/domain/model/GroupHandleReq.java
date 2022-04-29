@@ -20,6 +20,7 @@ public class GroupHandleReq implements Serializable {
     /**
      * 入群申请id
      */
+    @NotNull(message = "入群申请id不能为空！")
     private Long requestId;
 
     /**

@@ -31,7 +31,7 @@ public class GroupController {
     }
 
     @PostMapping("handle")
-    public Rest<?> handle(UserInfo userInfo, @Valid GroupHandleReq req) {
+    public Rest<?> handle(UserInfo userInfo, @Valid @RequestBody GroupHandleReq req) {
         return Rest.of(() -> groupService.handle(userInfo, req));
     }
 
