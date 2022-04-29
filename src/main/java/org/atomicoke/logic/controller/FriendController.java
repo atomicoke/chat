@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 朋友
+ * 好友
  *
- * @author <a href="mailto:likelovec@gmail.com">韦朕</a>
+ * @author oneIdler
  * @date 2022/4/17 22:32
  */
 @RestController

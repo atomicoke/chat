@@ -8,7 +8,7 @@ import org.atomicoke.inf.common.contants.ChatConst;
 import java.time.LocalDateTime;
 
 /**
- * @author <a href="mailto:likelovec@gmail.com">fzdwx</a>
+ * @author oneIdler
  * @date 2022/4/10 17:20
  */
 @Data
