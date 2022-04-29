@@ -1,6 +1,6 @@
 package org.atomicoke.logic.user.api;
 
-import org.atomicoke.logic.msg.domain.resp.SysInfoResp;
+import org.atomicoke.logic.msg.domain.resp.NotifyResp;
 import org.atomicoke.logic.msg.sync.MessageSyncer;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,15 +33,15 @@ class UserApiTest {
 
     @Test
     void test1() throws Exception {
-        SysInfoResp resp = new SysInfoResp();
+        NotifyResp resp = new NotifyResp();
         resp.setBoxOwnerId("1111");
         resp.setBoxOwnerSeq("1");
         resp.setContactType(11001);
         resp.setFromId("0");
         resp.setFromUname("系统");
-        resp.setMessageId("123123123");
-        resp.setSendTime(LocalDateTime.now());
+        resp.setRequestId("123123123");
+        resp.setHandlerTime(LocalDateTime.now());
         resp.setMsgFrom(2);
-        MessageSyncer.saveSysInfoToMongo(resp);
+        MessageSyncer.saveNotifyToMongo(resp);
     }
 }

@@ -31,12 +31,12 @@ public class GroupChatRequest implements Serializable {
     /**
      * 申请加入群的人
      */
-    private Long reqId;
+    private Long applyId;
 
     /**
      * 发送加群申请携带的申请信息
      */
-    private String reqMessage;
+    private String applyMessage;
 
     /**
      * 操作结果 1:未操作 2:同意 3:拒绝

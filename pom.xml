@@ -29,6 +29,7 @@
         <cosid.version>1.8.15</cosid.version>
         <skipTests>true</skipTests>
         <fastjson2.version>2.0.1</fastjson2.version>
+        <jakarta-validation-api.version>3.0.0</jakarta-validation-api.version>
     </properties>
 
     <build>
@@ -261,6 +262,13 @@
             <artifactId>mockito-inline</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>jakarta.validation</groupId>
+            <artifactId>jakarta.validation-api</artifactId>
+            <version>${jakarta-validation-api.version}</version>
+        </dependency>
+
     </dependencies>
 
 

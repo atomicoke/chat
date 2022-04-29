@@ -21,9 +21,9 @@ public class FriendRequestRepo extends BaseRepo<FriendRequestMapper, FriendReque
         return SqlHelper.retBool(this.baseMapper.insertIgnore(friendRequest));
     }
 
-    public boolean updateResult(Long id, LocalDateTime handlerTime, int result) {
+    public boolean updateResult(Long id, int result) {
         return this.lu()
-                .set(FriendRequest::getHandlerTime, handlerTime)
+                .set(FriendRequest::getHandlerTime, LocalDateTime.now())
                 .set(FriendRequest::getHandlerResult, result)
                 .eq(FriendRequest::getId, id)
                 .eq(FriendRequest::getHandlerResult, ChatConst.FriendAndGroupApplyResult.unOperated)

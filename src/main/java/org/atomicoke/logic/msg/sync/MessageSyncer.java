@@ -4,7 +4,7 @@ import cn.hutool.extra.spring.SpringUtil;
 import org.atomicoke.inf.common.util.Json;
 import org.atomicoke.inf.middleware.redis.Redis;
 import org.atomicoke.logic.msg.domain.resp.ChatMessageResp;
-import org.atomicoke.logic.msg.domain.resp.SysInfoResp;
+import org.atomicoke.logic.msg.domain.resp.NotifyResp;
 import org.atomicoke.logic.msg.sync.model.MessageSyncReq;
 import org.atomicoke.logic.msg.sync.model.MessageSyncResp;
 import org.atomicoke.logic.msg.ws.packet.chat.ReplayPacket;
@@ -25,10 +25,10 @@ public class MessageSyncer implements InitializingBean {
 
     // 未读消息最小的id
     private final static String CHAT_COLLECTION = "chat";
-    private final static String SYS_INFO_COLLECTION = "sys_info";
+    private final static String NOTIFY_COLLECTION = "notify";
     private final static String CHAT_SEQ_PREFIX = "msg:seq:" + CHAT_COLLECTION + ":";
 
-    private final static String SYS_INFO_SEQ_PREFIX = "msg:seq:" + SYS_INFO_COLLECTION + ":";
+    private final static String SYS_INFO_SEQ_PREFIX = "msg:seq:" + NOTIFY_COLLECTION + ":";
 
     private static MongoTemplate mongoTemplate;
 
@@ -41,16 +41,16 @@ public class MessageSyncer implements InitializingBean {
         return Redis.incr(getChatSeqKey(userId));
     }
 
-    public static Long incrSysInfoSeq(final String userId) {
-        return Redis.incr(getSysInfoSeqKey(userId));
+    public static Long incrNotifySeq(final String userId) {
+        return Redis.incr(getNotifySeqKey(userId));
     }
 
     public static void saveChatToMongo(final ChatMessageResp chatMessageResp) {
         saveToMongo(Json.toJson(chatMessageResp), CHAT_COLLECTION);
     }
 
-    public static void saveSysInfoToMongo(final SysInfoResp sysInfoResp) {
-        saveToMongo(Json.toJson(sysInfoResp), SYS_INFO_COLLECTION);
+    public static void saveNotifyToMongo(final NotifyResp notifyResp) {
+        saveToMongo(Json.toJson(notifyResp), NOTIFY_COLLECTION);
     }
 
     public static void saveToMongo(String json, String collection) {
@@ -72,8 +72,8 @@ public class MessageSyncer implements InitializingBean {
         mongoTemplate.insert(chatMessageResps, CHAT_COLLECTION);
     }
 
-    public static void saveSysInfoToMongo(final List<SysInfoResp> sysInfoResps) {
-        mongoTemplate.insert(sysInfoResps, CHAT_COLLECTION);
+    public static void saveNotifyToMongo(final List<NotifyResp> notifyResps) {
+        mongoTemplate.insert(notifyResps, CHAT_COLLECTION);
     }
 
     public static MessageSyncResp sync(final MessageSyncReq req) {
@@ -92,7 +92,7 @@ public class MessageSyncer implements InitializingBean {
         return CHAT_SEQ_PREFIX + recvUserId;
     }
 
-    private static String getSysInfoSeqKey(final String recvUserId) {
+    private static String getNotifySeqKey(final String recvUserId) {
         return SYS_INFO_SEQ_PREFIX + recvUserId;
     }
 }
