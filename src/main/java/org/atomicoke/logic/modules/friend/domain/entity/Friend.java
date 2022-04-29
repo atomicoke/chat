@@ -68,14 +68,14 @@ public class Friend implements Serializable {
                         .setOwnerId(userId1)
                         .setFriendId(userId2)
                         .setRemark("")
-                        .setAddWay(null)
+                        .setAddWay(0)
                         .setAddTime(time)
                         .setUpdateTime(time),
                 new Friend()
                         .setOwnerId(userId2)
                         .setFriendId(userId1)
                         .setRemark("")
-                        .setAddWay(null)
+                        .setAddWay(0)
                         .setAddTime(time)
                         .setUpdateTime(time));
 

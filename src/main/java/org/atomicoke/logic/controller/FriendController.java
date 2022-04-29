@@ -26,12 +26,12 @@ public class FriendController {
     private final FriendService friendService;
 
     @PostMapping("apply")
-    public void apply(UserInfo userInfo, @Valid @RequestBody FriendApplyReq req) {
-        Rest.of(() -> friendService.apply(userInfo, req));
+    public Rest<?> apply(UserInfo userInfo, @Valid @RequestBody FriendApplyReq req) {
+        return Rest.of(() -> friendService.apply(userInfo, req));
     }
 
     @PostMapping("handle")
-    public void handle(UserInfo userInfo, @Valid @RequestBody FriendHandleReq req) {
-        Rest.of(() -> friendService.handle(userInfo, req));
+    public Rest<?> handle(UserInfo userInfo, @Valid @RequestBody FriendHandleReq req) {
+        return Rest.of(() -> friendService.handle(userInfo, req));
     }
 }
