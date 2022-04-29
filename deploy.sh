@@ -20,7 +20,7 @@ usage() {
 start_application() {
     echo "starting java process"
     echo "${Path}"
-    nohup java -javaagent:/root/project/xrebel.jar -jar ${Path} > ${JAVA_OUT} 2>&1 &
+    nohup java -agentpath:/tmp/cdbg_java_agent.so -javaagent:/root/project/xrebel.jar -jar ${Path} > ${JAVA_OUT} 2>&1 &
     echo "started java process"
 }
 
