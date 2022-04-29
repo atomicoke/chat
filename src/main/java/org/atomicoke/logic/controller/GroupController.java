@@ -1,7 +1,7 @@
 package org.atomicoke.logic.controller;
 
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.atomicoke.inf.common.web.model.Rest;
 import org.atomicoke.inf.common.web.model.UserInfo;
 import org.atomicoke.logic.modules.group.domain.model.GroupApplyReq;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("group")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class GroupController {
 
     private final GroupService groupService;
