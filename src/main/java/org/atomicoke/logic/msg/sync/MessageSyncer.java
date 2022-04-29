@@ -3,6 +3,7 @@ package org.atomicoke.logic.msg.sync;
 import cn.hutool.extra.spring.SpringUtil;
 import org.atomicoke.inf.common.util.Json;
 import org.atomicoke.inf.middleware.redis.Redis;
+import org.atomicoke.logic.msg.domain.model.Notify;
 import org.atomicoke.logic.msg.domain.resp.ChatMessageResp;
 import org.atomicoke.logic.msg.domain.resp.ContactNotifyResp;
 import org.atomicoke.logic.msg.sync.model.MessageSyncReq;
@@ -49,8 +50,8 @@ public class MessageSyncer implements InitializingBean {
         saveToMongo(Json.toJson(chatMessageResp), CHAT_COLLECTION);
     }
 
-    public static void saveNotifyToMongo(final ContactNotifyResp contactNotifyResp) {
-        saveToMongo(Json.toJson(contactNotifyResp), NOTIFY_COLLECTION);
+    public static void saveNotifyToMongo(final Notify<ContactNotifyResp> notify) {
+        saveToMongo(Json.toJson(notify), NOTIFY_COLLECTION);
     }
 
     public static void saveToMongo(String json, String collection) {
@@ -72,8 +73,8 @@ public class MessageSyncer implements InitializingBean {
         mongoTemplate.insert(chatMessageResps, CHAT_COLLECTION);
     }
 
-    public static void saveNotifyToMongo(final List<ContactNotifyResp> contactNotifyResps) {
-        mongoTemplate.insert(contactNotifyResps, CHAT_COLLECTION);
+    public static void saveNotifyToMongo(final List<Notify<ContactNotifyResp>> notifies) {
+        mongoTemplate.insert(notifies, NOTIFY_COLLECTION);
     }
 
     public static MessageSyncResp sync(final MessageSyncReq req) {

@@ -14,6 +14,7 @@ import org.atomicoke.logic.modules.group.domain.model.GroupApplyReq;
 import org.atomicoke.logic.modules.group.domain.model.GroupHandleReq;
 import org.atomicoke.logic.modules.user.domain.dao.UserRepo;
 import org.atomicoke.logic.modules.user.domain.entity.User;
+import org.atomicoke.logic.msg.domain.model.Notify;
 import org.atomicoke.logic.msg.domain.resp.ContactNotifyResp;
 import org.atomicoke.logic.msg.sync.MessageSyncer;
 import org.atomicoke.logic.msg.ws.UserWsConn;
@@ -51,20 +52,20 @@ public class GroupService {
         boolean flag = groupChatRequestDao.saveIgnore(request);
         if (flag) {
             List<Long> toIdList = this.getGroupManager(req.getToId());
-            List<ContactNotifyResp> respList = toIdList.stream()
+            List<Notify<ContactNotifyResp>> notifies = toIdList.stream()
                     .map(e -> {
                         WebSocket conn = UserWsConn.get(req.getToId());
-                        ContactNotifyResp contactNotifyResp = req.ofResp(request.getId(), e, userInfo);
+                        ContactNotifyResp resp = req.ofResp(request.getId(), e, userInfo);
                         if (conn == null) {
                             // TODO: 2022/4/23 离线推送
                             log.warn("用户[{}]没有连接", req.getToId());
                         } else {
-                            conn.send(WsPacket.newNotifyPacket(contactNotifyResp).encode());
+                            conn.send(WsPacket.newNotifyPacket(resp).encode());
                         }
-                        return contactNotifyResp;
+                        return Notify.of(resp, resp.type());
                     }).collect(Collectors.toList());
 
-            MessageSyncer.saveNotifyToMongo(respList);
+            MessageSyncer.saveNotifyToMongo(notifies);
         }
     }
 
@@ -91,15 +92,15 @@ public class GroupService {
         member.setAddTime(LocalDateTime.now());
         member.setAddWay(0);
         groupChatMemberDao.save(member);
-        ContactNotifyResp contactNotifyResp = req.ofResp(req.getRequestId(), applyId, userInfo);
+        ContactNotifyResp resp = req.ofResp(req.getRequestId(), applyId, userInfo);
         WebSocket conn = UserWsConn.get(applyId);
         if (conn == null) {
             // TODO: 2022/4/23 离线推送
             log.warn("用户[{}]没有连接", applyId);
         } else {
-            conn.send(WsPacket.newNotifyPacket(contactNotifyResp).encode());
+            conn.send(WsPacket.newNotifyPacket(resp).encode());
         }
-        MessageSyncer.saveNotifyToMongo(contactNotifyResp);
+        MessageSyncer.saveNotifyToMongo(Notify.of(resp, resp.type()));
 
     }
 

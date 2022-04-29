@@ -11,6 +11,7 @@ import org.atomicoke.logic.modules.friend.domain.entity.Friend;
 import org.atomicoke.logic.modules.friend.domain.entity.FriendRequest;
 import org.atomicoke.logic.modules.friend.domain.model.FriendApplyReq;
 import org.atomicoke.logic.modules.friend.domain.model.FriendHandleReq;
+import org.atomicoke.logic.msg.domain.model.Notify;
 import org.atomicoke.logic.msg.domain.resp.ContactNotifyResp;
 import org.atomicoke.logic.msg.sync.MessageSyncer;
 import org.atomicoke.logic.msg.ws.UserWsConn;
@@ -53,7 +54,7 @@ public class FriendService {
             } else {
                 conn.send(WsPacket.newNotifyPacket(contactNotifyResp).encode());
             }
-            MessageSyncer.saveNotifyToMongo(contactNotifyResp);
+            MessageSyncer.saveNotifyToMongo(Notify.of(contactNotifyResp, contactNotifyResp.type()));
         }
     }
 
@@ -83,6 +84,6 @@ public class FriendService {
         } else {
             conn.send(WsPacket.newNotifyPacket(contactNotifyResp).encode());
         }
-        MessageSyncer.saveNotifyToMongo(contactNotifyResp);
+        MessageSyncer.saveNotifyToMongo(Notify.of(contactNotifyResp, contactNotifyResp.type()));
     }
 }
