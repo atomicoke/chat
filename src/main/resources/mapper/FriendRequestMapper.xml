@@ -6,9 +6,9 @@
 
     <resultMap id="BaseResultMap" type="org.atomicoke.logic.modules.friend.domain.entity.FriendRequest">
         <id property="id" column="id" jdbcType="BIGINT"/>
-        <result property="reqId" column="req_id" jdbcType="BIGINT"/>
+        <result property="applyId" column="apply_id" jdbcType="BIGINT"/>
         <result property="userId" column="user_id" jdbcType="BIGINT"/>
-        <result property="reqMessage" column="req_message" jdbcType="VARCHAR"/>
+        <result property="applyMessage" column="apply_message" jdbcType="VARCHAR"/>
         <result property="addWay" column="add_way" jdbcType="INTEGER"/>
         <result property="handlerResult" column="handler_result" jdbcType="INTEGER"/>
         <result property="handlerTime" column="handler_time" jdbcType="TIMESTAMP"/>
@@ -17,15 +17,15 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,req_id,user_id,
-        req_message,add_way,handler_result,
+        id,apply_id,user_id,
+        apply_message,add_way,handler_result,
         handler_time,create_time, random_id
     </sql>
     <insert id="insertIgnore">
         insert ignore into friend_request
         (<include refid="Base_Column_List"/>)
         values
-        (#{id},#{reqId},#{userId},#{reqMessage},
+        (#{id},#{applyId},#{userId},#{applyMessage},
         #{addWay},#{handlerResult},#{handlerTime},
         #{createTime},#{randomId});
     </insert>

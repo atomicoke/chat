@@ -88,6 +88,7 @@ public class GroupService {
             member.setNickName(user.getNickName());
             member.setRoleType(1);
             member.setAddTime(LocalDateTime.now());
+            member.setAddWay(0);
             groupChatMemberDao.save(member);
             NotifyResp notifyResp = req.ofResp(req.getRequestId(), applyId, userInfo);
             WebSocket conn = UserWsConn.get(applyId);
