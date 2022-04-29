@@ -94,22 +94,22 @@ public interface ChatConst {
 
         interface Contact {
             /**
-             * 添加好友请求
+             * 添加好友通知
              */
             int applyFriend = 11001;
 
             /**
-             * 处理好友请求
+             * 处理好友通知
              */
             int handleFriend = 11002;
 
             /**
-             * 入群请求
+             * 入群申请通知
              */
             int applyGroup = 12001;
 
             /**
-             * 处理入群请求
+             * 处理入群通知
              */
             int handleGroup = 12002;
 

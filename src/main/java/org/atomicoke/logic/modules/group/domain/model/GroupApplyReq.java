@@ -5,7 +5,7 @@ import lombok.Data;
 import org.atomicoke.inf.common.contants.ChatConst;
 import org.atomicoke.inf.common.web.model.UserInfo;
 import org.atomicoke.logic.modules.group.domain.entity.GroupChatRequest;
-import org.atomicoke.logic.msg.domain.resp.NotifyResp;
+import org.atomicoke.logic.msg.domain.resp.ContactNotifyResp;
 import org.atomicoke.logic.msg.sync.MessageSyncer;
 
 import java.time.LocalDateTime;
@@ -37,9 +37,9 @@ public class GroupApplyReq {
         return request;
     }
 
-    public NotifyResp ofResp(Long requestId, Long toId, UserInfo userInfo) {
+    public ContactNotifyResp ofResp(Long requestId, Long toId, UserInfo userInfo) {
         Long seq = MessageSyncer.incrNotifySeq(String.valueOf(this.getToId()));
-        final var resp = new NotifyResp();
+        final var resp = new ContactNotifyResp();
         resp.setBoxOwnerId(String.valueOf(toId));
         resp.setBoxOwnerSeq(String.valueOf(seq));
         resp.setRequestId(String.valueOf(requestId));
@@ -49,7 +49,7 @@ public class GroupApplyReq {
         resp.setContactType(ChatConst.Notify.Contact.applyGroup);
         resp.setHandlerTime(LocalDateTime.now());
         resp.setHandlerResult(ChatConst.FriendAndGroupApplyResult.unOperated);
-        NotifyResp.Message msg = new NotifyResp.Message();
+        ContactNotifyResp.Message msg = new ContactNotifyResp.Message();
         msg.setOperatorId(userInfo.getId());
         msg.setOperatorAvatar(userInfo.getAvatar());
         msg.setOperatorNickName(userInfo.getNickName());

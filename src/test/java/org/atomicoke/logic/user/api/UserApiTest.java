@@ -1,6 +1,6 @@
 package org.atomicoke.logic.user.api;
 
-import org.atomicoke.logic.msg.domain.resp.NotifyResp;
+import org.atomicoke.logic.msg.domain.resp.ContactNotifyResp;
 import org.atomicoke.logic.msg.sync.MessageSyncer;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +33,7 @@ class UserApiTest {
 
     @Test
     void test1() throws Exception {
-        NotifyResp resp = new NotifyResp();
+        ContactNotifyResp resp = new ContactNotifyResp();
         resp.setBoxOwnerId("1111");
         resp.setBoxOwnerSeq("1");
         resp.setContactType(11001);

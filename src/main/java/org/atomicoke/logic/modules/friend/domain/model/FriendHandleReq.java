@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.atomicoke.inf.common.contants.ChatConst;
 import org.atomicoke.inf.common.web.model.UserInfo;
-import org.atomicoke.logic.msg.domain.resp.NotifyResp;
+import org.atomicoke.logic.msg.domain.resp.ContactNotifyResp;
 import org.atomicoke.logic.msg.sync.MessageSyncer;
 
 import java.io.Serializable;
@@ -24,7 +24,7 @@ public class FriendHandleReq implements Serializable {
     private Long requestId;
 
     /**
-     * 操作结果 1:未操作 2:同意 3:拒绝
+     * 操作结果 2:同意 3:拒绝
      *
      * @see ChatConst.FriendAndGroupApplyResult
      */
@@ -32,9 +32,9 @@ public class FriendHandleReq implements Serializable {
     private Integer handlerResult;
 
 
-    public NotifyResp ofResp(Long requestId, Long toId, UserInfo userInfo) {
+    public ContactNotifyResp ofResp(Long requestId, Long toId, UserInfo userInfo) {
         Long seq = MessageSyncer.incrNotifySeq(String.valueOf(toId));
-        final var resp = new NotifyResp();
+        final var resp = new ContactNotifyResp();
         resp.setBoxOwnerId(String.valueOf(toId));
         resp.setBoxOwnerSeq(String.valueOf(seq));
         resp.setRequestId(String.valueOf(requestId));
@@ -42,7 +42,7 @@ public class FriendHandleReq implements Serializable {
         resp.setContactType(ChatConst.Notify.Contact.handleFriend);
         resp.setHandlerTime(LocalDateTime.now());
         resp.setHandlerResult(this.getHandlerResult());
-        NotifyResp.Message msg = new NotifyResp.Message();
+        ContactNotifyResp.Message msg = new ContactNotifyResp.Message();
         msg.setOperatorId(userInfo.getId());
         msg.setOperatorAvatar(userInfo.getAvatar());
         msg.setOperatorNickName(userInfo.getNickName());

@@ -3,7 +3,6 @@ package org.atomicoke.logic.modules.group.service;
 import io.github.fzdwx.inf.msg.WebSocket;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.atomicoke.inf.common.contants.ChatConst;
 import org.atomicoke.inf.common.web.model.UserInfo;
 import org.atomicoke.logic.modules.friend.domain.model.FriendApplyReq;
 import org.atomicoke.logic.modules.friend.domain.model.FriendHandleReq;
@@ -15,7 +14,7 @@ import org.atomicoke.logic.modules.group.domain.model.GroupApplyReq;
 import org.atomicoke.logic.modules.group.domain.model.GroupHandleReq;
 import org.atomicoke.logic.modules.user.domain.dao.UserRepo;
 import org.atomicoke.logic.modules.user.domain.entity.User;
-import org.atomicoke.logic.msg.domain.resp.NotifyResp;
+import org.atomicoke.logic.msg.domain.resp.ContactNotifyResp;
 import org.atomicoke.logic.msg.sync.MessageSyncer;
 import org.atomicoke.logic.msg.ws.UserWsConn;
 import org.atomicoke.logic.msg.ws.WsPacket;
@@ -52,17 +51,17 @@ public class GroupService {
         boolean flag = groupChatRequestDao.saveIgnore(request);
         if (flag) {
             List<Long> toIdList = this.getGroupManager(req.getToId());
-            List<NotifyResp> respList = toIdList.stream()
+            List<ContactNotifyResp> respList = toIdList.stream()
                     .map(e -> {
                         WebSocket conn = UserWsConn.get(req.getToId());
-                        NotifyResp notifyResp = req.ofResp(request.getId(), e, userInfo);
+                        ContactNotifyResp contactNotifyResp = req.ofResp(request.getId(), e, userInfo);
                         if (conn == null) {
                             // TODO: 2022/4/23 离线推送
                             log.warn("用户[{}]没有连接", req.getToId());
                         } else {
-                            conn.send(WsPacket.newNotifyPacket(notifyResp, ChatConst.Notify.contact).encode());
+                            conn.send(WsPacket.newNotifyPacket(contactNotifyResp).encode());
                         }
-                        return notifyResp;
+                        return contactNotifyResp;
                     }).collect(Collectors.toList());
 
             MessageSyncer.saveNotifyToMongo(respList);
@@ -92,15 +91,15 @@ public class GroupService {
         member.setAddTime(LocalDateTime.now());
         member.setAddWay(0);
         groupChatMemberDao.save(member);
-        NotifyResp notifyResp = req.ofResp(req.getRequestId(), applyId, userInfo);
+        ContactNotifyResp contactNotifyResp = req.ofResp(req.getRequestId(), applyId, userInfo);
         WebSocket conn = UserWsConn.get(applyId);
         if (conn == null) {
             // TODO: 2022/4/23 离线推送
             log.warn("用户[{}]没有连接", applyId);
         } else {
-            conn.send(WsPacket.newNotifyPacket(notifyResp, ChatConst.Notify.contact).encode());
+            conn.send(WsPacket.newNotifyPacket(contactNotifyResp).encode());
         }
-        MessageSyncer.saveNotifyToMongo(notifyResp);
+        MessageSyncer.saveNotifyToMongo(contactNotifyResp);
 
     }
 
