@@ -51,7 +51,13 @@ public class ChatMessageResp implements MessageResp {
      * @see ChatConst.SessionType
      */
     private int sessionType;
+    /**
+     * @see ChatConst.MsgFrom
+     */
     private int msgFrom;
+    /**
+     * 发送时间
+     */
     private LocalDateTime sendTime;
     private ChatMessage chatMessage;
 
@@ -81,7 +87,7 @@ public class ChatMessageResp implements MessageResp {
 
         public void fixUrl() {
             if (!Lang.eq(contentType.intValue(), ChatConst.ContentType.Text)) {
-                this.content = Minio.getAccessUrl(this.content);
+                this.content = Minio.getPubAccessUrl(this.content);
             }
         }
     }

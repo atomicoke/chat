@@ -1,7 +1,6 @@
 package org.atomicoke.logic.msg.sync;
 
 import cn.hutool.extra.spring.SpringUtil;
-import org.atomicoke.inf.common.util.Json;
 import org.atomicoke.inf.middleware.redis.Redis;
 import org.atomicoke.logic.msg.domain.model.Message;
 import org.atomicoke.logic.msg.domain.resp.ChatMessageResp;
@@ -23,10 +22,8 @@ import java.util.List;
 @Component
 public class MessageSyncer implements InitializingBean {
 
-    // 未读消息最小的id
     private final static String COLLECTION = "msg";
     private final static String SEQ_PREFIX = "msg:seq:";
-
     private static MongoTemplate mongoTemplate;
 
     @Override
@@ -34,21 +31,19 @@ public class MessageSyncer implements InitializingBean {
         mongoTemplate = SpringUtil.getBean(MongoTemplate.class);
     }
 
-    public static Long incrSeq(final String userId) {
-        return Redis.incr(getSeqKey(userId));
+    public static Long incrSeq(final Long userId) {
+        if (userId == null) {
+            throw new IllegalArgumentException("userId is null");
+        }
+        return Redis.incr(getSeqKey(userId.toString()));
     }
 
     public static void saveToMongo(final Message message) {
-        saveToMongo(Json.toJson(message), COLLECTION);
+        mongoTemplate.insert(message.encode(), COLLECTION);
     }
-
-    public static void saveToMongo(String json, String collection) {
-        mongoTemplate.insert(json, collection);
-    }
-
 
     public static ReplayPacket.Data incrSeqAndSaveToMongo(final Long userId, final ChatMessageResp resp) {
-        final var seq = incrSeq(userId.toString());
+        final var seq = incrSeq(userId);
 
         final var message = resp.toMessage(userId, seq);
 

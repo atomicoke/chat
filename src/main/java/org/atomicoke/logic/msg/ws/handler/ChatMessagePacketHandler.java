@@ -104,13 +104,12 @@ public class ChatMessagePacketHandler implements WsPacket.Handler<ChatMessagePac
     }
 
     private Message sendPersonal(final ChatMessagePacket packet, final ChatMessageResp resp, Long toUserId) {
-        Message message = resp.toMessage(toUserId, MessageSyncer.incrSeq(toUserId.toString()));
+        Message message = resp.toMessage(toUserId, MessageSyncer.incrSeq(toUserId));
         final var conn = UserWsConn.get(toUserId);
         if (conn == null) {
             // TODO: 2022/4/23 离线推送
             log.warn("用户[{}]没有连接", toUserId);
         } else {
-            //todo 2022/4/30 消息数据结构
             conn.send(packet.newSuccessPacket(resp.fixUrl()).encode());
         }
 
@@ -127,8 +126,8 @@ public class ChatMessagePacketHandler implements WsPacket.Handler<ChatMessagePac
     }
 
     private void sendAll(final ChatMessagePacket packet, final ChatMessageResp resp) {
-        //todo 2022/4/30 消息数据结构
         final var data = packet.newSuccessPacket(resp).encode();
+
         final var fromIdLong = Long.parseLong(resp.getFromId());
         UserWsConn.foreach((id, ws) -> {
             if (id.equals(fromIdLong)) {

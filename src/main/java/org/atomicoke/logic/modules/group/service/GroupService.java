@@ -1,7 +1,7 @@
 package org.atomicoke.logic.modules.group.service;
 
 import io.github.fzdwx.inf.msg.WebSocket;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.atomicoke.inf.common.util.Json;
 import org.atomicoke.inf.common.web.model.UserInfo;
@@ -32,13 +32,12 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class GroupService {
 
     private final GroupChatRequestRepo groupChatRequestDao;
     private final GroupChatMemberRepo groupChatMemberDao;
     private final UserRepo userDao;
-
 
     /**
      * 好友申请
@@ -51,7 +50,7 @@ public class GroupService {
         GroupChatRequest request = req.ofEntity(userInfo.getIdLong());
         boolean flag = groupChatRequestDao.saveIgnore(request);
         if (flag) {
-            List<Long> toIdList = this.getGroupManager(req.getToId());
+            List<Long> toIdList = this.groupChatMemberDao.getGroupManager(req.getToId());
             List<String> messages = toIdList.stream()
                     .map(toUserId -> {
                         WebSocket conn = UserWsConn.get(req.getToId());
@@ -62,7 +61,7 @@ public class GroupService {
                         } else {
                             conn.send(WsPacket.newNotifyPacket(resp).encode());
                         }
-                        return Json.toJson(resp.toMessage(toUserId, MessageSyncer.incrSeq(String.valueOf(toUserId))));
+                        return Json.toJson(resp.toMessage(toUserId, MessageSyncer.incrSeq(toUserId)));
                     }).collect(Collectors.toList());
             MessageSyncer.saveToMongo(messages);
         }
@@ -99,11 +98,6 @@ public class GroupService {
         } else {
             conn.send(WsPacket.newNotifyPacket(resp).encode());
         }
-        MessageSyncer.saveToMongo(resp.toMessage(applyId, MessageSyncer.incrSeq(String.valueOf(applyId))));
-
-    }
-
-    public List<Long> getGroupManager(Long groupId) {
-        return this.groupChatMemberDao.getGroupManager(groupId);
+        MessageSyncer.saveToMongo(resp.toMessage(applyId, MessageSyncer.incrSeq(applyId)));
     }
 }

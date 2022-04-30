@@ -1,6 +1,7 @@
 package org.atomicoke.logic.msg.domain.model;
 
 import lombok.Data;
+import org.atomicoke.inf.common.util.Json;
 
 import java.io.Serializable;
 
@@ -32,4 +33,8 @@ public class Message implements Serializable {
      * 通知类型
      */
     private String messageType;
+
+    public String encode() {
+        return Json.toJson(this);
+    }
 }
