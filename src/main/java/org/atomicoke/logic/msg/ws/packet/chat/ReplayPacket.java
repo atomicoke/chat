@@ -39,14 +39,14 @@ public class ReplayPacket extends WsPacket {
     @lombok.Data
     public static class Data {
 
-        private String messageId;
+        private String chatId;
 
         private String boxOwnerId;
 
         private String boxOwnerSeq;
 
-        public Data(final String messageId, final String boxOwnerId, final String seq) {
-            this.messageId = messageId;
+        public Data(final String chatId, final String boxOwnerId, final String seq) {
+            this.chatId = chatId;
             this.boxOwnerSeq = seq;
             this.boxOwnerId = boxOwnerId;
         }

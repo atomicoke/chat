@@ -49,7 +49,7 @@ public class MessageSyncer implements InitializingBean {
 
         saveToMongo(message);
 
-        return new ReplayPacket.Data(resp.getMessageId(), message.getBoxOwnerId(), message.getBoxOwnerSeq());
+        return new ReplayPacket.Data(resp.getChatId(), message.getBoxOwnerId(), message.getBoxOwnerSeq());
     }
 
     public static void saveToMongo(final List<String> messages) {

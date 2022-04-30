@@ -86,7 +86,6 @@ public abstract class WsPacket {
         return new NotifyPacket<>(data, data.type());
     }
 
-
     public static ReplayPacket newReplayChatPacket(ReplayPacket.Data data, WsPacket packet) {
         if (packet == null) {
             throw Err.verify("packet is null");
