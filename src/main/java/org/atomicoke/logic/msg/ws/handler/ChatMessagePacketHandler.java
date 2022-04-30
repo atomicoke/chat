@@ -110,7 +110,7 @@ public class ChatMessagePacketHandler implements WsPacket.Handler<ChatMessagePac
             // TODO: 2022/4/23 离线推送
             log.warn("用户[{}]没有连接", toUserId);
         } else {
-            conn.send(packet.newSuccessPacket(resp.fixUrl()).encode());
+            conn.send(packet.newSuccessPacket(message).encode());
         }
 
         return message;
