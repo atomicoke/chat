@@ -1,7 +1,6 @@
 package org.atomicoke.logic.user.api;
 
 import org.atomicoke.inf.common.util.Json;
-import org.atomicoke.logic.msg.domain.model.Notify;
 import org.atomicoke.logic.msg.domain.resp.ContactNotifyResp;
 import org.atomicoke.logic.msg.sync.MessageSyncer;
 import org.junit.jupiter.api.Test;
@@ -50,8 +49,7 @@ class UserApiTest {
                     resp.setRequestId("123123123");
                     resp.setHandlerTime(LocalDateTime.now());
                     resp.setMsgFrom(2);
-                    Notify<ContactNotifyResp> notify = Notify.of(resp, resp.type());
-                    return Json.toJson(notify);
+                    return Json.toJson(resp.toNotify());
                 }).collect(Collectors.toList());
         MessageSyncer.saveNotifyToMongo(list);
     }
