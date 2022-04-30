@@ -44,7 +44,7 @@ public class FriendService {
      */
     @Transactional(rollbackFor = Exception.class)
     public void apply(UserInfo userInfo, FriendApplyReq req) {
-        Assert.ensureTrue(friendDao.existFriend(userInfo.getId(), req.getToId()), "已存在好友关系!");
+        Assert.ensureFalse(friendDao.existFriend(userInfo.getId(), req.getToId()), "已存在好友关系!");
 
         FriendRequest request = req.ofEntity(userInfo.getIdLong());
 
@@ -71,6 +71,7 @@ public class FriendService {
         Long applyId = friendRequestDao.getApplyId(req.getRequestId());
         if (Lang.eq(req.getHandlerResult().intValue(), ChatConst.FriendAndGroupApplyResult.agree)) {
             List<Friend> friends = Friend.of(applyId, userInfo.getIdLong(), LocalDateTime.now());
+            // TODO: 2022/4/30 如果已经曾经存在好友关系，删除好友时如何处理？ 是删除两份还是单独删除某一方？
             friendDao.saveBatch(friends);
         }
 
