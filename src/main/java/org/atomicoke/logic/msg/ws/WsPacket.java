@@ -12,7 +12,7 @@ import org.atomicoke.inf.common.err.Err;
 import org.atomicoke.inf.common.util.Json;
 import org.atomicoke.inf.common.web.model.UserInfo;
 import org.atomicoke.inf.middleware.redis.Redis;
-import org.atomicoke.logic.msg.domain.resp.NotifyResp;
+import org.atomicoke.logic.msg.domain.resp.MessageResp;
 import org.atomicoke.logic.msg.ws.handler.ChatMessagePacketHandler;
 import org.atomicoke.logic.msg.ws.packet.chat.ChatMessagePacket;
 import org.atomicoke.logic.msg.ws.packet.chat.ReplayPacket;
@@ -82,7 +82,7 @@ public abstract class WsPacket {
     /**
      * new a success packet.
      */
-    public static <OUT extends NotifyResp> NotifyPacket<OUT> newNotifyPacket(OUT data) {
+    public static <OUT extends MessageResp> NotifyPacket<OUT> newNotifyPacket(OUT data) {
         return new NotifyPacket<>(data, data.type());
     }
 

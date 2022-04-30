@@ -3,12 +3,10 @@ package org.atomicoke.logic.msg.sync;
 import cn.hutool.extra.spring.SpringUtil;
 import org.atomicoke.inf.common.util.Json;
 import org.atomicoke.inf.middleware.redis.Redis;
-import org.atomicoke.logic.msg.domain.model.Notify;
+import org.atomicoke.logic.msg.domain.model.Message;
 import org.atomicoke.logic.msg.domain.resp.ChatMessageResp;
-import org.atomicoke.logic.msg.domain.resp.ContactNotifyResp;
 import org.atomicoke.logic.msg.sync.model.MessageSyncReq;
 import org.atomicoke.logic.msg.sync.model.MessageSyncResp;
-import org.atomicoke.logic.msg.sync.model.NotifySyncResp;
 import org.atomicoke.logic.msg.ws.packet.chat.ReplayPacket;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -26,11 +24,8 @@ import java.util.List;
 public class MessageSyncer implements InitializingBean {
 
     // 未读消息最小的id
-    private final static String CHAT_COLLECTION = "chat";
-    private final static String NOTIFY_COLLECTION = "notify";
-    private final static String CHAT_SEQ_PREFIX = "msg:seq:" + CHAT_COLLECTION + ":";
-
-    private final static String SYS_INFO_SEQ_PREFIX = "msg:seq:" + NOTIFY_COLLECTION + ":";
+    private final static String COLLECTION = "msg";
+    private final static String SEQ_PREFIX = "msg:seq:";
 
     private static MongoTemplate mongoTemplate;
 
@@ -39,20 +34,12 @@ public class MessageSyncer implements InitializingBean {
         mongoTemplate = SpringUtil.getBean(MongoTemplate.class);
     }
 
-    public static Long incrChatSeq(final String userId) {
-        return Redis.incr(getChatSeqKey(userId));
+    public static Long incrSeq(final String userId) {
+        return Redis.incr(getSeqKey(userId));
     }
 
-    public static Long incrNotifySeq(final String userId) {
-        return Redis.incr(getNotifySeqKey(userId));
-    }
-
-    public static void saveChatToMongo(final ChatMessageResp chatMessageResp) {
-        saveToMongo(Json.toJson(chatMessageResp), CHAT_COLLECTION);
-    }
-
-    public static void saveNotifyToMongo(final Notify<ContactNotifyResp> notify) {
-        saveToMongo(Json.toJson(notify), NOTIFY_COLLECTION);
+    public static void saveToMongo(final Message message) {
+        saveToMongo(Json.toJson(message), COLLECTION);
     }
 
     public static void saveToMongo(String json, String collection) {
@@ -61,48 +48,32 @@ public class MessageSyncer implements InitializingBean {
 
 
     public static ReplayPacket.Data incrSeqAndSaveToMongo(final Long userId, final ChatMessageResp resp) {
-        final var seq = incrChatSeq(userId.toString());
+        final var seq = incrSeq(userId.toString());
 
-        final var chatMessageResp = resp.copy(userId, seq);
+        final var message = resp.toMessage(userId, seq);
 
-        saveChatToMongo(chatMessageResp);
+        saveToMongo(message);
 
-        return new ReplayPacket.Data(chatMessageResp.getMessageId(), chatMessageResp.getBoxOwnerId(), chatMessageResp.getBoxOwnerSeq());
+        return new ReplayPacket.Data(resp.getMessageId(), message.getBoxOwnerId(), message.getBoxOwnerSeq());
     }
 
-    public static void saveChatToMongo(final List<String> chatMessageResps) {
-        mongoTemplate.insert(chatMessageResps, CHAT_COLLECTION);
-    }
-
-    public static void saveNotifyToMongo(final List<String> notifies) {
-        mongoTemplate.insert(notifies, NOTIFY_COLLECTION);
+    public static void saveToMongo(final List<String> messages) {
+        mongoTemplate.insert(messages, COLLECTION);
     }
 
     public static MessageSyncResp syncMessage(final MessageSyncReq req) {
         req.check();
 
-        final var chatMessageResps = mongoTemplate.find(req.toQuery(), ChatMessageResp.class, CHAT_COLLECTION);
+        final var messages = mongoTemplate.find(req.toQuery(), Message.class, COLLECTION);
 
-        return MessageSyncResp.of(chatMessageResps, getChatSeq(req.getUserId()));
+        return MessageSyncResp.of(messages, getSeq(req.getUserId()));
     }
 
-    public static NotifySyncResp syncNotify(final MessageSyncReq req) {
-        req.check();
-
-        final List<String> notifies = mongoTemplate.find(req.toQuery(), String.class, CHAT_COLLECTION);
-
-        return NotifySyncResp.of(notifies, getChatSeq(req.getUserId()));
+    private static String getSeq(final String userId) {
+        return Redis.get(getSeqKey(userId));
     }
 
-    private static String getChatSeq(final String userId) {
-        return Redis.get(getChatSeqKey(userId));
-    }
-
-    private static String getChatSeqKey(final String recvUserId) {
-        return CHAT_SEQ_PREFIX + recvUserId;
-    }
-
-    private static String getNotifySeqKey(final String recvUserId) {
-        return SYS_INFO_SEQ_PREFIX + recvUserId;
+    private static String getSeqKey(final String recvUserId) {
+        return SEQ_PREFIX + recvUserId;
     }
 }

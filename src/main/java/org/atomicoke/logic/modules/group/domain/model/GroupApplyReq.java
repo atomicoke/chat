@@ -5,8 +5,7 @@ import lombok.Data;
 import org.atomicoke.inf.common.contants.ChatConst;
 import org.atomicoke.inf.common.web.model.UserInfo;
 import org.atomicoke.logic.modules.group.domain.entity.GroupChatRequest;
-import org.atomicoke.logic.msg.domain.resp.ContactNotifyResp;
-import org.atomicoke.logic.msg.sync.MessageSyncer;
+import org.atomicoke.logic.msg.domain.resp.ContactMessageResp;
 
 import java.time.LocalDateTime;
 
@@ -37,24 +36,21 @@ public class GroupApplyReq {
         return request;
     }
 
-    public ContactNotifyResp ofResp(Long requestId, Long toId, UserInfo userInfo) {
-        Long seq = MessageSyncer.incrNotifySeq(String.valueOf(this.getToId()));
-        final var resp = new ContactNotifyResp();
-        resp.setBoxOwnerId(String.valueOf(toId));
-        resp.setBoxOwnerSeq(String.valueOf(seq));
+    public ContactMessageResp ofResp(Long requestId, Long toUserId, UserInfo userInfo) {
+        final var resp = new ContactMessageResp();
         resp.setRequestId(String.valueOf(requestId));
         //todo 系统头像
         resp.setFromAvatar("");
-        resp.setToId(String.valueOf(toId));
+        resp.setToId(String.valueOf(toUserId));
         resp.setContactType(ChatConst.Notify.Contact.applyGroup);
         resp.setHandlerTime(LocalDateTime.now());
         resp.setHandlerResult(ChatConst.FriendAndGroupApplyResult.unOperated);
-        ContactNotifyResp.Message msg = new ContactNotifyResp.Message();
+        ContactMessageResp.Content msg = new ContactMessageResp.Content();
         msg.setOperatorId(userInfo.getId());
         msg.setOperatorAvatar(userInfo.getAvatar());
         msg.setOperatorNickName(userInfo.getNickName());
         msg.setApplyMessage(this.getApplyMessage());
-        resp.setMessage(msg);
+        resp.setContent(msg);
         return resp;
     }
 }

@@ -5,9 +5,11 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 import org.atomicoke.inf.common.contants.ChatConst;
+import org.atomicoke.inf.common.util.Json;
 import org.atomicoke.inf.common.web.model.UserInfo;
 import org.atomicoke.inf.middleware.minio.Minio;
 import org.atomicoke.logic.modules.chathistory.domain.entity.ChatHistory;
+import org.atomicoke.logic.msg.domain.model.Message;
 import org.atomicoke.logic.msg.ws.packet.chat.ChatMessagePacket;
 
 import java.time.LocalDateTime;
@@ -19,17 +21,9 @@ import java.time.LocalDateTime;
 @Data
 @Slf4j
 @Accessors(chain = true)
-public class ChatMessageResp {
+public class ChatMessageResp implements MessageResp {
 
-    /**
-     * 当前信箱所属人id
-     */
-    private String boxOwnerId;
-
-    /**
-     * 当前信箱所属人 全局seq(每收到或发送一条消息则加1)
-     */
-    private String boxOwnerSeq;
+    private final static String type = "chat";
 
     /**
      * 消息id
@@ -61,20 +55,9 @@ public class ChatMessageResp {
     private LocalDateTime sendTime;
     private ChatMessage chatMessage;
 
-    public ChatMessageResp copy(final Long boxOwnerId, final Long boxOwnerSeq) {
-        final ChatMessageResp chatMessageResp = new ChatMessageResp();
-        chatMessageResp.setBoxOwnerId(boxOwnerId.toString());
-        chatMessageResp.setBoxOwnerSeq(boxOwnerSeq.toString());
-        chatMessageResp.setMessageId(this.messageId);
-        chatMessageResp.setFromId(this.fromId);
-        chatMessageResp.setFromNickName(this.fromNickName);
-        chatMessageResp.setFromAvatar(this.fromAvatar);
-        chatMessageResp.setToId(this.toId);
-        chatMessageResp.setSessionType(this.sessionType);
-        chatMessageResp.setMsgFrom(this.msgFrom);
-        chatMessageResp.setSendTime(this.sendTime);
-        chatMessageResp.setChatMessage(this.chatMessage);
-        return chatMessageResp;
+    @Override
+    public String type() {
+        return type;
     }
 
     @Data
@@ -120,5 +103,14 @@ public class ChatMessageResp {
         resp.setSendTime(packet.getSendTime());
         resp.setChatMessage(chatHistory.toResp());
         return resp;
+    }
+
+    public Message toMessage(Long boxOwnerId, Long boxOwnerSeq) {
+        Message message = new Message();
+        message.setBoxOwnerId(String.valueOf(boxOwnerId));
+        message.setBoxOwnerSeq(String.valueOf(boxOwnerSeq));
+        message.setMessageType(this.type());
+        message.setData(Json.toJson(this));
+        return message;
     }
 }

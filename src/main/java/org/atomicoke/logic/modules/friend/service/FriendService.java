@@ -11,7 +11,7 @@ import org.atomicoke.logic.modules.friend.domain.entity.Friend;
 import org.atomicoke.logic.modules.friend.domain.entity.FriendRequest;
 import org.atomicoke.logic.modules.friend.domain.model.FriendApplyReq;
 import org.atomicoke.logic.modules.friend.domain.model.FriendHandleReq;
-import org.atomicoke.logic.msg.domain.resp.ContactNotifyResp;
+import org.atomicoke.logic.msg.domain.resp.ContactMessageResp;
 import org.atomicoke.logic.msg.sync.MessageSyncer;
 import org.atomicoke.logic.msg.ws.UserWsConn;
 import org.atomicoke.logic.msg.ws.WsPacket;
@@ -46,14 +46,14 @@ public class FriendService {
         boolean flag = friendRequestDao.saveIgnore(request);
         if (flag) {
             WebSocket conn = UserWsConn.get(req.getToId());
-            ContactNotifyResp resp = req.ofResp(request.getId(), userInfo);
+            ContactMessageResp resp = req.ofResp(request.getId(), userInfo);
             if (conn == null) {
                 // TODO: 2022/4/23 离线推送
                 log.warn("用户[{}]没有连接", req.getToId());
             } else {
                 conn.send(WsPacket.newNotifyPacket(resp).encode());
             }
-            MessageSyncer.saveNotifyToMongo(resp.toNotify());
+            MessageSyncer.saveToMongo(resp.toMessage(req.getToId(), MessageSyncer.incrSeq(String.valueOf(req.getToId()))));
         }
     }
 
@@ -75,7 +75,7 @@ public class FriendService {
             List<Friend> friends = Friend.of(applyId, userInfo.getIdLong(), LocalDateTime.now());
             friendDao.saveBatch(friends);
         }
-        ContactNotifyResp resp = req.ofResp(req.getRequestId(), applyId, userInfo);
+        ContactMessageResp resp = req.ofResp(req.getRequestId(), applyId, userInfo);
         WebSocket conn = UserWsConn.get(applyId);
         if (conn == null) {
             // TODO: 2022/4/23 离线推送
@@ -83,6 +83,6 @@ public class FriendService {
         } else {
             conn.send(WsPacket.newNotifyPacket(resp).encode());
         }
-        MessageSyncer.saveNotifyToMongo(resp.toNotify());
+        MessageSyncer.saveToMongo(resp.toMessage(applyId, MessageSyncer.incrSeq(String.valueOf(applyId))));
     }
 }

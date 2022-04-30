@@ -5,8 +5,7 @@ import lombok.Data;
 import org.atomicoke.inf.common.contants.ChatConst;
 import org.atomicoke.inf.common.web.model.UserInfo;
 import org.atomicoke.logic.modules.friend.domain.entity.FriendRequest;
-import org.atomicoke.logic.msg.domain.resp.ContactNotifyResp;
-import org.atomicoke.logic.msg.sync.MessageSyncer;
+import org.atomicoke.logic.msg.domain.resp.ContactMessageResp;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -40,27 +39,24 @@ public class FriendApplyReq implements Serializable {
         return request;
     }
 
-    public ContactNotifyResp ofResp(Long requestId, UserInfo userInfo) {
-        Long seq = MessageSyncer.incrNotifySeq(String.valueOf(this.getToId()));
-        final var resp = new ContactNotifyResp();
-        resp.setBoxOwnerId(String.valueOf(toId));
-        resp.setBoxOwnerSeq(String.valueOf(seq));
+    public ContactMessageResp ofResp(Long requestId, UserInfo userInfo) {
+        final var resp = new ContactMessageResp();
         resp.setRequestId(String.valueOf(requestId));
         resp.setFromId(String.valueOf(ChatConst.Sys.SYS_ID));
         resp.setFromUname(ChatConst.Sys.SYS_NAME);
         //todo 系统头像
         resp.setFromAvatar("");
-        resp.setToId(String.valueOf(toId));
+        resp.setToId(String.valueOf(this.getToId()));
         resp.setContactType(ChatConst.Notify.Contact.applyFriend);
         resp.setMsgFrom(ChatConst.MsgFrom.SYS);
         resp.setHandlerTime(LocalDateTime.now());
         resp.setHandlerResult(1);
-        ContactNotifyResp.Message msg = new ContactNotifyResp.Message();
+        ContactMessageResp.Content msg = new ContactMessageResp.Content();
         msg.setOperatorId(userInfo.getId());
         msg.setOperatorAvatar(userInfo.getAvatar());
         msg.setOperatorNickName(userInfo.getNickName());
         msg.setApplyMessage(this.getApplyMessage());
-        resp.setMessage(msg);
+        resp.setContent(msg);
         return resp;
     }
 }

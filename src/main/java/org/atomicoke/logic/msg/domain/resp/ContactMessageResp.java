@@ -4,7 +4,8 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 import org.atomicoke.inf.common.contants.ChatConst;
-import org.atomicoke.logic.msg.domain.model.Notify;
+import org.atomicoke.inf.common.util.Json;
+import org.atomicoke.logic.msg.domain.model.Message;
 
 import java.time.LocalDateTime;
 
@@ -15,19 +16,9 @@ import java.time.LocalDateTime;
 @Data
 @Slf4j
 @Accessors(chain = true)
-public class ContactNotifyResp implements NotifyResp {
+public class ContactMessageResp implements MessageResp {
 
     private static final String type = ChatConst.Notify.contact;
-
-    /**
-     * 当前信箱所属人id
-     */
-    private String boxOwnerId;
-
-    /**
-     * 当前信箱所属人 全局seq(每收到或发送一条消息则加1)
-     */
-    private String boxOwnerSeq;
 
     /**
      * 申请id
@@ -73,7 +64,7 @@ public class ContactNotifyResp implements NotifyResp {
     /**
      * 消息
      */
-    private Message message;
+    private Content content;
 
     @Override
     public String type() {
@@ -81,7 +72,7 @@ public class ContactNotifyResp implements NotifyResp {
     }
 
     @Data
-    public static class Message {
+    public static class Content {
 
         /**
          * 操作人id
@@ -104,12 +95,12 @@ public class ContactNotifyResp implements NotifyResp {
         private String applyMessage;
     }
 
-    public Notify<ContactNotifyResp> toNotify() {
-        Notify<ContactNotifyResp> notify = new Notify<>();
-        notify.setBoxOwnerId(this.getBoxOwnerId());
-        notify.setBoxOwnerSeq(this.getBoxOwnerSeq());
-        notify.setNotifyType(this.type());
-        notify.setData(this);
-        return notify;
+    public Message toMessage(Long boxOwnerId, Long boxOwnerSeq) {
+        Message message = new Message();
+        message.setBoxOwnerId(String.valueOf(boxOwnerId));
+        message.setBoxOwnerSeq(String.valueOf(boxOwnerSeq));
+        message.setMessageType(this.type());
+        message.setData(Json.toJson(this));
+        return message;
     }
 }

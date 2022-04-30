@@ -4,8 +4,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.atomicoke.inf.common.contants.ChatConst;
 import org.atomicoke.inf.common.web.model.UserInfo;
-import org.atomicoke.logic.msg.domain.resp.ContactNotifyResp;
-import org.atomicoke.logic.msg.sync.MessageSyncer;
+import org.atomicoke.logic.msg.domain.resp.ContactMessageResp;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -32,21 +31,18 @@ public class FriendHandleReq implements Serializable {
     private Integer handlerResult;
 
 
-    public ContactNotifyResp ofResp(Long requestId, Long toId, UserInfo userInfo) {
-        Long seq = MessageSyncer.incrNotifySeq(String.valueOf(toId));
-        final var resp = new ContactNotifyResp();
-        resp.setBoxOwnerId(String.valueOf(toId));
-        resp.setBoxOwnerSeq(String.valueOf(seq));
+    public ContactMessageResp ofResp(Long requestId, Long toId, UserInfo userInfo) {
+        final var resp = new ContactMessageResp();
         resp.setRequestId(String.valueOf(requestId));
         resp.setToId(String.valueOf(toId));
         resp.setContactType(ChatConst.Notify.Contact.handleFriend);
         resp.setHandlerTime(LocalDateTime.now());
         resp.setHandlerResult(this.getHandlerResult());
-        ContactNotifyResp.Message msg = new ContactNotifyResp.Message();
+        ContactMessageResp.Content msg = new ContactMessageResp.Content();
         msg.setOperatorId(userInfo.getId());
         msg.setOperatorAvatar(userInfo.getAvatar());
         msg.setOperatorNickName(userInfo.getNickName());
-        resp.setMessage(msg);
+        resp.setContent(msg);
         return resp;
     }
 }

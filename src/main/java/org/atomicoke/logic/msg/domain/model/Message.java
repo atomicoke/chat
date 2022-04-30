@@ -11,7 +11,7 @@ import java.io.Serializable;
  * @since 2022/4/29
  */
 @Data
-public class Notify<T> implements Serializable {
+public class Message implements Serializable {
 
     /**
      * 当前信箱所属人id
@@ -26,10 +26,10 @@ public class Notify<T> implements Serializable {
     /**
      * 数据
      */
-    private T data;
+    private String data;
 
     /**
      * 通知类型
      */
-    private String notifyType;
+    private String messageType;
 }

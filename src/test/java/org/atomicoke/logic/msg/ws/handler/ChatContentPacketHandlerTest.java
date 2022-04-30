@@ -9,7 +9,7 @@ import static org.mockito.Mockito.mock;
  * @author <a href="mailto:likelovec@gmail.com">韦朕</a>
  * @date 2022/4/22 10:38
  */
-class ChatMessagePacketHandlerTest {
+class ChatContentPacketHandlerTest {
 
 
     @Test

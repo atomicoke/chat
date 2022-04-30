@@ -11,6 +11,7 @@ import org.atomicoke.inf.middleware.id.IdGenerate;
 import org.atomicoke.logic.config.ProjectProps;
 import org.atomicoke.logic.modules.chathistory.domain.dao.ChatHistoryRepo;
 import org.atomicoke.logic.modules.chathistory.domain.entity.ChatHistory;
+import org.atomicoke.logic.msg.domain.model.Message;
 import org.atomicoke.logic.msg.domain.resp.ChatMessageResp;
 import org.atomicoke.logic.msg.sync.MessageSyncer;
 import org.atomicoke.logic.msg.ws.UserWsConn;
@@ -96,36 +97,37 @@ public class ChatMessagePacketHandler implements WsPacket.Handler<ChatMessagePac
             case ChatConst.SessionType.single -> {
                 // 返回给发送人的响应
                 packet.replay(MessageSyncer.incrSeqAndSaveToMongo(chatHistory.getFromId(), resp));
-                MessageSyncer.saveChatToMongo(sendPersonal(packet, resp, packet.getToId()));
+                MessageSyncer.saveToMongo(sendPersonal(packet, resp, packet.getToId()));
             }
             default -> packet.sendError("未知的会话类型:" + packet.getSessionType());
         }
     }
 
-    private ChatMessageResp sendPersonal(final ChatMessagePacket packet, final ChatMessageResp resp, Long toUserId) {
-        final var copyResp = resp.copy(toUserId, MessageSyncer.incrChatSeq(toUserId.toString()));
-
+    private Message sendPersonal(final ChatMessagePacket packet, final ChatMessageResp resp, Long toUserId) {
+        Message message = resp.toMessage(toUserId, MessageSyncer.incrSeq(toUserId.toString()));
         final var conn = UserWsConn.get(toUserId);
         if (conn == null) {
             // TODO: 2022/4/23 离线推送
             log.warn("用户[{}]没有连接", toUserId);
         } else {
-            conn.send(packet.newSuccessPacket(copyResp.fixUrl()).encode());
+            //todo 2022/4/30 消息数据结构
+            conn.send(packet.newSuccessPacket(resp.fixUrl()).encode());
         }
 
-        return copyResp;
+        return message;
     }
 
     private void sendGroup(final ChatMessagePacket packet, final ChatMessageResp resp) {
         // todo toIdList 要不要前端传入
-        final var chatMessageResps = Seq.of(packet.getToIdList())
+        final var messages = Seq.of(packet.getToIdList())
                 .map(toUserId -> Json.toJson(sendPersonal(packet, resp, toUserId)))
                 .toList();
 
-        MessageSyncer.saveChatToMongo(chatMessageResps);
+        MessageSyncer.saveToMongo(messages);
     }
 
     private void sendAll(final ChatMessagePacket packet, final ChatMessageResp resp) {
+        //todo 2022/4/30 消息数据结构
         final var data = packet.newSuccessPacket(resp).encode();
         final var fromIdLong = Long.parseLong(resp.getFromId());
         UserWsConn.foreach((id, ws) -> {

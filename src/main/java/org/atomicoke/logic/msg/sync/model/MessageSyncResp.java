@@ -2,7 +2,7 @@ package org.atomicoke.logic.msg.sync.model;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.atomicoke.logic.msg.domain.resp.ChatMessageResp;
+import org.atomicoke.logic.msg.domain.model.Message;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor(staticName = "of")
 public class MessageSyncResp {
 
-    private final List<ChatMessageResp> messages;
+    private final List<Message> messages;
 
     private final String maxSeq;
 }

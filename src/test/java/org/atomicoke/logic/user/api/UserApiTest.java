@@ -1,7 +1,7 @@
 package org.atomicoke.logic.user.api;
 
 import org.atomicoke.inf.common.util.Json;
-import org.atomicoke.logic.msg.domain.resp.ContactNotifyResp;
+import org.atomicoke.logic.msg.domain.resp.ContactMessageResp;
 import org.atomicoke.logic.msg.sync.MessageSyncer;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,21 +36,18 @@ class UserApiTest {
     }
 
     @Test
-    void test1() throws Exception {
-
+    void test1() {
         List<String> list = IntStream.range(0, 10)
                 .mapToObj(i -> {
-                    ContactNotifyResp resp = new ContactNotifyResp();
-                    resp.setBoxOwnerId("1111");
-                    resp.setBoxOwnerSeq(String.valueOf(i + 1));
+                    ContactMessageResp resp = new ContactMessageResp();
                     resp.setContactType(11001);
                     resp.setFromId("0");
                     resp.setFromUname("系统");
                     resp.setRequestId("123123123");
                     resp.setHandlerTime(LocalDateTime.now());
                     resp.setMsgFrom(2);
-                    return Json.toJson(resp.toNotify());
+                    return Json.toJson(resp.toMessage(1111L, i + 1L));
                 }).collect(Collectors.toList());
-        MessageSyncer.saveNotifyToMongo(list);
+        MessageSyncer.saveToMongo(list);
     }
 }
