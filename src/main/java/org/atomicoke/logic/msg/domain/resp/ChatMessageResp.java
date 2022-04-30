@@ -28,7 +28,7 @@ public class ChatMessageResp implements MessageResp {
     /**
      * 消息id
      */
-    private String messageId;
+    private String chatId;
     /**
      * 消息发送人id
      */
@@ -99,7 +99,7 @@ public class ChatMessageResp implements MessageResp {
 
     public static ChatMessageResp from(final UserInfo userInfo, final ChatMessagePacket packet, final ChatHistory chatHistory) {
         final var resp = new ChatMessageResp();
-        resp.setMessageId(String.valueOf(chatHistory.getId()));
+        resp.setChatId(String.valueOf(chatHistory.getId()));
         resp.setFromId(userInfo.getId());
         resp.setFromNickName(userInfo.getNickName());
         resp.setFromAvatar(userInfo.getAvatar());
@@ -116,7 +116,7 @@ public class ChatMessageResp implements MessageResp {
         message.setBoxOwnerId(String.valueOf(boxOwnerId));
         message.setBoxOwnerSeq(String.valueOf(boxOwnerSeq));
         message.setMessageType(this.type());
-        message.setData(Json.toJson(this));
+        message.setData(Json.toJson(this.fixUrl()));
         return message;
     }
 }
