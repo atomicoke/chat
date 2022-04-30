@@ -116,7 +116,7 @@ public class ChatMessageResp implements MessageResp {
         message.setBoxOwnerId(String.valueOf(boxOwnerId));
         message.setBoxOwnerSeq(String.valueOf(boxOwnerSeq));
         message.setMessageType(this.type());
-        message.setData(Json.toJson(this.fixUrl()));
+        message.setBody(Json.toJson(this.fixUrl()));
         return message;
     }
 }
