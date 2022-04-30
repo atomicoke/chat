@@ -4,7 +4,6 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 import org.atomicoke.inf.common.contants.ChatConst;
-import org.atomicoke.inf.common.util.Json;
 import org.atomicoke.logic.msg.domain.model.Message;
 
 import java.time.LocalDateTime;
@@ -100,7 +99,7 @@ public class ContactMessageResp implements MessageResp {
         message.setBoxOwnerId(String.valueOf(boxOwnerId));
         message.setBoxOwnerSeq(String.valueOf(boxOwnerSeq));
         message.setMessageType(this.type());
-        message.setBody(Json.toJson(this));
+        message.setBody(this);
         return message;
     }
 }

@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 import org.atomicoke.inf.common.contants.ChatConst;
-import org.atomicoke.inf.common.util.Json;
 import org.atomicoke.inf.common.web.model.UserInfo;
 import org.atomicoke.inf.middleware.minio.Minio;
 import org.atomicoke.logic.modules.chathistory.domain.entity.ChatHistory;
@@ -116,7 +115,7 @@ public class ChatMessageResp implements MessageResp {
         message.setBoxOwnerId(String.valueOf(boxOwnerId));
         message.setBoxOwnerSeq(String.valueOf(boxOwnerSeq));
         message.setMessageType(this.type());
-        message.setBody(Json.toJson(this.fixUrl()));
+        message.setBody(this.fixUrl());
         return message;
     }
 }

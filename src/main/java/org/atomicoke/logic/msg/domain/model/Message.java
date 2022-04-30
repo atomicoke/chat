@@ -27,7 +27,7 @@ public class Message implements Serializable {
     /**
      * 数据
      */
-    private String body;
+    private Object body;
 
     /**
      * 通知类型
