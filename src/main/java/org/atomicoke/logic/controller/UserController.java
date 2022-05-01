@@ -6,8 +6,10 @@ import org.atomicoke.inf.common.web.model.Rest;
 import org.atomicoke.inf.common.web.model.RoleConstant;
 import org.atomicoke.inf.common.web.model.UserInfo;
 import org.atomicoke.logic.modules.user.domain.model.EditUserInfoReq;
+import org.atomicoke.logic.modules.user.domain.model.vo.BasicInfoVO;
 import org.atomicoke.logic.modules.user.service.UserService;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +25,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/user")
 public class UserController {
+
     private final UserService userService;
 
     /**
@@ -66,4 +69,14 @@ public class UserController {
         return Rest.of(userService.getUserInfo());
     }
 
+    /**
+     * 获取用户的基本信息
+     *
+     * @param userId 用户id
+     * @return {@link Rest }<{@link BasicInfoVO }>
+     */
+    @GetMapping("basicInfo/{userId}")
+    public Rest<BasicInfoVO> basicInfo(@PathVariable final Long userId) {
+        return Rest.of(userService.basicInfo(userId));
+    }
 }

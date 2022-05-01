@@ -3,6 +3,7 @@ package org.atomicoke.logic.modules.user.domain.dao;
 import org.atomicoke.inf.middleware.db.BaseRepo;
 import org.atomicoke.logic.modules.user.domain.dao.mapper.UserMapper;
 import org.atomicoke.logic.modules.user.domain.entity.User;
+import org.atomicoke.logic.modules.user.domain.model.vo.BasicInfoVO;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -25,5 +26,9 @@ public class UserRepo extends BaseRepo<UserMapper, User> {
 
     public User findOne(final Long id) {
         return super.getById(id);
+    }
+
+    public BasicInfoVO basicInfo(final Long userId) {
+        return this.baseMapper.basicInfo(userId);
     }
 }

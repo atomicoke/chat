@@ -3,14 +3,14 @@ package org.atomicoke.fzdwx;
 import cn.hutool.core.img.ImgUtil;
 import cn.hutool.http.HttpUtil;
 import io.github.fzdwx.lambada.lang.StopWatch;
-import org.atomicoke.logic.modules.msg.ws.WsPacket;
+import org.atomicoke.logic.modules.msg.WsPacket;
 import org.junit.jupiter.api.Test;
 
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
 
 /**
- * @author <a href="mailto:likelovec@gmail.com">韦朕</a>
+ * @author <a href="mailto:likelovec@gmail.com">fzdwx</a>
  * @date 2022/4/7 14:02
  */
 public class PacketTest {

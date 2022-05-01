@@ -1,4 +1,4 @@
-package org.atomicoke.logic.modules.msg.ws;
+package org.atomicoke.logic.modules.msg;
 
 import cn.hutool.extra.spring.SpringUtil;
 import io.github.fzdwx.inf.msg.WebSocket;
@@ -13,12 +13,12 @@ import org.atomicoke.inf.common.util.Json;
 import org.atomicoke.inf.common.web.model.UserInfo;
 import org.atomicoke.inf.middleware.redis.Redis;
 import org.atomicoke.logic.modules.msg.domain.resp.MessageResp;
-import org.atomicoke.logic.modules.msg.ws.handler.ChatMessagePacketHandler;
-import org.atomicoke.logic.modules.msg.ws.packet.chat.ChatMessagePacket;
-import org.atomicoke.logic.modules.msg.ws.packet.chat.ReplayPacket;
-import org.atomicoke.logic.modules.msg.ws.packet.status.ErrorPacket;
-import org.atomicoke.logic.modules.msg.ws.packet.status.NotifyPacket;
-import org.atomicoke.logic.modules.msg.ws.packet.status.SuccessPacket;
+import org.atomicoke.logic.modules.msg.handler.ChatMessagePacketHandler;
+import org.atomicoke.logic.modules.msg.packet.chat.ChatMessagePacket;
+import org.atomicoke.logic.modules.msg.packet.chat.ReplayPacket;
+import org.atomicoke.logic.modules.msg.packet.status.ErrorPacket;
+import org.atomicoke.logic.modules.msg.packet.status.NotifyPacket;
+import org.atomicoke.logic.modules.msg.packet.status.SuccessPacket;
 
 import javax.annotation.Nullable;
 import java.time.Duration;
@@ -28,7 +28,7 @@ import java.util.Map;
 /**
  * websocket packet.
  *
- * @author <a href="mailto:likelovec@gmail.com">韦朕</a>
+ * @author <a href="mailto:likelovec@gmail.com">fzdwx</a>
  * @date 2022/4/7 11:20
  */
 @Slf4j

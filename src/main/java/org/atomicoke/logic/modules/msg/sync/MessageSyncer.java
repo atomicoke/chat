@@ -3,7 +3,7 @@ package org.atomicoke.logic.modules.msg.sync;
 import cn.hutool.extra.spring.SpringUtil;
 import org.atomicoke.inf.middleware.redis.Redis;
 import org.atomicoke.logic.modules.msg.domain.model.Message;
-import org.atomicoke.logic.modules.msg.ws.packet.chat.ReplayPacket;
+import org.atomicoke.logic.modules.msg.packet.chat.ReplayPacket;
 import org.atomicoke.logic.modules.msg.domain.resp.ChatMessageResp;
 import org.atomicoke.logic.modules.msg.domain.model.MessageSyncReq;
 import org.atomicoke.logic.modules.msg.domain.model.MessageSyncResp;
@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * 用于消息同步.
  *
- * @author <a href="mailto:likelovec@gmail.com">韦朕</a>
+ * @author <a href="mailto:likelovec@gmail.com">fzdwx</a>
  * @date 2022/4/12 15:48
  */
 @Component

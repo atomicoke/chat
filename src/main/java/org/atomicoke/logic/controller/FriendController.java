@@ -6,7 +6,10 @@ import org.atomicoke.inf.common.web.model.Rest;
 import org.atomicoke.inf.common.web.model.UserInfo;
 import org.atomicoke.logic.modules.friend.domain.model.FriendApplyReq;
 import org.atomicoke.logic.modules.friend.domain.model.FriendHandleReq;
+import org.atomicoke.logic.modules.friend.domain.model.vo.FriendInfoVO;
 import org.atomicoke.logic.modules.friend.service.FriendService;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -59,5 +62,16 @@ public class FriendController {
     public Rest<?> delete(UserInfo userInfo) {
         //todo 删除好友
         return Rest.success();
+    }
+
+    /**
+     * 获取好友信息
+     *
+     * @param friendId 好友id
+     * @return {@link Rest }<{@link String }>
+     */
+    @GetMapping("info/{friendId}")
+    public Rest<FriendInfoVO> info(UserInfo userInfo, @PathVariable final Long friendId) {
+        return Rest.of(friendService.info(userInfo.getIdLong(),friendId));
     }
 }

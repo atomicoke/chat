@@ -27,7 +27,7 @@ public class MessageSyncReq {
      */
     private int limit;
 
-    private static final int maxLimit = 1000;
+    private static final int maxLimit = 5000;
 
     public Query toQuery() {
         final var criteria = Criteria.where("boxOwnerId").is(this.userId).and("boxOwnerSeq").gt(this.startSeq);

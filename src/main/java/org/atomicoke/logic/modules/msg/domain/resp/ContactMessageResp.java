@@ -28,15 +28,6 @@ public class ContactMessageResp implements MessageResp {
      */
     private String fromId = String.valueOf(ChatConst.Sys.SYS_ID);
     /**
-     * 消息发送人用户名
-     */
-    private String fromUname = ChatConst.Sys.SYS_NAME;
-    /**
-     * 消息发送人头像
-     */
-    //todo 系统头像
-    private String fromAvatar;
-    /**
      * 实际接收人id
      */
     private String toId;
@@ -77,16 +68,6 @@ public class ContactMessageResp implements MessageResp {
          * 操作人id
          */
         private String operatorId;
-
-        /**
-         * 操作人头像
-         */
-        private String operatorAvatar;
-
-        /**
-         * 操作人昵称
-         */
-        private String operatorNickName;
 
         /**
          * 携带的申请信息

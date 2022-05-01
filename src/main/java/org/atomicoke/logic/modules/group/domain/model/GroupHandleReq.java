@@ -40,8 +40,6 @@ public class GroupHandleReq implements Serializable {
         resp.setHandlerResult(this.getHandlerResult());
         ContactMessageResp.Content msg = new ContactMessageResp.Content();
         msg.setOperatorId(userInfo.getId());
-        msg.setOperatorAvatar(userInfo.getAvatar());
-        msg.setOperatorNickName(userInfo.getNickName());
         resp.setContent(msg);
         return resp;
     }

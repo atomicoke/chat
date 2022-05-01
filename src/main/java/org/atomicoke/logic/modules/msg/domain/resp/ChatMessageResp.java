@@ -9,7 +9,7 @@ import org.atomicoke.inf.common.web.model.UserInfo;
 import org.atomicoke.inf.middleware.minio.Minio;
 import org.atomicoke.logic.modules.chathistory.domain.entity.ChatHistory;
 import org.atomicoke.logic.modules.msg.domain.model.Message;
-import org.atomicoke.logic.modules.msg.ws.packet.chat.ChatMessagePacket;
+import org.atomicoke.logic.modules.msg.packet.chat.ChatMessagePacket;
 
 import java.time.LocalDateTime;
 
@@ -32,14 +32,6 @@ public class ChatMessageResp implements MessageResp {
      * 消息发送人id
      */
     private String fromId;
-    /**
-     * 发送人昵称
-     */
-    private String fromNickName;
-    /**
-     * 消息发送人头像
-     */
-    private String fromAvatar;
     /**
      * 根据sessionType有不同的含义
      * {@link ChatConst.SessionType#single} 实际接收人id
@@ -100,8 +92,6 @@ public class ChatMessageResp implements MessageResp {
         final var resp = new ChatMessageResp();
         resp.setChatId(String.valueOf(chatHistory.getId()));
         resp.setFromId(userInfo.getId());
-        resp.setFromNickName(userInfo.getNickName());
-        resp.setFromAvatar(userInfo.getAvatar());
         resp.setToId(String.valueOf(chatHistory.getToId()));
         resp.setSessionType(packet.getSessionType());
         resp.setMsgFrom(packet.getMsgFrom());

@@ -1,4 +1,4 @@
-package org.atomicoke.logic.modules.msg.ws.handler;
+package org.atomicoke.logic.modules.msg.handler;
 
 import io.github.fzdwx.lambada.Lang;
 import io.github.fzdwx.lambada.Seq;
@@ -12,17 +12,17 @@ import org.atomicoke.logic.config.ProjectProps;
 import org.atomicoke.logic.modules.chathistory.domain.dao.ChatHistoryRepo;
 import org.atomicoke.logic.modules.chathistory.domain.entity.ChatHistory;
 import org.atomicoke.logic.modules.msg.domain.model.Message;
-import org.atomicoke.logic.modules.msg.ws.UserWsConn;
-import org.atomicoke.logic.modules.msg.ws.packet.chat.ChatMessagePacket;
+import org.atomicoke.logic.modules.msg.UserWsConn;
+import org.atomicoke.logic.modules.msg.packet.chat.ChatMessagePacket;
 import org.atomicoke.logic.modules.msg.domain.resp.ChatMessageResp;
 import org.atomicoke.logic.modules.msg.sync.MessageSyncer;
-import org.atomicoke.logic.modules.msg.ws.WsPacket;
+import org.atomicoke.logic.modules.msg.WsPacket;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 
 /**
- * @author <a href="mailto:likelovec@gmail.com">韦朕</a>
+ * @author <a href="mailto:likelovec@gmail.com">fzdwx</a>
  * @date 2022/4/8 17:19
  */
 @Slf4j

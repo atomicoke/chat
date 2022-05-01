@@ -17,8 +17,8 @@ import org.atomicoke.logic.modules.user.domain.dao.UserRepo;
 import org.atomicoke.logic.modules.user.domain.entity.User;
 import org.atomicoke.logic.modules.msg.domain.resp.ContactMessageResp;
 import org.atomicoke.logic.modules.msg.sync.MessageSyncer;
-import org.atomicoke.logic.modules.msg.ws.UserWsConn;
-import org.atomicoke.logic.modules.msg.ws.WsPacket;
+import org.atomicoke.logic.modules.msg.UserWsConn;
+import org.atomicoke.logic.modules.msg.WsPacket;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
