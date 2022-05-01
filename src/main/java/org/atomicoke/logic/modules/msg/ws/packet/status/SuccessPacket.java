@@ -1,10 +1,10 @@
-package org.atomicoke.logic.msg.ws.packet.status;
+package org.atomicoke.logic.modules.msg.ws.packet.status;
 
 import io.github.fzdwx.inf.msg.WebSocket;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.atomicoke.inf.common.web.model.Rest;
-import org.atomicoke.logic.msg.ws.WsPacket;
+import org.atomicoke.logic.modules.msg.ws.WsPacket;
 
 @EqualsAndHashCode(callSuper = true)
 @Data

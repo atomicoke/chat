@@ -1,4 +1,4 @@
-package org.atomicoke.logic.msg.ws.endpoint;
+package org.atomicoke.logic.modules.msg.ws.endpoint;
 
 import cn.dev33.satoken.stp.StpUtil;
 import io.github.fzdwx.inf.http.core.HttpHandler;
@@ -7,8 +7,8 @@ import io.github.fzdwx.inf.http.core.HttpServerResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.atomicoke.inf.common.web.Web;
 import org.atomicoke.inf.middleware.sky.Ws;
-import org.atomicoke.logic.msg.ws.UserWsConn;
-import org.atomicoke.logic.msg.ws.WsPacket;
+import org.atomicoke.logic.modules.msg.ws.UserWsConn;
+import org.atomicoke.logic.modules.msg.ws.WsPacket;
 
 /**
  * @author <a href="mailto:likelovec@gmail.com">fzdwx</a>

@@ -1,4 +1,4 @@
-package org.atomicoke.logic.msg.domain.resp;
+package org.atomicoke.logic.modules.msg.domain.resp;
 
 /**
  * @author oneIdler

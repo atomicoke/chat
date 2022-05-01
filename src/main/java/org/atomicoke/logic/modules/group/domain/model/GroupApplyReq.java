@@ -5,7 +5,7 @@ import lombok.Data;
 import org.atomicoke.inf.common.contants.ChatConst;
 import org.atomicoke.inf.common.web.model.UserInfo;
 import org.atomicoke.logic.modules.group.domain.entity.GroupChatRequest;
-import org.atomicoke.logic.msg.domain.resp.ContactMessageResp;
+import org.atomicoke.logic.modules.msg.domain.resp.ContactMessageResp;
 
 import java.time.LocalDateTime;
 

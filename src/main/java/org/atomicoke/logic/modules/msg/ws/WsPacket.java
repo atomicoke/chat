@@ -1,4 +1,4 @@
-package org.atomicoke.logic.msg.ws;
+package org.atomicoke.logic.modules.msg.ws;
 
 import cn.hutool.extra.spring.SpringUtil;
 import io.github.fzdwx.inf.msg.WebSocket;
@@ -12,13 +12,13 @@ import org.atomicoke.inf.common.err.Err;
 import org.atomicoke.inf.common.util.Json;
 import org.atomicoke.inf.common.web.model.UserInfo;
 import org.atomicoke.inf.middleware.redis.Redis;
-import org.atomicoke.logic.msg.domain.resp.MessageResp;
-import org.atomicoke.logic.msg.ws.handler.ChatMessagePacketHandler;
-import org.atomicoke.logic.msg.ws.packet.chat.ChatMessagePacket;
-import org.atomicoke.logic.msg.ws.packet.chat.ReplayPacket;
-import org.atomicoke.logic.msg.ws.packet.status.ErrorPacket;
-import org.atomicoke.logic.msg.ws.packet.status.NotifyPacket;
-import org.atomicoke.logic.msg.ws.packet.status.SuccessPacket;
+import org.atomicoke.logic.modules.msg.domain.resp.MessageResp;
+import org.atomicoke.logic.modules.msg.ws.handler.ChatMessagePacketHandler;
+import org.atomicoke.logic.modules.msg.ws.packet.chat.ChatMessagePacket;
+import org.atomicoke.logic.modules.msg.ws.packet.chat.ReplayPacket;
+import org.atomicoke.logic.modules.msg.ws.packet.status.ErrorPacket;
+import org.atomicoke.logic.modules.msg.ws.packet.status.NotifyPacket;
+import org.atomicoke.logic.modules.msg.ws.packet.status.SuccessPacket;
 
 import javax.annotation.Nullable;
 import java.time.Duration;

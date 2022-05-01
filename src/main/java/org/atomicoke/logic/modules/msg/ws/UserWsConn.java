@@ -1,4 +1,4 @@
-package org.atomicoke.logic.msg.ws;
+package org.atomicoke.logic.modules.msg.ws;
 
 import io.github.fzdwx.inf.msg.WebSocket;
 import io.github.fzdwx.lambada.Lang;

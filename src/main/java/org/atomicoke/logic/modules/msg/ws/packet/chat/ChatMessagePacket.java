@@ -1,4 +1,4 @@
-package org.atomicoke.logic.msg.ws.packet.chat;
+package org.atomicoke.logic.modules.msg.ws.packet.chat;
 
 import io.github.fzdwx.lambada.Lang;
 import io.netty.channel.ChannelFuture;
@@ -9,7 +9,7 @@ import org.atomicoke.inf.common.contants.ChatConst;
 import org.atomicoke.inf.common.err.Err;
 import org.atomicoke.inf.common.web.model.UserInfo;
 import org.atomicoke.logic.modules.chathistory.domain.entity.ChatHistory;
-import org.atomicoke.logic.msg.ws.WsPacket;
+import org.atomicoke.logic.modules.msg.ws.WsPacket;
 
 import java.time.LocalDateTime;
 import java.util.List;

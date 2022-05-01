@@ -1,4 +1,4 @@
-package org.atomicoke.logic.msg.ws.handler;
+package org.atomicoke.logic.modules.msg.ws.handler;
 
 import io.github.fzdwx.lambada.Lang;
 import io.github.fzdwx.lambada.Seq;
@@ -11,12 +11,12 @@ import org.atomicoke.inf.middleware.id.IdGenerate;
 import org.atomicoke.logic.config.ProjectProps;
 import org.atomicoke.logic.modules.chathistory.domain.dao.ChatHistoryRepo;
 import org.atomicoke.logic.modules.chathistory.domain.entity.ChatHistory;
-import org.atomicoke.logic.msg.domain.model.Message;
-import org.atomicoke.logic.msg.domain.resp.ChatMessageResp;
-import org.atomicoke.logic.msg.sync.MessageSyncer;
-import org.atomicoke.logic.msg.ws.UserWsConn;
-import org.atomicoke.logic.msg.ws.WsPacket;
-import org.atomicoke.logic.msg.ws.packet.chat.ChatMessagePacket;
+import org.atomicoke.logic.modules.msg.domain.model.Message;
+import org.atomicoke.logic.modules.msg.ws.UserWsConn;
+import org.atomicoke.logic.modules.msg.ws.packet.chat.ChatMessagePacket;
+import org.atomicoke.logic.modules.msg.domain.resp.ChatMessageResp;
+import org.atomicoke.logic.modules.msg.sync.MessageSyncer;
+import org.atomicoke.logic.modules.msg.ws.WsPacket;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;

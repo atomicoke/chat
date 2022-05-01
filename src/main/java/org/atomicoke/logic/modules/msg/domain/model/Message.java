@@ -1,4 +1,4 @@
-package org.atomicoke.logic.msg.domain.model;
+package org.atomicoke.logic.modules.msg.domain.model;
 
 import lombok.Data;
 import org.atomicoke.inf.common.util.Json;

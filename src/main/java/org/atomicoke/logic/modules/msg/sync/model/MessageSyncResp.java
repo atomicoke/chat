@@ -1,7 +1,8 @@
-package org.atomicoke.logic.msg.sync.model;
+package org.atomicoke.logic.modules.msg.sync.model;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.atomicoke.logic.modules.msg.domain.model.Message;
 
 import java.util.List;
 
@@ -11,9 +12,9 @@ import java.util.List;
  */
 @Data
 @RequiredArgsConstructor(staticName = "of")
-public class NotifySyncResp {
+public class MessageSyncResp {
 
-    private final List<String> notifies;
+    private final List<Message> messages;
 
     private final String maxSeq;
 }

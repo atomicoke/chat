@@ -1,4 +1,4 @@
-package org.atomicoke.logic.msg.domain.resp;
+package org.atomicoke.logic.modules.msg.domain.resp;
 
 import io.github.fzdwx.lambada.Lang;
 import lombok.Data;
@@ -8,8 +8,8 @@ import org.atomicoke.inf.common.contants.ChatConst;
 import org.atomicoke.inf.common.web.model.UserInfo;
 import org.atomicoke.inf.middleware.minio.Minio;
 import org.atomicoke.logic.modules.chathistory.domain.entity.ChatHistory;
-import org.atomicoke.logic.msg.domain.model.Message;
-import org.atomicoke.logic.msg.ws.packet.chat.ChatMessagePacket;
+import org.atomicoke.logic.modules.msg.domain.model.Message;
+import org.atomicoke.logic.modules.msg.ws.packet.chat.ChatMessagePacket;
 
 import java.time.LocalDateTime;
 

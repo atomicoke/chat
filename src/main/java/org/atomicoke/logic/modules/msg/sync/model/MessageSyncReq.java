@@ -1,4 +1,4 @@
-package org.atomicoke.logic.msg.sync.model;
+package org.atomicoke.logic.modules.msg.sync.model;
 
 import lombok.Data;
 import org.springframework.data.domain.Sort;

@@ -13,10 +13,10 @@ import org.atomicoke.logic.modules.friend.domain.entity.Friend;
 import org.atomicoke.logic.modules.friend.domain.entity.FriendRequest;
 import org.atomicoke.logic.modules.friend.domain.model.FriendApplyReq;
 import org.atomicoke.logic.modules.friend.domain.model.FriendHandleReq;
-import org.atomicoke.logic.msg.domain.resp.ContactMessageResp;
-import org.atomicoke.logic.msg.sync.MessageSyncer;
-import org.atomicoke.logic.msg.ws.UserWsConn;
-import org.atomicoke.logic.msg.ws.WsPacket;
+import org.atomicoke.logic.modules.msg.domain.resp.ContactMessageResp;
+import org.atomicoke.logic.modules.msg.sync.MessageSyncer;
+import org.atomicoke.logic.modules.msg.ws.UserWsConn;
+import org.atomicoke.logic.modules.msg.ws.WsPacket;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
