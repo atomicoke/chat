@@ -3,7 +3,10 @@ package org.atomicoke.logic.modules.user.domain.dao.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
 import org.atomicoke.logic.modules.user.domain.entity.User;
+import org.atomicoke.logic.modules.user.domain.model.req.SearchUserReq;
 import org.atomicoke.logic.modules.user.domain.model.vo.BasicInfoVO;
+
+import java.util.List;
 
 /**
  * @author 98065
@@ -14,4 +17,6 @@ import org.atomicoke.logic.modules.user.domain.model.vo.BasicInfoVO;
 public interface UserMapper extends BaseMapper<User> {
 
     BasicInfoVO basicInfo(@Param("userId") Long userId);
+
+    List<BasicInfoVO> search(@Param("req") SearchUserReq req);
 }

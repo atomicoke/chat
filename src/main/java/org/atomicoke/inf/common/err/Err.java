@@ -50,4 +50,8 @@ public class Err extends RuntimeException {
     public static void thrVerify(final String message) {
         throw verify(message);
     }
+
+    public static IllegalArgumentException illegalArgument(final String message) {
+        return new IllegalArgumentException(message);
+    }
 }

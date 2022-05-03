@@ -3,8 +3,11 @@ package org.atomicoke.logic.modules.user.domain.dao;
 import org.atomicoke.inf.middleware.db.BaseRepo;
 import org.atomicoke.logic.modules.user.domain.dao.mapper.UserMapper;
 import org.atomicoke.logic.modules.user.domain.entity.User;
+import org.atomicoke.logic.modules.user.domain.model.req.SearchUserReq;
 import org.atomicoke.logic.modules.user.domain.model.vo.BasicInfoVO;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * UserDaoImpl: 数据操作接口实现
@@ -30,5 +33,9 @@ public class UserRepo extends BaseRepo<UserMapper, User> {
 
     public BasicInfoVO basicInfo(final Long userId) {
         return this.baseMapper.basicInfo(userId);
+    }
+
+    public List<BasicInfoVO> search(final SearchUserReq req) {
+        return this.baseMapper.search(req);
     }
 }

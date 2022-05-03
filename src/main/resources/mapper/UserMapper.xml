@@ -42,4 +42,20 @@
         from user a
         where a.id = #{userId}
     </select>
+
+    <select id="search" resultType="org.atomicoke.logic.modules.user.domain.model.vo.BasicInfoVO">
+        select a.id as userId,
+               a.nick_name,
+               a.avatar,
+               a.gender
+        from user a
+        <where>
+            <if test="req.uname != null and req.uname != ''">
+                a.uname = #{req.uname}
+            </if>
+            <if test="req.mobile != null">
+                and a.mobile = #{req.mobile}
+            </if>
+        </where>
+    </select>
 </mapper>

@@ -12,6 +12,7 @@ import org.atomicoke.logic.modules.user.domain.entity.User;
 import org.atomicoke.logic.modules.user.domain.model.EditUserInfoReq;
 import org.atomicoke.logic.modules.user.domain.model.SingInReq;
 import org.atomicoke.logic.modules.user.domain.model.SingUpReq;
+import org.atomicoke.logic.modules.user.domain.model.req.SearchUserReq;
 import org.atomicoke.logic.modules.user.domain.model.vo.BasicInfoVO;
 import org.springframework.stereotype.Service;
 
@@ -103,5 +104,13 @@ public class UserService {
 
         basicInfo.fixAvatar();
         return basicInfo;
+    }
+
+    public List<BasicInfoVO> search(final SearchUserReq req) {
+        req.preCheck();
+
+        final var search = this.userDao.search(req);
+        search.forEach(BasicInfoVO::fixAvatar);
+        return search;
     }
 }

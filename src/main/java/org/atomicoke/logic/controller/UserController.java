@@ -6,6 +6,7 @@ import org.atomicoke.inf.common.web.model.Rest;
 import org.atomicoke.inf.common.web.model.RoleConstant;
 import org.atomicoke.inf.common.web.model.UserInfo;
 import org.atomicoke.logic.modules.user.domain.model.EditUserInfoReq;
+import org.atomicoke.logic.modules.user.domain.model.req.SearchUserReq;
 import org.atomicoke.logic.modules.user.domain.model.vo.BasicInfoVO;
 import org.atomicoke.logic.modules.user.service.UserService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +28,17 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+
+    /**
+     * 搜索(只能根据uname 或 手机号 精确搜索)
+     *
+     * @param req req
+     * @return {@link Rest }<{@link List }<{@link BasicInfoVO }>>
+     */
+    @GetMapping("search")
+    public Rest<List<BasicInfoVO>> search(SearchUserReq req) {
+        return Rest.of(userService.search(req));
+    }
 
     /**
      * 获取所有用户信息
