@@ -3,8 +3,11 @@ package org.atomicoke.logic.modules.friend.domain.dao;
 import org.atomicoke.inf.middleware.db.BaseRepo;
 import org.atomicoke.logic.modules.friend.domain.dao.mapper.FriendMapper;
 import org.atomicoke.logic.modules.friend.domain.entity.Friend;
+import org.atomicoke.logic.modules.friend.domain.model.req.SyncFriendReq;
 import org.atomicoke.logic.modules.friend.domain.model.vo.FriendInfoVO;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * @author <a href="mailto:likelovec@gmail.com">fzdwx</a>
@@ -30,5 +33,9 @@ public class FriendRepo extends BaseRepo<FriendMapper, Friend> {
 
     public FriendInfoVO info(final Long ownerId, final Long friendId) {
         return this.baseMapper.info(ownerId,friendId);
+    }
+
+    public List<FriendInfoVO> sync(final SyncFriendReq req) {
+        return this.baseMapper.sync(req);
     }
 }

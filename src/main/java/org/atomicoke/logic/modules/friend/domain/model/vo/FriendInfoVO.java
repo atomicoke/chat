@@ -1,8 +1,12 @@
 package org.atomicoke.logic.modules.friend.domain.model.vo;
 
+import cn.hutool.core.date.DatePattern;
+import com.alibaba.fastjson2.annotation.JSONField;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.atomicoke.inf.common.UserAvatarFixer;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 
@@ -57,6 +61,9 @@ public class FriendInfoVO implements UserAvatarFixer {
     /**
      * 添加时间
      */
+    @DateTimeFormat(pattern = DatePattern.NORM_DATETIME_PATTERN)
+    @JsonFormat(pattern = DatePattern.NORM_DATETIME_PATTERN)
+    @JSONField(format = DatePattern.NORM_DATETIME_PATTERN)
     private LocalDateTime addTime;
 
     @Override

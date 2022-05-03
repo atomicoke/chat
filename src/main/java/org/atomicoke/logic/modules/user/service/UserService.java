@@ -110,6 +110,10 @@ public class UserService {
         req.preCheck();
 
         final var search = this.userDao.search(req);
+        if (Lang.isEmpty(search)) {
+            return search;
+        }
+
         search.forEach(BasicInfoVO::fixAvatar);
         return search;
     }

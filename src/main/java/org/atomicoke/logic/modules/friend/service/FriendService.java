@@ -13,6 +13,7 @@ import org.atomicoke.logic.modules.friend.domain.entity.Friend;
 import org.atomicoke.logic.modules.friend.domain.entity.FriendRequest;
 import org.atomicoke.logic.modules.friend.domain.model.FriendApplyReq;
 import org.atomicoke.logic.modules.friend.domain.model.FriendHandleReq;
+import org.atomicoke.logic.modules.friend.domain.model.req.SyncFriendReq;
 import org.atomicoke.logic.modules.friend.domain.model.vo.FriendInfoVO;
 import org.atomicoke.logic.modules.msg.UserWsConn;
 import org.atomicoke.logic.modules.msg.WsPacket;
@@ -93,6 +94,16 @@ public class FriendService {
 
         friendInfoVO.fixAvatar();
         return friendInfoVO;
+    }
+
+    public List<FriendInfoVO> sync(final SyncFriendReq req) {
+        final var list = this.friendDao.sync(req);
+        if (Lang.isEmpty(list)) {
+            return list;
+        }
+
+        list.forEach(FriendInfoVO::fixAvatar);
+        return list;
     }
 
     /**

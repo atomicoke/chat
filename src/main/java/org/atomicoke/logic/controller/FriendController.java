@@ -6,6 +6,7 @@ import org.atomicoke.inf.common.web.model.Rest;
 import org.atomicoke.inf.common.web.model.UserInfo;
 import org.atomicoke.logic.modules.friend.domain.model.FriendApplyReq;
 import org.atomicoke.logic.modules.friend.domain.model.FriendHandleReq;
+import org.atomicoke.logic.modules.friend.domain.model.req.SyncFriendReq;
 import org.atomicoke.logic.modules.friend.domain.model.vo.FriendInfoVO;
 import org.atomicoke.logic.modules.friend.service.FriendService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * 好友
@@ -27,6 +30,21 @@ import org.springframework.web.bind.annotation.RestController;
 public class FriendController {
 
     private final FriendService friendService;
+
+
+    /**
+     * 同步好友信息(如果传入updateTime,则只同步指定更新时间后的好友信息)
+     *
+     * @param userInfo 用户信息
+     * @param req      req
+     * @return {@link Rest }<{@link List }<{@link FriendInfoVO }>>
+     */
+    @PostMapping("sync")
+    public Rest<List<FriendInfoVO>> sync(UserInfo userInfo,@RequestBody  SyncFriendReq req) {
+        req.setUserId(userInfo.getIdLong());
+
+        return Rest.of(friendService.sync(req));
+    }
 
     /**
      * 好友申请
@@ -72,6 +90,6 @@ public class FriendController {
      */
     @GetMapping("info/{friendId}")
     public Rest<FriendInfoVO> info(UserInfo userInfo, @PathVariable final Long friendId) {
-        return Rest.of(friendService.info(userInfo.getIdLong(),friendId));
+        return Rest.of(friendService.info(userInfo.getIdLong(), friendId));
     }
 }

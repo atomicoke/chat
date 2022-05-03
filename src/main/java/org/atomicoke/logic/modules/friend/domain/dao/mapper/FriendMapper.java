@@ -3,7 +3,10 @@ package org.atomicoke.logic.modules.friend.domain.dao.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
 import org.atomicoke.logic.modules.friend.domain.entity.Friend;
+import org.atomicoke.logic.modules.friend.domain.model.req.SyncFriendReq;
 import org.atomicoke.logic.modules.friend.domain.model.vo.FriendInfoVO;
+
+import java.util.List;
 
 /**
  * @author 98065
@@ -14,4 +17,6 @@ import org.atomicoke.logic.modules.friend.domain.model.vo.FriendInfoVO;
 public interface FriendMapper extends BaseMapper<Friend> {
 
     FriendInfoVO info(final @Param("ownerId") Long ownerId, @Param("friendId") Long friendId);
+
+    List<FriendInfoVO> sync(SyncFriendReq req);
 }

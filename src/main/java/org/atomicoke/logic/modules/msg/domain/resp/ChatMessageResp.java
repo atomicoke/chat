@@ -1,5 +1,8 @@
 package org.atomicoke.logic.modules.msg.domain.resp;
 
+import cn.hutool.core.date.DatePattern;
+import com.alibaba.fastjson2.annotation.JSONField;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.github.fzdwx.lambada.Lang;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -10,6 +13,7 @@ import org.atomicoke.inf.middleware.minio.Minio;
 import org.atomicoke.logic.modules.chathistory.domain.entity.ChatHistory;
 import org.atomicoke.logic.modules.msg.domain.model.Message;
 import org.atomicoke.logic.modules.msg.packet.chat.ChatMessagePacket;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 
@@ -49,7 +53,11 @@ public class ChatMessageResp implements MessageResp {
     /**
      * 发送时间
      */
+    @DateTimeFormat(pattern = DatePattern.NORM_DATETIME_PATTERN)
+    @JsonFormat(pattern = DatePattern.NORM_DATETIME_PATTERN)
+    @JSONField(format = DatePattern.NORM_DATETIME_PATTERN)
     private LocalDateTime sendTime;
+
     private ChatMessage chatMessage;
 
     @Override
