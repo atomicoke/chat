@@ -42,7 +42,6 @@ class UserApiTest {
                     ContactMessageResp resp = new ContactMessageResp();
                     resp.setContactType(11001);
                     resp.setFromId("0");
-                    resp.setFromUname("系统");
                     resp.setRequestId("123123123");
                     resp.setHandlerTime(LocalDateTime.now());
                     resp.setMsgFrom(2);
