@@ -25,6 +25,27 @@
         update_time,
         del_flag
     </sql>
+    <insert id="insertOrUpdate">
+        insert into friend
+        (id,
+         owner_id,
+         friend_id,
+         remark,
+         add_way,
+         add_time,
+         update_time)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.id},#{item.ownerId},#{item.friendId},#{item.remark},
+            #{item.addWay},#{item.addTime},#{item.updateTime})
+        </foreach>
+        on duplicate key update
+        remark = values(remark),
+        add_way = values(add_way),
+        add_time = values(add_time),
+        update_time = values(update_time),
+        del_flag = 0
+    </insert>
 
     <select id="info" resultType="org.atomicoke.logic.modules.friend.domain.model.vo.FriendInfoVO">
         select f.owner_id,

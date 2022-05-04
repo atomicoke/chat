@@ -12,7 +12,6 @@ import org.atomicoke.inf.common.err.Err;
 import org.atomicoke.inf.common.util.Json;
 import org.atomicoke.inf.common.web.model.UserInfo;
 import org.atomicoke.inf.middleware.redis.Redis;
-import org.atomicoke.logic.modules.msg.domain.resp.MessageResp;
 import org.atomicoke.logic.modules.msg.handler.ChatMessagePacketHandler;
 import org.atomicoke.logic.modules.msg.packet.chat.ChatMessagePacket;
 import org.atomicoke.logic.modules.msg.packet.chat.ReplayPacket;
@@ -82,8 +81,8 @@ public abstract class WsPacket {
     /**
      * new a success packet.
      */
-    public static <OUT extends MessageResp> NotifyPacket<OUT> newNotifyPacket(OUT data) {
-        return new NotifyPacket<>(data, data.type());
+    public static <OUT> NotifyPacket<OUT> newNotifyPacket(OUT data, String notifyType) {
+        return new NotifyPacket<>(data, notifyType);
     }
 
     public static ReplayPacket newReplayChatPacket(ReplayPacket.Data data, WsPacket packet) {
