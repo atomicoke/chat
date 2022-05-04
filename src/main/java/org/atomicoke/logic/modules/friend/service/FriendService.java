@@ -13,10 +13,12 @@ import org.atomicoke.logic.modules.friend.domain.entity.Friend;
 import org.atomicoke.logic.modules.friend.domain.entity.FriendRequest;
 import org.atomicoke.logic.modules.friend.domain.model.FriendApplyReq;
 import org.atomicoke.logic.modules.friend.domain.model.FriendHandleReq;
-import org.atomicoke.logic.msg.domain.resp.ContactMessageResp;
-import org.atomicoke.logic.msg.sync.MessageSyncer;
-import org.atomicoke.logic.msg.ws.UserWsConn;
-import org.atomicoke.logic.msg.ws.WsPacket;
+import org.atomicoke.logic.modules.friend.domain.model.req.SyncFriendReq;
+import org.atomicoke.logic.modules.friend.domain.model.vo.FriendInfoVO;
+import org.atomicoke.logic.modules.msg.UserWsConn;
+import org.atomicoke.logic.modules.msg.WsPacket;
+import org.atomicoke.logic.modules.msg.domain.resp.ContactMessageResp;
+import org.atomicoke.logic.modules.msg.sync.MessageSyncer;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -63,6 +65,7 @@ public class FriendService {
      */
     @Transactional(rollbackFor = Exception.class)
     public void handle(UserInfo userInfo, FriendHandleReq req) {
+        // TODO 这里要判断apply_id 不能等于 userInfo.id
         if (!friendRequestDao.updateResult(req.getRequestId(), req.getHandlerResult())) {
             return;
         }
@@ -76,6 +79,31 @@ public class FriendService {
         }
 
         push(applyId, req.ofResp(req.getRequestId(), applyId, userInfo));
+    }
+
+    /**
+     * 获取好友信息
+     *
+     * @param ownerId  所有者id
+     * @param friendId 朋友id
+     * @return {@link FriendInfoVO }
+     */
+    public FriendInfoVO info(final Long ownerId, final Long friendId) {
+        final var friendInfoVO = friendDao.info(ownerId, friendId);
+        Assert.notNull(friendInfoVO, "好友不存在!");
+
+        friendInfoVO.fixAvatar();
+        return friendInfoVO;
+    }
+
+    public List<FriendInfoVO> sync(final SyncFriendReq req) {
+        final var list = this.friendDao.sync(req);
+        if (Lang.isEmpty(list)) {
+            return list;
+        }
+
+        list.forEach(FriendInfoVO::fixAvatar);
+        return list;
     }
 
     /**

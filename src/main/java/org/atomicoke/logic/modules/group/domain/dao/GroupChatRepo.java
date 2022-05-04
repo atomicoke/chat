@@ -6,7 +6,7 @@ import org.atomicoke.logic.modules.group.domain.entity.GroupChat;
 import org.springframework.stereotype.Repository;
 
 /**
- * @author <a href="mailto:likelovec@gmail.com">韦朕</a>
+ * @author <a href="mailto:likelovec@gmail.com">fzdwx</a>
  * @date 2022/4/21 16:59
  */
 @Repository

@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.atomicoke.inf.common.contants.ChatConst;
 import org.atomicoke.inf.common.web.model.UserInfo;
-import org.atomicoke.logic.msg.domain.resp.ContactMessageResp;
+import org.atomicoke.logic.modules.msg.domain.resp.ContactMessageResp;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -40,8 +40,6 @@ public class GroupHandleReq implements Serializable {
         resp.setHandlerResult(this.getHandlerResult());
         ContactMessageResp.Content msg = new ContactMessageResp.Content();
         msg.setOperatorId(userInfo.getId());
-        msg.setOperatorAvatar(userInfo.getAvatar());
-        msg.setOperatorNickName(userInfo.getNickName());
         resp.setContent(msg);
         return resp;
     }

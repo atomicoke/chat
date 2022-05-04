@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * json 工具类 for Jackson
  *
- * @author <a href="mailto:likelovec@gmail.com">韦朕</a>
+ * @author <a href="mailto:likelovec@gmail.com">fzdwx</a>
  * @date 2021/12/1 13:02
  */
 @Slf4j

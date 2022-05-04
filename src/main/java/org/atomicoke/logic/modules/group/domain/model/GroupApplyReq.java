@@ -5,7 +5,7 @@ import lombok.Data;
 import org.atomicoke.inf.common.contants.ChatConst;
 import org.atomicoke.inf.common.web.model.UserInfo;
 import org.atomicoke.logic.modules.group.domain.entity.GroupChatRequest;
-import org.atomicoke.logic.msg.domain.resp.ContactMessageResp;
+import org.atomicoke.logic.modules.msg.domain.resp.ContactMessageResp;
 
 import java.time.LocalDateTime;
 
@@ -40,15 +40,12 @@ public class GroupApplyReq {
         final var resp = new ContactMessageResp();
         resp.setRequestId(String.valueOf(requestId));
         //todo 系统头像
-        resp.setFromAvatar("");
         resp.setToId(String.valueOf(toUserId));
         resp.setContactType(ChatConst.Notify.Contact.applyGroup);
         resp.setHandlerTime(LocalDateTime.now());
         resp.setHandlerResult(ChatConst.FriendAndGroupApplyResult.unOperated);
         ContactMessageResp.Content msg = new ContactMessageResp.Content();
         msg.setOperatorId(userInfo.getId());
-        msg.setOperatorAvatar(userInfo.getAvatar());
-        msg.setOperatorNickName(userInfo.getNickName());
         msg.setApplyMessage(this.getApplyMessage());
         resp.setContent(msg);
         return resp;

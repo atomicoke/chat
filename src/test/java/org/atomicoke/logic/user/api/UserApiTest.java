@@ -1,8 +1,8 @@
 package org.atomicoke.logic.user.api;
 
 import org.atomicoke.inf.common.util.Json;
-import org.atomicoke.logic.msg.domain.resp.ContactMessageResp;
-import org.atomicoke.logic.msg.sync.MessageSyncer;
+import org.atomicoke.logic.modules.msg.domain.resp.ContactMessageResp;
+import org.atomicoke.logic.modules.msg.sync.MessageSyncer;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -42,7 +42,6 @@ class UserApiTest {
                     ContactMessageResp resp = new ContactMessageResp();
                     resp.setContactType(11001);
                     resp.setFromId("0");
-                    resp.setFromUname("系统");
                     resp.setRequestId("123123123");
                     resp.setHandlerTime(LocalDateTime.now());
                     resp.setMsgFrom(2);

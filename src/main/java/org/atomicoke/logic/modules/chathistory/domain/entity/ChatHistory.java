@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.atomicoke.inf.common.contants.ChatConst;
-import org.atomicoke.logic.msg.domain.resp.ChatMessageResp;
+import org.atomicoke.logic.modules.msg.domain.resp.ChatMessageResp;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;

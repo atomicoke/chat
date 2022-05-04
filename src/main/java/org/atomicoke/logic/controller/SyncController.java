@@ -2,9 +2,9 @@ package org.atomicoke.logic.controller;
 
 import org.atomicoke.inf.common.web.model.Rest;
 import org.atomicoke.inf.common.web.model.UserInfo;
-import org.atomicoke.logic.msg.sync.MessageSyncer;
-import org.atomicoke.logic.msg.sync.model.MessageSyncReq;
-import org.atomicoke.logic.msg.sync.model.MessageSyncResp;
+import org.atomicoke.logic.modules.msg.sync.MessageSyncer;
+import org.atomicoke.logic.modules.msg.domain.model.MessageSyncReq;
+import org.atomicoke.logic.modules.msg.domain.model.MessageSyncResp;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

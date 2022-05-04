@@ -25,4 +25,38 @@
         update_time,
         del_flag
     </sql>
+
+    <select id="info" resultType="org.atomicoke.logic.modules.friend.domain.model.vo.FriendInfoVO">
+        select f.owner_id,
+               f.friend_id,
+               u.nick_name as friendNickName,
+               u.avatar    as friendAvatar,
+               u.gender    as friendGender,
+               u.mobile    as friendMobile,
+               f.remark,
+               f.add_way,
+               f.add_time
+        from friend f
+                 left join user u on f.friend_id = u.id
+        where f.owner_id = #{ownerId}
+          and f.friend_id = #{friendId}
+    </select>
+
+    <select id="sync" resultType="org.atomicoke.logic.modules.friend.domain.model.vo.FriendInfoVO">
+        select f.owner_id,
+               f.friend_id,
+               u.nick_name as friendNickName,
+               u.avatar    as friendAvatar,
+               u.gender    as friendGender,
+               u.mobile    as friendMobile,
+               f.remark,
+               f.add_way,
+               f.add_time
+        from friend f
+                 left join user u on f.friend_id = u.id
+        where f.owner_id = #{userId}
+        <if test="updateTime != null">
+            and f.update_time >= #{updateTime}
+        </if>
+    </select>
 </mapper>

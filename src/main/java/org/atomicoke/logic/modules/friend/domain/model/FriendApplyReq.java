@@ -5,7 +5,7 @@ import lombok.Data;
 import org.atomicoke.inf.common.contants.ChatConst;
 import org.atomicoke.inf.common.web.model.UserInfo;
 import org.atomicoke.logic.modules.friend.domain.entity.FriendRequest;
-import org.atomicoke.logic.msg.domain.resp.ContactMessageResp;
+import org.atomicoke.logic.modules.msg.domain.resp.ContactMessageResp;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -43,9 +43,6 @@ public class FriendApplyReq implements Serializable {
         final var resp = new ContactMessageResp();
         resp.setRequestId(String.valueOf(requestId));
         resp.setFromId(String.valueOf(ChatConst.Sys.SYS_ID));
-        resp.setFromUname(ChatConst.Sys.SYS_NAME);
-        //todo 系统头像
-        resp.setFromAvatar("");
         resp.setToId(String.valueOf(this.getToId()));
         resp.setContactType(ChatConst.Notify.Contact.applyFriend);
         resp.setMsgFrom(ChatConst.MsgFrom.SYS);
@@ -53,8 +50,6 @@ public class FriendApplyReq implements Serializable {
         resp.setHandlerResult(1);
         ContactMessageResp.Content msg = new ContactMessageResp.Content();
         msg.setOperatorId(userInfo.getId());
-        msg.setOperatorAvatar(userInfo.getAvatar());
-        msg.setOperatorNickName(userInfo.getNickName());
         msg.setApplyMessage(this.getApplyMessage());
         resp.setContent(msg);
         return resp;

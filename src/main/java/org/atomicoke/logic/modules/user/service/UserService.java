@@ -3,6 +3,7 @@ package org.atomicoke.logic.modules.user.service;
 import io.github.fzdwx.lambada.Coll;
 import io.github.fzdwx.lambada.Lang;
 import lombok.RequiredArgsConstructor;
+import org.atomicoke.inf.common.Assert;
 import org.atomicoke.inf.common.err.Err;
 import org.atomicoke.inf.common.web.Web;
 import org.atomicoke.inf.common.web.model.UserInfo;
@@ -11,6 +12,8 @@ import org.atomicoke.logic.modules.user.domain.entity.User;
 import org.atomicoke.logic.modules.user.domain.model.EditUserInfoReq;
 import org.atomicoke.logic.modules.user.domain.model.SingInReq;
 import org.atomicoke.logic.modules.user.domain.model.SingUpReq;
+import org.atomicoke.logic.modules.user.domain.model.req.SearchUserReq;
+import org.atomicoke.logic.modules.user.domain.model.vo.BasicInfoVO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -93,5 +96,25 @@ public class UserService {
 
     public UserInfo getUserInfo() {
         return Web.getUserInfo();
+    }
+
+    public BasicInfoVO basicInfo(final Long userId) {
+        final var basicInfo = this.userDao.basicInfo(userId);
+        Assert.notNull(basicInfo, "用户不存在");
+
+        basicInfo.fixAvatar();
+        return basicInfo;
+    }
+
+    public List<BasicInfoVO> search(final SearchUserReq req) {
+        req.preCheck();
+
+        final var search = this.userDao.search(req);
+        if (Lang.isEmpty(search)) {
+            return search;
+        }
+
+        search.forEach(BasicInfoVO::fixAvatar);
+        return search;
     }
 }

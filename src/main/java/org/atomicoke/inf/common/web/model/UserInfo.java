@@ -2,7 +2,7 @@ package org.atomicoke.inf.common.web.model;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
-import org.atomicoke.inf.middleware.minio.Minio;
+import org.atomicoke.inf.common.UserAvatarFixer;
 import org.atomicoke.logic.modules.user.domain.entity.User;
 
 /**
@@ -11,7 +11,7 @@ import org.atomicoke.logic.modules.user.domain.entity.User;
  */
 @Data
 @Accessors(chain = true)
-public class UserInfo {
+public class UserInfo implements UserAvatarFixer {
 
     private String id;
     private String uname;
@@ -31,9 +31,16 @@ public class UserInfo {
         userInfo.setMobile(userEntity.getMobile());
         userInfo.setRoleKey(userEntity.getRoleKey());
         userInfo.setGender(userEntity.getGender());
-        if (userEntity.getAvatar() != null) {
-            userInfo.setAvatar(Minio.getPubAccessUrl(userEntity.getAvatar()));
-        }
+        userInfo.fixAvatar(userEntity.getAvatar());
         return userInfo;
+    }
+
+    public void avatar(final String avatar) {
+        this.avatar = avatar;
+    }
+
+    @Override
+    public String avatar() {
+        return this.avatar;
     }
 }

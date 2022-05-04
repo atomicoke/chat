@@ -3,25 +3,59 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.atomicoke.logic.modules.user.domain.dao.mapper.UserMapper">
-
     <resultMap id="BaseResultMap" type="org.atomicoke.logic.modules.user.domain.entity.User">
-            <id property="id" column="id" jdbcType="BIGINT"/>
-            <result property="uname" column="uname" jdbcType="VARCHAR"/>
-            <result property="mobile" column="mobile" jdbcType="BIGINT"/>
-            <result property="avatar" column="avatar" jdbcType="VARCHAR"/>
-            <result property="passwd" column="passwd" jdbcType="VARCHAR"/>
-            <result property="salt" column="salt" jdbcType="VARCHAR"/>
-            <result property="roleKey" column="role_key" jdbcType="VARCHAR"/>
-            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
-            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
-            <result property="delFlag" column="del_flag" jdbcType="TINYINT"/>
-            <result property="gender" column="gender" jdbcType="TINYINT"/>
+        <!--@Table user-->
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="uname" column="uname" jdbcType="VARCHAR"/>
+        <result column="nick_name" property="nickName"/>
+        <result property="mobile" column="mobile" jdbcType="BIGINT"/>
+        <result property="avatar" column="avatar" jdbcType="VARCHAR"/>
+        <result property="passwd" column="passwd" jdbcType="VARCHAR"/>
+        <result property="salt" column="salt" jdbcType="VARCHAR"/>
+        <result property="roleKey" column="role_key" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="delFlag" column="del_flag" jdbcType="TINYINT"/>
+        <result property="gender" column="gender" jdbcType="TINYINT"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,uname,mobile,
-        avatar,passwd,salt,
-        role_key,create_time,update_time,
-        del_flag,gender
+        id,
+        uname,
+        nick_name,
+        mobile,
+        avatar,
+        passwd,
+        salt,
+        role_key,
+        create_time,
+        update_time,
+        del_flag,
+        gender
     </sql>
+
+    <select id="basicInfo" resultType="org.atomicoke.logic.modules.user.domain.model.vo.BasicInfoVO">
+        select a.id as userId,
+               a.nick_name,
+               a.avatar,
+               a.gender
+        from user a
+        where a.id = #{userId}
+    </select>
+
+    <select id="search" resultType="org.atomicoke.logic.modules.user.domain.model.vo.BasicInfoVO">
+        select a.id as userId,
+               a.nick_name,
+               a.avatar,
+               a.gender
+        from user a
+        <where>
+            <if test="req.uname != null and req.uname != ''">
+                a.uname = #{req.uname}
+            </if>
+            <if test="req.mobile != null">
+                and a.mobile = #{req.mobile}
+            </if>
+        </where>
+    </select>
 </mapper>
