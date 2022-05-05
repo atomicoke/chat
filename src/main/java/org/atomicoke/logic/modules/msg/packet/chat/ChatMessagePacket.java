@@ -11,6 +11,7 @@ import org.atomicoke.inf.common.util.Time;
 import org.atomicoke.inf.common.web.model.UserInfo;
 import org.atomicoke.logic.modules.chathistory.domain.entity.ChatHistory;
 import org.atomicoke.logic.modules.msg.WsPacket;
+import org.atomicoke.logic.modules.msg.domain.model.ChatMessage;
 
 import java.util.List;
 
@@ -90,8 +91,8 @@ public class ChatMessagePacket extends WsPacket {
             return Err.verify("toId can not be null");
         }
 
-        if (this.chatMessage.sendTime == null) {
-            this.chatMessage.sendTime = Time.now();
+        if (this.chatMessage.getSendTime() == null) {
+            this.chatMessage.setSendTime(Time.now());
         }
 
         return chatMessage.prepare();
@@ -102,7 +103,7 @@ public class ChatMessagePacket extends WsPacket {
         log.setRandomId(this.randomId);
         log.setFromId(userInfo.getIdLong());
         log.setMsgFrom(this.msgFrom);
-        log.setSendTime(this.chatMessage.sendTime);
+        log.setSendTime(this.chatMessage.getSendTime());
         log.setSessionType(this.sessionType);
         log.setToId(this.toId);
 
@@ -124,48 +125,4 @@ public class ChatMessagePacket extends WsPacket {
         return this.ws.send(newReplayChatPacket(data, this).encode());
     }
 
-    @Data
-    public static class ChatMessage {
-
-        /**
-         * 消息体
-         */
-        private String content;
-
-        /**
-         * 消息类型
-         *
-         * @see ChatConst.ContentType
-         */
-        private int contentType;
-
-        private int fileSize;
-
-        private String fileName;
-
-        /**
-         * 发送时间
-         */
-        private Long sendTime;
-
-        public Err prepare() {
-            if (Lang.eq(contentType, ChatConst.ContentType.Text)) {
-                if (content == null) {
-                    throw Err.verify("content is null");
-                }
-            } else if (contentType == 0) {
-                throw Err.verify("contentType is null");
-            } else {
-                if (fileSize == 0) {
-                    throw Err.verify("fileSize is null");
-                }
-
-                if (fileName == null) {
-                    throw Err.verify("fileName is null");
-                }
-            }
-
-            return null;
-        }
-    }
 }

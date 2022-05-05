@@ -1,13 +1,12 @@
 package org.atomicoke.logic.modules.msg.domain.resp;
 
-import io.github.fzdwx.lambada.Lang;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 import org.atomicoke.inf.common.contants.ChatConst;
 import org.atomicoke.inf.common.web.model.UserInfo;
-import org.atomicoke.inf.middleware.minio.Minio;
 import org.atomicoke.logic.modules.chathistory.domain.entity.ChatHistory;
+import org.atomicoke.logic.modules.msg.domain.model.ChatMessage;
 import org.atomicoke.logic.modules.msg.domain.model.Message;
 import org.atomicoke.logic.modules.msg.packet.chat.ChatMessagePacket;
 
@@ -44,42 +43,12 @@ public class ChatMessageResp implements MessageResp {
      * @see ChatConst.MsgFrom
      */
     private int msgFrom;
-    /**
-     * 发送时间
-     */
-    private Long sendTime;
 
     private ChatMessage chatMessage;
 
     @Override
     public String type() {
         return type;
-    }
-
-    @Data
-    public static class ChatMessage {
-
-        /**
-         * 消息体
-         */
-        private String content;
-
-        /**
-         * 消息类型
-         *
-         * @see ChatConst.ContentType
-         */
-        private Integer contentType;
-
-        private String fileName;
-
-        private Integer fileSize;
-
-        public void fixUrl() {
-            if (!Lang.eq(contentType.intValue(), ChatConst.ContentType.Text)) {
-                this.content = Minio.getPubAccessUrl(this.content);
-            }
-        }
     }
 
     public ChatMessageResp fixUrl() {
@@ -94,8 +63,7 @@ public class ChatMessageResp implements MessageResp {
         resp.setToId(String.valueOf(chatHistory.getToId()));
         resp.setSessionType(packet.getSessionType());
         resp.setMsgFrom(packet.getMsgFrom());
-        resp.setSendTime(packet.getChatMessage().getSendTime());
-        resp.setChatMessage(chatHistory.toResp());
+        resp.setChatMessage(packet.getChatMessage());
         return resp;
     }
 

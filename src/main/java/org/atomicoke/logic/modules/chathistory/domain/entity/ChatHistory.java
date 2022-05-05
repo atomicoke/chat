@@ -7,7 +7,6 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import org.atomicoke.inf.common.contants.ChatConst;
-import org.atomicoke.logic.modules.msg.domain.resp.ChatMessageResp;
 
 import java.io.Serializable;
 
@@ -78,15 +77,4 @@ public class ChatHistory implements Serializable {
      * 随机id(用于去重)
      */
     private String randomId;
-
-    public ChatMessageResp.ChatMessage toResp() {
-        final var resp = new ChatMessageResp.ChatMessage();
-
-        resp.setFileName(fileName);
-        resp.setFileSize(fileSize);
-        resp.setContentType(this.contentType);
-        resp.setContent(this.content);
-
-        return resp;
-    }
 }
