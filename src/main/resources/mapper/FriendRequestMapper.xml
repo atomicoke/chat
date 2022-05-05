@@ -13,7 +13,6 @@
         <result property="handlerResult" column="handler_result" jdbcType="INTEGER"/>
         <result property="handlerTime" column="handler_time" jdbcType="TIMESTAMP"/>
         <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
-        <result property="randomId" column="random_id" jdbcType="VARCHAR"/>
     </resultMap>
 
     <sql id="Base_Column_List">
@@ -21,12 +20,4 @@
         apply_message,add_way,handler_result,
         handler_time,create_time, random_id
     </sql>
-    <insert id="insertIgnore">
-        insert ignore into friend_request
-        (<include refid="Base_Column_List"/>)
-        values
-        (#{id},#{applyId},#{userId},#{applyMessage},
-        #{addWay},#{handlerResult},#{handlerTime},
-        #{createTime},#{randomId});
-    </insert>
 </mapper>

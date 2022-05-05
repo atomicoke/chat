@@ -23,7 +23,7 @@ public class FriendRepo extends BaseRepo<FriendMapper, Friend> {
      * @param userId2 用户id
      * @return bool
      */
-    public boolean existFriend(String userId1, Long userId2) {
+    public boolean existFriend(Long userId1, Long userId2) {
         Long count = lq()
                 .in(Friend::getOwnerId, userId1, userId2)
                 .in(Friend::getFriendId, userId1, userId2)
@@ -37,5 +37,9 @@ public class FriendRepo extends BaseRepo<FriendMapper, Friend> {
 
     public List<FriendInfoVO> sync(final SyncFriendReq req) {
         return this.baseMapper.sync(req);
+    }
+
+    public void insertOrUpdate(List<Friend> friends) {
+        this.baseMapper.insertOrUpdate(friends);
     }
 }

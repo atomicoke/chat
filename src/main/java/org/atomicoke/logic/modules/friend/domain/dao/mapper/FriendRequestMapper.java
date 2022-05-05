@@ -11,5 +11,4 @@ import org.atomicoke.logic.modules.friend.domain.entity.FriendRequest;
 */
 public interface FriendRequestMapper extends BaseMapper<FriendRequest> {
 
-    Integer insertIgnore(FriendRequest friendRequest);
 }

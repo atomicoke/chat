@@ -21,7 +21,7 @@ import java.time.LocalDateTime;
 @Accessors(chain = true)
 public class ContactMessageResp implements MessageResp {
 
-    private static final String type = ChatConst.Notify.contact;
+    private static final String type = "notify";
 
     /**
      * 申请id

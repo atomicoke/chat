@@ -19,4 +19,6 @@ public interface FriendMapper extends BaseMapper<Friend> {
     FriendInfoVO info(final @Param("ownerId") Long ownerId, @Param("friendId") Long friendId);
 
     List<FriendInfoVO> sync(SyncFriendReq req);
+
+    void insertOrUpdate(List<Friend> friends);
 }

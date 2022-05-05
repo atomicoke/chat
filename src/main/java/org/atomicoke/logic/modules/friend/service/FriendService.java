@@ -17,6 +17,7 @@ import org.atomicoke.logic.modules.friend.domain.model.req.SyncFriendReq;
 import org.atomicoke.logic.modules.friend.domain.model.vo.FriendInfoVO;
 import org.atomicoke.logic.modules.msg.UserWsConn;
 import org.atomicoke.logic.modules.msg.WsPacket;
+import org.atomicoke.logic.modules.msg.domain.model.Message;
 import org.atomicoke.logic.modules.msg.domain.resp.ContactMessageResp;
 import org.atomicoke.logic.modules.msg.sync.MessageSyncer;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author oneIdler
@@ -46,11 +48,12 @@ public class FriendService {
      */
     @Transactional(rollbackFor = Exception.class)
     public void apply(UserInfo userInfo, FriendApplyReq req) {
-        Assert.ensureFalse(friendDao.existFriend(userInfo.getId(), req.getToId()), "已存在好友关系!");
-
+        Assert.ensureFalse(friendDao.existFriend(userInfo.getIdLong(), req.getToId()), "已存在好友关系!");
+        Assert.ensureFalse(Objects.equals(userInfo.getIdLong(), req.getToId()), "无法添加自己为好友!");
         FriendRequest request = req.ofEntity(userInfo.getIdLong());
-
-        if (!friendRequestDao.saveIgnore(request)) {
+        boolean exist = friendRequestDao.existByResult(userInfo.getIdLong(), req.getToId());
+        Assert.ensureFalse(exist, "请勿重复申请!");
+        if (!friendRequestDao.save(request)) {
             return;
         }
 
@@ -65,7 +68,6 @@ public class FriendService {
      */
     @Transactional(rollbackFor = Exception.class)
     public void handle(UserInfo userInfo, FriendHandleReq req) {
-        // TODO 这里要判断apply_id 不能等于 userInfo.id
         if (!friendRequestDao.updateResult(req.getRequestId(), req.getHandlerResult())) {
             return;
         }
@@ -74,8 +76,7 @@ public class FriendService {
         Long applyId = friendRequestDao.getApplyId(req.getRequestId());
         if (Lang.eq(req.getHandlerResult().intValue(), ChatConst.FriendAndGroupApplyResult.agree)) {
             List<Friend> friends = Friend.of(applyId, userInfo.getIdLong(), LocalDateTime.now());
-            // TODO: 2022/4/30 如果已经曾经存在好友关系，删除好友时如何处理？ 是删除两份还是单独删除某一方？
-            friendDao.saveBatch(friends);
+            friendDao.insertOrUpdate(friends);
         }
 
         push(applyId, req.ofResp(req.getRequestId(), applyId, userInfo));
@@ -114,12 +115,13 @@ public class FriendService {
      */
     private void push(final Long applyId, final ContactMessageResp resp) {
         WebSocket conn = UserWsConn.get(applyId);
+        Message message = resp.toMessage(applyId, MessageSyncer.incrSeq(applyId));
         if (conn == null) {
             // TODO: 2022/4/23 离线推送
             log.warn("用户[{}]没有连接", applyId);
         } else {
-            conn.send(WsPacket.newNotifyPacket(resp).encode());
+            conn.send(WsPacket.newNotifyPacket(message, ChatConst.Notify.contact).encode());
         }
-        MessageSyncer.saveToMongo(resp.toMessage(applyId, MessageSyncer.incrSeq(applyId)));
+        MessageSyncer.saveToMongo(message);
     }
 }

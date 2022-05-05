@@ -3,6 +3,7 @@ package org.atomicoke.logic.modules.group.service;
 import io.github.fzdwx.inf.msg.WebSocket;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.atomicoke.inf.common.contants.ChatConst;
 import org.atomicoke.inf.common.util.Json;
 import org.atomicoke.inf.common.web.model.UserInfo;
 import org.atomicoke.logic.modules.friend.domain.model.FriendApplyReq;
@@ -13,12 +14,13 @@ import org.atomicoke.logic.modules.group.domain.entity.GroupChatMember;
 import org.atomicoke.logic.modules.group.domain.entity.GroupChatRequest;
 import org.atomicoke.logic.modules.group.domain.model.GroupApplyReq;
 import org.atomicoke.logic.modules.group.domain.model.GroupHandleReq;
-import org.atomicoke.logic.modules.user.domain.dao.UserRepo;
-import org.atomicoke.logic.modules.user.domain.entity.User;
-import org.atomicoke.logic.modules.msg.domain.resp.ContactMessageResp;
-import org.atomicoke.logic.modules.msg.sync.MessageSyncer;
 import org.atomicoke.logic.modules.msg.UserWsConn;
 import org.atomicoke.logic.modules.msg.WsPacket;
+import org.atomicoke.logic.modules.msg.domain.model.Message;
+import org.atomicoke.logic.modules.msg.domain.resp.ContactMessageResp;
+import org.atomicoke.logic.modules.msg.sync.MessageSyncer;
+import org.atomicoke.logic.modules.user.domain.dao.UserRepo;
+import org.atomicoke.logic.modules.user.domain.entity.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -53,15 +55,16 @@ public class GroupService {
             List<Long> toIdList = this.groupChatMemberDao.getGroupManager(req.getToId());
             List<String> messages = toIdList.stream()
                     .map(toUserId -> {
-                        WebSocket conn = UserWsConn.get(req.getToId());
                         ContactMessageResp resp = req.ofResp(request.getId(), toUserId, userInfo);
+                        Message message = resp.toMessage(toUserId, MessageSyncer.incrSeq(toUserId));
+                        WebSocket conn = UserWsConn.get(req.getToId());
                         if (conn == null) {
                             // TODO: 2022/4/23 离线推送
                             log.warn("用户[{}]没有连接", req.getToId());
                         } else {
-                            conn.send(WsPacket.newNotifyPacket(resp).encode());
+                            conn.send(WsPacket.newNotifyPacket(message, ChatConst.Notify.contact).encode());
                         }
-                        return Json.toJson(resp.toMessage(toUserId, MessageSyncer.incrSeq(toUserId)));
+                        return Json.toJson(message);
                     }).collect(Collectors.toList());
             MessageSyncer.saveToMongo(messages);
         }
@@ -91,13 +94,14 @@ public class GroupService {
         member.setAddWay(0);
         groupChatMemberDao.save(member);
         ContactMessageResp resp = req.ofResp(req.getRequestId(), applyId, userInfo);
+        Message message = resp.toMessage(applyId, MessageSyncer.incrSeq(applyId));
         WebSocket conn = UserWsConn.get(applyId);
         if (conn == null) {
             // TODO: 2022/4/23 离线推送
             log.warn("用户[{}]没有连接", applyId);
         } else {
-            conn.send(WsPacket.newNotifyPacket(resp).encode());
+            conn.send(WsPacket.newNotifyPacket(message, ChatConst.Notify.contact).encode());
         }
-        MessageSyncer.saveToMongo(resp.toMessage(applyId, MessageSyncer.incrSeq(applyId)));
+        MessageSyncer.saveToMongo(message);
     }
 }
