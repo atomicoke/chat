@@ -11,8 +11,8 @@
         <result property="applyMessage" column="apply_message" jdbcType="VARCHAR"/>
         <result property="addWay" column="add_way" jdbcType="INTEGER"/>
         <result property="handlerResult" column="handler_result" jdbcType="INTEGER"/>
-        <result property="handlerTime" column="handler_time" jdbcType="TIMESTAMP"/>
-        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="handlerTime" column="handler_time" jdbcType="BIGINT"/>
+        <result property="createTime" column="create_time" jdbcType="BIGINT"/>
     </resultMap>
 
     <sql id="Base_Column_List">

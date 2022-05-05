@@ -67,11 +67,11 @@ public class User implements Serializable {
     /**
      * 创建时间
      */
-    private LocalDateTime createTime;
+    private Long createTime;
     /**
      * 更新时间
      */
-    private LocalDateTime updateTime;
+    private Long updateTime;
 
     /**
      * 是否逻辑删除
@@ -91,7 +91,7 @@ public class User implements Serializable {
                 .setUname(req.getUname())
                 .setNickName(nickName)
                 .setSalt(salt)
-                .setCreateTime(LocalDateTime.now())
+                .setCreateTime(System.currentTimeMillis())
                 .setRoleKey(RoleConstant.COMMON)
                 .setPasswd(encodePasswd(req.getPasswd(), salt));
     }
@@ -100,7 +100,7 @@ public class User implements Serializable {
         final var newUser = new User();
 
         newUser.setId(user.getId())
-                .setUpdateTime(LocalDateTime.now())
+                .setUpdateTime(System.currentTimeMillis())
                 .setUname(user.getUname());
 
         if (req.getNickName() != null) {

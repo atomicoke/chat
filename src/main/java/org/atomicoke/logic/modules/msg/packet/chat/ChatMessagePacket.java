@@ -1,8 +1,5 @@
 package org.atomicoke.logic.modules.msg.packet.chat;
 
-import cn.hutool.core.date.DatePattern;
-import com.alibaba.fastjson2.annotation.JSONField;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import io.github.fzdwx.lambada.Lang;
 import io.netty.channel.ChannelFuture;
 import lombok.Data;
@@ -13,9 +10,7 @@ import org.atomicoke.inf.common.err.Err;
 import org.atomicoke.inf.common.web.model.UserInfo;
 import org.atomicoke.logic.modules.chathistory.domain.entity.ChatHistory;
 import org.atomicoke.logic.modules.msg.WsPacket;
-import org.springframework.format.annotation.DateTimeFormat;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -60,14 +55,6 @@ public class ChatMessagePacket extends WsPacket {
     private int msgFrom;
 
     /**
-     * 发送时间
-     */
-    @DateTimeFormat(pattern = DatePattern.NORM_DATETIME_PATTERN)
-    @JsonFormat(pattern = DatePattern.NORM_DATETIME_PATTERN)
-    @JSONField(format = DatePattern.NORM_DATETIME_PATTERN)
-    private LocalDateTime sendTime;
-
-    /**
      * 聊天信息
      */
     private ChatMessage chatMessage;
@@ -102,8 +89,8 @@ public class ChatMessagePacket extends WsPacket {
             return Err.verify("toId can not be null");
         }
 
-        if (this.sendTime == null) {
-            this.sendTime = LocalDateTime.now();
+        if (this.chatMessage.sendTime == null) {
+            this.chatMessage.sendTime = System.currentTimeMillis();
         }
 
         return chatMessage.prepare();
@@ -114,7 +101,7 @@ public class ChatMessagePacket extends WsPacket {
         log.setRandomId(this.randomId);
         log.setFromId(userInfo.getIdLong());
         log.setMsgFrom(this.msgFrom);
-        log.setSendTime(this.sendTime);
+        log.setSendTime(this.chatMessage.sendTime);
         log.setSessionType(this.sessionType);
         log.setToId(this.toId);
 
@@ -154,6 +141,11 @@ public class ChatMessagePacket extends WsPacket {
         private int fileSize;
 
         private String fileName;
+
+        /**
+         * 发送时间
+         */
+        private Long sendTime;
 
         public Err prepare() {
             if (Lang.eq(contentType, ChatConst.ContentType.Text)) {

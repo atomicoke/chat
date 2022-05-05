@@ -11,7 +11,7 @@
             <result property="nickName" column="nick_name" jdbcType="VARCHAR"/>
             <result property="roleType" column="role_type" jdbcType="INTEGER"/>
             <result property="addWay" column="add_way" jdbcType="INTEGER"/>
-            <result property="addTime" column="add_time" jdbcType="TIMESTAMP"/>
+            <result property="addTime" column="add_time" jdbcType="BIGINT"/>
     </resultMap>
 
     <sql id="Base_Column_List">

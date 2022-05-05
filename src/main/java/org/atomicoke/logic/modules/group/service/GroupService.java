@@ -24,7 +24,6 @@ import org.atomicoke.logic.modules.user.domain.entity.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -90,7 +89,7 @@ public class GroupService {
         member.setUserId(applyId);
         member.setNickName(user.getNickName());
         member.setRoleType(1);
-        member.setAddTime(LocalDateTime.now());
+        member.setAddTime(System.currentTimeMillis());
         member.setAddWay(0);
         groupChatMemberDao.save(member);
         ContactMessageResp resp = req.ofResp(req.getRequestId(), applyId, userInfo);

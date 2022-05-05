@@ -23,7 +23,6 @@ import org.atomicoke.logic.modules.msg.sync.MessageSyncer;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -75,7 +74,7 @@ public class FriendService {
         // 好友请求的原申请人id为toId
         Long applyId = friendRequestDao.getApplyId(req.getRequestId());
         if (Lang.eq(req.getHandlerResult().intValue(), ChatConst.FriendAndGroupApplyResult.agree)) {
-            List<Friend> friends = Friend.of(applyId, userInfo.getIdLong(), LocalDateTime.now());
+            List<Friend> friends = Friend.of(applyId, userInfo.getIdLong(), System.currentTimeMillis());
             friendDao.insertOrUpdate(friends);
         }
 

@@ -33,7 +33,7 @@ public class FriendApplyReq implements Serializable {
         FriendRequest request = new FriendRequest();
         request.setApplyMessage(this.getApplyMessage());
         request.setHandlerResult(ChatConst.FriendAndGroupApplyResult.unOperated);
-        request.setCreateTime(LocalDateTime.now());
+        request.setCreateTime(System.currentTimeMillis());
         request.setAddWay(0);
         request.setApplyId(userId);
         request.setUserId(this.getToId());

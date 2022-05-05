@@ -30,7 +30,7 @@ public class GroupApplyReq {
         GroupChatRequest request = new GroupChatRequest();
         request.setApplyMessage(this.getApplyMessage());
         request.setHandlerResult(ChatConst.FriendAndGroupApplyResult.unOperated);
-        request.setCreateTime(LocalDateTime.now());
+        request.setCreateTime(System.currentTimeMillis());
         request.setApplyId(applyId);
         request.setGroupId(this.getToId());
         return request;

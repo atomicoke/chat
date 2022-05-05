@@ -12,7 +12,7 @@
             <result property="notification" column="notification" jdbcType="VARCHAR"/>
             <result property="creatorUserId" column="creator_user_id" jdbcType="BIGINT"/>
             <result property="groupType" column="group_type" jdbcType="INTEGER"/>
-            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="createTime" column="create_time" jdbcType="BIGINT"/>
     </resultMap>
 
     <sql id="Base_Column_List">

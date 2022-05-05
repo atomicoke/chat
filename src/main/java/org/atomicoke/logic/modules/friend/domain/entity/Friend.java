@@ -1,11 +1,14 @@
 package org.atomicoke.logic.modules.friend.domain.entity;
 
-import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableLogic;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -46,12 +49,12 @@ public class Friend implements Serializable {
     /**
      * 添加时间
      */
-    private LocalDateTime addTime;
+    private Long addTime;
 
     /**
      * 更新时间
      */
-    private LocalDateTime updateTime;
+    private Long updateTime;
 
     /**
      * 是否逻辑删除
@@ -62,7 +65,7 @@ public class Friend implements Serializable {
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 
-    public static List<Friend> of(Long userId1, Long userId2, LocalDateTime time) {
+    public static List<Friend> of(Long userId1, Long userId2, Long time) {
         //todo 好友备注
         return List.of(new Friend()
                         .setOwnerId(userId1)

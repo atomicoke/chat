@@ -10,7 +10,6 @@ import org.atomicoke.inf.common.contants.ChatConst;
 import org.atomicoke.logic.modules.msg.domain.resp.ChatMessageResp;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 /**
  * 聊天记录
@@ -73,7 +72,7 @@ public class ChatHistory implements Serializable {
     /**
      * 发送时间
      */
-    private LocalDateTime sendTime;
+    private Long sendTime;
 
     /**
      * 随机id(用于去重)

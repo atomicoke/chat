@@ -1,17 +1,12 @@
 package org.atomicoke.logic.modules.group.domain.entity;
 
-import cn.hutool.core.date.DatePattern;
-import com.alibaba.fastjson2.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 /**
  * 用户发起加群申请表
@@ -55,7 +50,7 @@ public class GroupChatRequest implements Serializable {
     /**
      * 处理时间
      */
-    private LocalDateTime handlerTime;
+    private Long handlerTime;
 
     /**
      * 处理人
@@ -65,10 +60,7 @@ public class GroupChatRequest implements Serializable {
     /**
      * 创建时间
      */
-    @DateTimeFormat(pattern = DatePattern.NORM_DATETIME_PATTERN)
-    @JsonFormat(pattern = DatePattern.NORM_DATETIME_PATTERN)
-    @JSONField(format = DatePattern.NORM_DATETIME_PATTERN)
-    private LocalDateTime createTime;
+    private Long createTime;
 
     /**
      * 随机id(用于去重)
