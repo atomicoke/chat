@@ -54,6 +54,7 @@ public class EchoWs implements HttpHandler {
                     ws.mountText(s -> {
                         final var wsPacket = WsPacket.decode(s);
                         if (wsPacket == null) {
+                            ws.send("无效的数据包");
                             log.error("[decode packet] | unrecognized : {}", s);
                         } else {
                             WsPacket.routing(wsPacket.mountWebsocket(ws));
