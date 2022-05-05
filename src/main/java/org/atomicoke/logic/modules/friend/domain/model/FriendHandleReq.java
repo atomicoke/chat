@@ -3,11 +3,11 @@ package org.atomicoke.logic.modules.friend.domain.model;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.atomicoke.inf.common.contants.ChatConst;
+import org.atomicoke.inf.common.util.Time;
 import org.atomicoke.inf.common.web.model.UserInfo;
 import org.atomicoke.logic.modules.msg.domain.resp.ContactMessageResp;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 /**
  * @author oneIdler
@@ -36,7 +36,7 @@ public class FriendHandleReq implements Serializable {
         resp.setRequestId(String.valueOf(requestId));
         resp.setToId(String.valueOf(toId));
         resp.setContactType(ChatConst.Notify.Contact.handleFriend);
-        resp.setHandlerTime(LocalDateTime.now());
+        resp.setHandlerTime(Time.now());
         resp.setHandlerResult(this.getHandlerResult());
         ContactMessageResp.Content msg = new ContactMessageResp.Content();
         msg.setOperatorId(userInfo.getId());

@@ -9,7 +9,6 @@ import org.atomicoke.logic.modules.friend.domain.entity.FriendRequest;
 import org.atomicoke.logic.modules.msg.domain.resp.ContactMessageResp;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 /**
  * @author oneIdler
@@ -48,7 +47,7 @@ public class FriendApplyReq implements Serializable {
         resp.setToId(String.valueOf(this.getToId()));
         resp.setContactType(ChatConst.Notify.Contact.applyFriend);
         resp.setMsgFrom(ChatConst.MsgFrom.SYS);
-        resp.setHandlerTime(LocalDateTime.now());
+        resp.setHandlerTime(Time.now());
         resp.setHandlerResult(1);
         ContactMessageResp.Content msg = new ContactMessageResp.Content();
         msg.setOperatorId(userInfo.getId());

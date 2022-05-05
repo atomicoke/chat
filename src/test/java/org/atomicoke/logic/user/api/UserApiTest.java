@@ -1,6 +1,7 @@
 package org.atomicoke.logic.user.api;
 
 import org.atomicoke.inf.common.util.Json;
+import org.atomicoke.inf.common.util.Time;
 import org.atomicoke.logic.modules.msg.domain.resp.ContactMessageResp;
 import org.atomicoke.logic.modules.msg.sync.MessageSyncer;
 import org.junit.jupiter.api.Test;
@@ -9,7 +10,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -43,7 +43,7 @@ class UserApiTest {
                     resp.setContactType(11001);
                     resp.setFromId("0");
                     resp.setRequestId("123123123");
-                    resp.setHandlerTime(LocalDateTime.now());
+                    resp.setHandlerTime(Time.now());
                     resp.setMsgFrom(2);
                     return Json.toJson(resp.toMessage(1111L, i + 1L));
                 }).collect(Collectors.toList());

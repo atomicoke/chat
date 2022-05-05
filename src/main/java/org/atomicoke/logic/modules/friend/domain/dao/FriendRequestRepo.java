@@ -2,12 +2,11 @@ package org.atomicoke.logic.modules.friend.domain.dao;
 
 import org.atomicoke.inf.common.contants.ChatConst;
 import org.atomicoke.inf.common.err.Err;
+import org.atomicoke.inf.common.util.Time;
 import org.atomicoke.inf.middleware.db.BaseRepo;
 import org.atomicoke.logic.modules.friend.domain.dao.mapper.FriendRequestMapper;
 import org.atomicoke.logic.modules.friend.domain.entity.FriendRequest;
 import org.springframework.stereotype.Repository;
-
-import java.time.LocalDateTime;
 
 /**
  * @author oneIdler
@@ -17,7 +16,7 @@ import java.time.LocalDateTime;
 public class FriendRequestRepo extends BaseRepo<FriendRequestMapper, FriendRequest> {
     public boolean updateResult(Long id, int result) {
         return this.lu()
-                .set(FriendRequest::getHandlerTime, LocalDateTime.now())
+                .set(FriendRequest::getHandlerTime, Time.now())
                 .set(FriendRequest::getHandlerResult, result)
                 .eq(FriendRequest::getId, id)
                 .eq(FriendRequest::getHandlerResult, ChatConst.FriendAndGroupApplyResult.unOperated)

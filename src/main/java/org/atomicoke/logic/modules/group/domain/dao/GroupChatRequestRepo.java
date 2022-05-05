@@ -3,12 +3,11 @@ package org.atomicoke.logic.modules.group.domain.dao;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import org.atomicoke.inf.common.contants.ChatConst;
 import org.atomicoke.inf.common.err.Err;
+import org.atomicoke.inf.common.util.Time;
 import org.atomicoke.inf.middleware.db.BaseRepo;
 import org.atomicoke.logic.modules.group.domain.dao.mapper.GroupChatRequestMapper;
 import org.atomicoke.logic.modules.group.domain.entity.GroupChatRequest;
 import org.springframework.stereotype.Repository;
-
-import java.time.LocalDateTime;
 
 /**
  * @author oneIdler
@@ -24,7 +23,7 @@ public class GroupChatRequestRepo extends BaseRepo<GroupChatRequestMapper, Group
 
     public boolean updateResult(Long id, Long handlerUser, int result) {
         return this.lu()
-                .set(GroupChatRequest::getHandlerTime, LocalDateTime.now())
+                .set(GroupChatRequest::getHandlerTime, Time.now())
                 .set(GroupChatRequest::getHandlerResult, result)
                 .set(GroupChatRequest::getHandlerUser, handlerUser)
                 .eq(GroupChatRequest::getId, id)

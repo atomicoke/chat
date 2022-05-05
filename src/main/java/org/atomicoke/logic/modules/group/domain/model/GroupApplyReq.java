@@ -8,8 +8,6 @@ import org.atomicoke.inf.common.web.model.UserInfo;
 import org.atomicoke.logic.modules.group.domain.entity.GroupChatRequest;
 import org.atomicoke.logic.modules.msg.domain.resp.ContactMessageResp;
 
-import java.time.LocalDateTime;
-
 /**
  * @author oneIdler
  * @since 2022/4/28
@@ -43,7 +41,7 @@ public class GroupApplyReq {
         //todo 系统头像
         resp.setToId(String.valueOf(toUserId));
         resp.setContactType(ChatConst.Notify.Contact.applyGroup);
-        resp.setHandlerTime(LocalDateTime.now());
+        resp.setHandlerTime(Time.now());
         resp.setHandlerResult(ChatConst.FriendAndGroupApplyResult.unOperated);
         ContactMessageResp.Content msg = new ContactMessageResp.Content();
         msg.setOperatorId(userInfo.getId());

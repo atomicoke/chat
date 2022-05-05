@@ -1,14 +1,10 @@
 package org.atomicoke.logic.modules.msg.domain.resp;
 
-import cn.hutool.core.date.DatePattern;
-import com.alibaba.fastjson2.annotation.JSONField;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 import org.atomicoke.inf.common.contants.ChatConst;
 import org.atomicoke.logic.modules.msg.domain.model.Message;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 
@@ -48,10 +44,7 @@ public class ContactMessageResp implements MessageResp {
     /**
      * 操作时间
      */
-    @DateTimeFormat(pattern = DatePattern.NORM_DATETIME_PATTERN)
-    @JsonFormat(pattern = DatePattern.NORM_DATETIME_PATTERN)
-    @JSONField(format = DatePattern.NORM_DATETIME_PATTERN)
-    private LocalDateTime handlerTime;
+    private Long handlerTime;
 
     /**
      * 操作结果 1:未操作 2:同意 3:拒绝
