@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
 import org.atomicoke.inf.common.contants.ChatConst;
 import org.atomicoke.inf.common.err.Err;
+import org.atomicoke.inf.common.util.Time;
 import org.atomicoke.inf.common.web.model.UserInfo;
 import org.atomicoke.logic.modules.chathistory.domain.entity.ChatHistory;
 import org.atomicoke.logic.modules.msg.WsPacket;
@@ -90,7 +91,7 @@ public class ChatMessagePacket extends WsPacket {
         }
 
         if (this.chatMessage.sendTime == null) {
-            this.chatMessage.sendTime = System.currentTimeMillis();
+            this.chatMessage.sendTime = Time.now();
         }
 
         return chatMessage.prepare();

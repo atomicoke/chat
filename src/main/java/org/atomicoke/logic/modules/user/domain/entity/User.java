@@ -11,13 +11,13 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import io.github.fzdwx.lambada.Lang;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import org.atomicoke.inf.common.util.Time;
 import org.atomicoke.inf.common.web.model.RoleConstant;
 import org.atomicoke.logic.modules.user.domain.model.EditUserInfoReq;
 import org.atomicoke.logic.modules.user.domain.model.SingUpReq;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 /**
  * 简单演示表
@@ -91,7 +91,7 @@ public class User implements Serializable {
                 .setUname(req.getUname())
                 .setNickName(nickName)
                 .setSalt(salt)
-                .setCreateTime(System.currentTimeMillis())
+                .setCreateTime(Time.now())
                 .setRoleKey(RoleConstant.COMMON)
                 .setPasswd(encodePasswd(req.getPasswd(), salt));
     }
@@ -100,7 +100,7 @@ public class User implements Serializable {
         final var newUser = new User();
 
         newUser.setId(user.getId())
-                .setUpdateTime(System.currentTimeMillis())
+                .setUpdateTime(Time.now())
                 .setUname(user.getUname());
 
         if (req.getNickName() != null) {

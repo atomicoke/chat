@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.atomicoke.inf.common.contants.ChatConst;
 import org.atomicoke.inf.common.util.Json;
+import org.atomicoke.inf.common.util.Time;
 import org.atomicoke.inf.common.web.model.UserInfo;
 import org.atomicoke.logic.modules.friend.domain.model.FriendApplyReq;
 import org.atomicoke.logic.modules.friend.domain.model.FriendHandleReq;
@@ -89,7 +90,7 @@ public class GroupService {
         member.setUserId(applyId);
         member.setNickName(user.getNickName());
         member.setRoleType(1);
-        member.setAddTime(System.currentTimeMillis());
+        member.setAddTime(Time.now());
         member.setAddWay(0);
         groupChatMemberDao.save(member);
         ContactMessageResp resp = req.ofResp(req.getRequestId(), applyId, userInfo);

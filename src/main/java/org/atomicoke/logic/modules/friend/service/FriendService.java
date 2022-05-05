@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.atomicoke.inf.common.Assert;
 import org.atomicoke.inf.common.contants.ChatConst;
+import org.atomicoke.inf.common.util.Time;
 import org.atomicoke.inf.common.web.model.UserInfo;
 import org.atomicoke.logic.modules.friend.domain.dao.FriendRepo;
 import org.atomicoke.logic.modules.friend.domain.dao.FriendRequestRepo;
@@ -74,7 +75,7 @@ public class FriendService {
         // 好友请求的原申请人id为toId
         Long applyId = friendRequestDao.getApplyId(req.getRequestId());
         if (Lang.eq(req.getHandlerResult().intValue(), ChatConst.FriendAndGroupApplyResult.agree)) {
-            List<Friend> friends = Friend.of(applyId, userInfo.getIdLong(), System.currentTimeMillis());
+            List<Friend> friends = Friend.of(applyId, userInfo.getIdLong(), Time.now());
             friendDao.insertOrUpdate(friends);
         }
 

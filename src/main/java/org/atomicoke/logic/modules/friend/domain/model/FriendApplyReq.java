@@ -3,6 +3,7 @@ package org.atomicoke.logic.modules.friend.domain.model;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.atomicoke.inf.common.contants.ChatConst;
+import org.atomicoke.inf.common.util.Time;
 import org.atomicoke.inf.common.web.model.UserInfo;
 import org.atomicoke.logic.modules.friend.domain.entity.FriendRequest;
 import org.atomicoke.logic.modules.msg.domain.resp.ContactMessageResp;
@@ -33,7 +34,7 @@ public class FriendApplyReq implements Serializable {
         FriendRequest request = new FriendRequest();
         request.setApplyMessage(this.getApplyMessage());
         request.setHandlerResult(ChatConst.FriendAndGroupApplyResult.unOperated);
-        request.setCreateTime(System.currentTimeMillis());
+        request.setCreateTime(Time.now());
         request.setAddWay(0);
         request.setApplyId(userId);
         request.setUserId(this.getToId());

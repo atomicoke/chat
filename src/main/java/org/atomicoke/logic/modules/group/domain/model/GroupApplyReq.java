@@ -3,6 +3,7 @@ package org.atomicoke.logic.modules.group.domain.model;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.atomicoke.inf.common.contants.ChatConst;
+import org.atomicoke.inf.common.util.Time;
 import org.atomicoke.inf.common.web.model.UserInfo;
 import org.atomicoke.logic.modules.group.domain.entity.GroupChatRequest;
 import org.atomicoke.logic.modules.msg.domain.resp.ContactMessageResp;
@@ -30,7 +31,7 @@ public class GroupApplyReq {
         GroupChatRequest request = new GroupChatRequest();
         request.setApplyMessage(this.getApplyMessage());
         request.setHandlerResult(ChatConst.FriendAndGroupApplyResult.unOperated);
-        request.setCreateTime(System.currentTimeMillis());
+        request.setCreateTime(Time.now());
         request.setApplyId(applyId);
         request.setGroupId(this.getToId());
         return request;
