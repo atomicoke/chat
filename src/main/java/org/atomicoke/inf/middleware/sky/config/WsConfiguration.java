@@ -1,11 +1,13 @@
 package org.atomicoke.inf.middleware.sky.config;
 
 import cn.hutool.extra.spring.SpringUtil;
-import io.github.fzdwx.inf.Netty;
-import io.github.fzdwx.inf.http.core.HttpHandler;
-import io.github.fzdwx.inf.http.core.HttpServerRequest;
-import io.github.fzdwx.inf.http.core.HttpServerResponse;
-import io.github.fzdwx.inf.route.Router;
+import http.HttpHandler;
+import http.HttpServer;
+import http.HttpServerRequest;
+import http.HttpServerResponse;
+import http.Router;
+import io.github.fzdwx.lambada.internal.Tuple2;
+import io.github.fzdwx.lambada.lang.NvMap;
 import lombok.extern.slf4j.Slf4j;
 import org.atomicoke.inf.middleware.sky.Ws;
 import org.jetbrains.annotations.NotNull;
@@ -32,7 +34,7 @@ public class WsConfiguration implements InitializingBean {
     }
 
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() {
         SpringUtil.getConfigurableBeanFactory().getBeansWithAnnotation(Ws.class)
                 .forEach((name, bean) -> {
                     final HttpHandler handler;
@@ -47,9 +49,21 @@ public class WsConfiguration implements InitializingBean {
                     router.GET(ws.value(), handler);
                 });
 
-        Netty.HTTP(port, router)
-                .dev()
-                .bind();
+        new HttpServer(
+                (req, resp) -> {
+
+                    final Tuple2<HttpHandler, NvMap> t2 = router.match(req);
+
+                    final HttpHandler httpHandler = t2.v1;
+                    if (httpHandler == null) {
+                        resp.sendNotFound();
+                        return;
+                    }
+
+                    httpHandler.handle(req, resp);
+                }
+        ).withGroup(0, 0)
+                .bind(port);
     }
 
     @NotNull
