@@ -25,6 +25,6 @@ public class GroupChatMemberRepo extends BaseRepo<GroupChatMemberMapper, GroupCh
         if (CollUtil.isEmpty(list)) {
             return Collections.emptyList();
         }
-        return list.stream().map(e -> e.getUserId()).collect(Collectors.toList());
+        return list.stream().map(GroupChatMember::getUserId).collect(Collectors.toList());
     }
 }

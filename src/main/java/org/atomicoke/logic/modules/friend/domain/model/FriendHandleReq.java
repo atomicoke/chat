@@ -20,7 +20,7 @@ public class FriendHandleReq implements Serializable {
      * 好友申请id
      */
     @NotNull(message = "好友申请id不能为空！")
-    private Long requestId;
+    private Long applyId;
 
     /**
      * 操作结果 2:同意 3:拒绝
@@ -33,7 +33,7 @@ public class FriendHandleReq implements Serializable {
 
     public ContactMessageResp ofResp(Long requestId, Long toId, UserInfo userInfo) {
         final var resp = new ContactMessageResp();
-        resp.setRequestId(String.valueOf(requestId));
+        resp.setApplyId(String.valueOf(requestId));
         resp.setToId(String.valueOf(toId));
         resp.setContactType(ChatConst.Notify.Contact.handleFriend);
         resp.setHandlerTime(Time.now());

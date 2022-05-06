@@ -11,11 +11,11 @@ import java.io.Serializable;
 /**
  * 用户发起加群申请表
  *
- * @TableName group_chat_request
+ * @TableName group_chat_apply
  */
 @Data
-@TableName(value = "group_chat_request")
-public class GroupChatRequest implements Serializable {
+@TableName(value = "group_chat_apply")
+public class GroupChatApply implements Serializable {
     /**
      *
      */
@@ -23,17 +23,27 @@ public class GroupChatRequest implements Serializable {
     private Long id;
 
     /**
+     * 请求类型 1:申请入群 2:邀请入群
+     */
+    private Integer type;
+
+    /**
      * 群id
      */
     private Long groupId;
 
     /**
-     * 申请加入群的人
+     * 申请/被邀请 入群的用户id
      */
-    private Long applyId;
+    private Long userId;
 
     /**
-     * 发送加群申请携带的申请信息
+     * 申请/邀请 入群的申请人id
+     */
+    private Long applyUserId;
+
+    /**
+     * 申请/邀请 入群携带的申请信息
      */
     private String applyMessage;
 

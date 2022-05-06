@@ -1,5 +1,6 @@
 package org.atomicoke.logic.modules.user.domain.dao;
 
+import org.atomicoke.inf.common.Assert;
 import org.atomicoke.inf.middleware.db.BaseRepo;
 import org.atomicoke.logic.modules.user.domain.dao.mapper.UserMapper;
 import org.atomicoke.logic.modules.user.domain.entity.User;
@@ -37,5 +38,13 @@ public class UserRepo extends BaseRepo<UserMapper, User> {
 
     public List<BasicInfoVO> search(final SearchUserReq req) {
         return this.baseMapper.search(req);
+    }
+
+    public String getNickName(Long id) {
+        User user = this.lq()
+                .select(User::getNickName)
+                .one();
+        Assert.notNull(user, "用户不存在！");
+        return user.getNickName();
     }
 }

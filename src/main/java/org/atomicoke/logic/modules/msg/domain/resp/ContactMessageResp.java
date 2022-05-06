@@ -6,8 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.atomicoke.inf.common.contants.ChatConst;
 import org.atomicoke.logic.modules.msg.domain.model.Message;
 
-import java.time.LocalDateTime;
-
 /**
  * @author oneIdler
  * @date 2022/4/10 17:20
@@ -22,7 +20,7 @@ public class ContactMessageResp implements MessageResp {
     /**
      * 申请id
      */
-    private String requestId;
+    private String applyId;
     /**
      * 消息发送人id（此时默认为0表示系统通知）
      */

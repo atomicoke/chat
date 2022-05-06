@@ -13,12 +13,18 @@ import org.atomicoke.logic.modules.msg.domain.resp.ContactMessageResp;
  * @since 2022/4/28
  */
 @Data
-public class GroupApplyReq {
+public class GroupInviteReq {
     /**
      * 群id
      */
     @NotNull(message = "群id不能为空！")
     private Long groupId;
+
+    /**
+     * 目标id(被邀请人id)
+     */
+    @NotNull(message = "toId不能为空！")
+    private Long toId;
 
     /**
      * 发起申请携带的申请信息
@@ -27,10 +33,10 @@ public class GroupApplyReq {
 
     public GroupChatApply ofEntity(Long applyUserId) {
         GroupChatApply request = new GroupChatApply();
-        request.setType(1);
+        request.setType(2);
         request.setApplyUserId(applyUserId);
         request.setApplyMessage(this.getApplyMessage());
-        request.setUserId(applyUserId);
+        request.setUserId(this.getToId());
         request.setHandlerResult(ChatConst.FriendAndGroupApplyResult.unOperated);
         request.setCreateTime(Time.now());
         request.setGroupId(this.getGroupId());
@@ -42,7 +48,7 @@ public class GroupApplyReq {
         resp.setApplyId(String.valueOf(requestId));
         //todo 系统头像
         resp.setToId(String.valueOf(toUserId));
-        resp.setContactType(ChatConst.Notify.Contact.applyGroup);
+        resp.setContactType(ChatConst.Notify.Contact.inviteGroup);
         resp.setHandlerTime(Time.now());
         resp.setHandlerResult(ChatConst.FriendAndGroupApplyResult.unOperated);
         ContactMessageResp.Content msg = new ContactMessageResp.Content();

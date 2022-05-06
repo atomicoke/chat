@@ -5,7 +5,7 @@ import lombok.Data;
 import org.atomicoke.inf.common.contants.ChatConst;
 import org.atomicoke.inf.common.util.Time;
 import org.atomicoke.inf.common.web.model.UserInfo;
-import org.atomicoke.logic.modules.friend.domain.entity.FriendRequest;
+import org.atomicoke.logic.modules.friend.domain.entity.FriendApply;
 import org.atomicoke.logic.modules.msg.domain.resp.ContactMessageResp;
 
 import java.io.Serializable;
@@ -29,20 +29,20 @@ public class FriendApplyReq implements Serializable {
     private String applyMessage;
 
 
-    public FriendRequest ofEntity(Long userId) {
-        FriendRequest request = new FriendRequest();
+    public FriendApply ofEntity(Long userId) {
+        FriendApply request = new FriendApply();
         request.setApplyMessage(this.getApplyMessage());
         request.setHandlerResult(ChatConst.FriendAndGroupApplyResult.unOperated);
         request.setCreateTime(Time.now());
         request.setAddWay(0);
-        request.setApplyId(userId);
+        request.setApplyUserId(userId);
         request.setUserId(this.getToId());
         return request;
     }
 
-    public ContactMessageResp ofResp(Long requestId, UserInfo userInfo) {
+    public ContactMessageResp ofResp(Long applyId, UserInfo userInfo) {
         final var resp = new ContactMessageResp();
-        resp.setRequestId(String.valueOf(requestId));
+        resp.setApplyId(String.valueOf(applyId));
         resp.setFromId(String.valueOf(ChatConst.Sys.SYS_ID));
         resp.setToId(String.valueOf(this.getToId()));
         resp.setContactType(ChatConst.Notify.Contact.applyFriend);

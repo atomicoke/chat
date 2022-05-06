@@ -8,10 +8,10 @@ import org.atomicoke.inf.common.Assert;
 import org.atomicoke.inf.common.contants.ChatConst;
 import org.atomicoke.inf.common.util.Time;
 import org.atomicoke.inf.common.web.model.UserInfo;
+import org.atomicoke.logic.modules.friend.domain.dao.FriendApplyRepo;
 import org.atomicoke.logic.modules.friend.domain.dao.FriendRepo;
-import org.atomicoke.logic.modules.friend.domain.dao.FriendRequestRepo;
 import org.atomicoke.logic.modules.friend.domain.entity.Friend;
-import org.atomicoke.logic.modules.friend.domain.entity.FriendRequest;
+import org.atomicoke.logic.modules.friend.domain.entity.FriendApply;
 import org.atomicoke.logic.modules.friend.domain.model.FriendApplyReq;
 import org.atomicoke.logic.modules.friend.domain.model.FriendHandleReq;
 import org.atomicoke.logic.modules.friend.domain.model.req.SyncFriendReq;
@@ -38,7 +38,7 @@ public class FriendService {
 
     private FriendRepo friendDao;
 
-    private FriendRequestRepo friendRequestDao;
+    private FriendApplyRepo friendApplyDao;
 
     /**
      * 好友申请
@@ -50,14 +50,14 @@ public class FriendService {
     public void apply(UserInfo userInfo, FriendApplyReq req) {
         Assert.ensureFalse(friendDao.existFriend(userInfo.getIdLong(), req.getToId()), "已存在好友关系!");
         Assert.ensureFalse(Objects.equals(userInfo.getIdLong(), req.getToId()), "无法添加自己为好友!");
-        FriendRequest request = req.ofEntity(userInfo.getIdLong());
-        boolean exist = friendRequestDao.existByResult(userInfo.getIdLong(), req.getToId());
+        FriendApply apply = req.ofEntity(userInfo.getIdLong());
+        boolean exist = friendApplyDao.existByResult(userInfo.getIdLong(), req.getToId());
         Assert.ensureFalse(exist, "请勿重复申请!");
-        if (!friendRequestDao.save(request)) {
+        if (!friendApplyDao.save(apply)) {
             return;
         }
 
-        push(req.getToId(), req.ofResp(request.getId(), userInfo));
+        push(req.getToId(), req.ofResp(apply.getId(), userInfo));
     }
 
     /**
@@ -68,18 +68,18 @@ public class FriendService {
      */
     @Transactional(rollbackFor = Exception.class)
     public void handle(UserInfo userInfo, FriendHandleReq req) {
-        if (!friendRequestDao.updateResult(req.getRequestId(), req.getHandlerResult())) {
+        if (!friendApplyDao.updateResult(req.getApplyId(), req.getHandlerResult())) {
             return;
         }
 
         // 好友请求的原申请人id为toId
-        Long applyId = friendRequestDao.getApplyId(req.getRequestId());
+        Long applyUserId = friendApplyDao.getApplyUserId(req.getApplyId());
         if (Lang.eq(req.getHandlerResult().intValue(), ChatConst.FriendAndGroupApplyResult.agree)) {
-            List<Friend> friends = Friend.of(applyId, userInfo.getIdLong(), Time.now());
+            List<Friend> friends = Friend.of(applyUserId, userInfo.getIdLong(), Time.now());
             friendDao.insertOrUpdate(friends);
         }
 
-        push(applyId, req.ofResp(req.getRequestId(), applyId, userInfo));
+        push(applyUserId, req.ofResp(req.getApplyId(), applyUserId, userInfo));
     }
 
     /**
@@ -110,15 +110,15 @@ public class FriendService {
     /**
      * 推送消息
      *
-     * @param applyId 申请人id
-     * @param resp    resp
+     * @param userId 目标用户id
+     * @param resp   resp
      */
-    private void push(final Long applyId, final ContactMessageResp resp) {
-        WebSocket conn = UserWsConn.get(applyId);
-        Message message = resp.toMessage(applyId, MessageSyncer.incrSeq(applyId));
+    private void push(final Long userId, final ContactMessageResp resp) {
+        WebSocket conn = UserWsConn.get(userId);
+        Message message = resp.toMessage(userId, MessageSyncer.incrSeq(userId));
         if (conn == null) {
             // TODO: 2022/4/23 离线推送
-            log.warn("用户[{}]没有连接", applyId);
+            log.warn("用户[{}]没有连接", userId);
         } else {
             conn.send(WsPacket.newNotifyPacket(message, ChatConst.Notify.contact).encode());
         }

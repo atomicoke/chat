@@ -20,7 +20,7 @@ public class GroupHandleReq implements Serializable {
      * 入群申请id
      */
     @NotNull(message = "入群申请id不能为空！")
-    private Long requestId;
+    private Long applyId;
 
     /**
      * @see ChatConst.FriendAndGroupApplyResult
@@ -28,12 +28,9 @@ public class GroupHandleReq implements Serializable {
     @NotNull(message = "处理结果不能为空！")
     private Integer handlerResult;
 
-    @NotNull(message = "处理人id不能为空！")
-    private Long handlerUser;
-
     public ContactMessageResp ofResp(Long requestId, Long toId, UserInfo userInfo) {
         final var resp = new ContactMessageResp();
-        resp.setRequestId(String.valueOf(requestId));
+        resp.setApplyId(String.valueOf(requestId));
         resp.setToId(String.valueOf(toId));
         resp.setContactType(ChatConst.Notify.Contact.handleGroup);
         resp.setHandlerTime(Time.now());

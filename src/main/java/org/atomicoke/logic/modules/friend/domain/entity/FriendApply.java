@@ -11,11 +11,11 @@ import java.io.Serializable;
 /**
  * 用户发起好友申请表
  *
- * @TableName friend_request
+ * @TableName friend_apply
  */
 @Data
-@TableName(value = "friend_request")
-public class FriendRequest implements Serializable {
+@TableName(value = "friend_apply")
+public class FriendApply implements Serializable {
     /**
      *
      */
@@ -25,7 +25,7 @@ public class FriendRequest implements Serializable {
     /**
      * 添加人
      */
-    private Long applyId;
+    private Long applyUserId;
 
     /**
      * 被添加人

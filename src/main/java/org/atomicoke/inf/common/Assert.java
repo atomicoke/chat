@@ -1,6 +1,9 @@
 package org.atomicoke.inf.common;
 
+import cn.hutool.core.collection.CollUtil;
 import org.atomicoke.inf.common.err.Err;
+
+import java.util.Collection;
 
 /**
  * assert.
@@ -22,6 +25,12 @@ public class Assert {
 
     public static void ensureFalse(final boolean flag, final String message) {
         if (flag) {
+            throw Err.normal(message);
+        }
+    }
+
+    public static <T> void notEmpty(Collection<T> collection, String message) {
+        if (CollUtil.isEmpty(collection)) {
             throw Err.normal(message);
         }
     }

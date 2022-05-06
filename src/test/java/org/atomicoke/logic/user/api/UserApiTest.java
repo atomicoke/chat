@@ -42,7 +42,7 @@ class UserApiTest {
                     ContactMessageResp resp = new ContactMessageResp();
                     resp.setContactType(11001);
                     resp.setFromId("0");
-                    resp.setRequestId("123123123");
+                    resp.setApplyId("123123123");
                     resp.setHandlerTime(Time.now());
                     resp.setMsgFrom(2);
                     return Json.toJson(resp.toMessage(1111L, i + 1L));
