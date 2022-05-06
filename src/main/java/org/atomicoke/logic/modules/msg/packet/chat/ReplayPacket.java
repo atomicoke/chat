@@ -1,7 +1,7 @@
 package org.atomicoke.logic.modules.msg.packet.chat;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import io.github.fzdwx.inf.socket.WebSocket;
+import socket.WebSocket;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.atomicoke.logic.modules.msg.WsPacket;

@@ -1,9 +1,9 @@
 package org.atomicoke.logic.endpoint;
 
 import cn.dev33.satoken.stp.StpUtil;
-import io.github.fzdwx.inf.http.core.HttpHandler;
-import io.github.fzdwx.inf.http.core.HttpServerRequest;
-import io.github.fzdwx.inf.http.core.HttpServerResponse;
+import http.HttpHandler;
+import http.HttpServerRequest;
+import http.HttpServerResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.atomicoke.inf.common.web.Web;
 import org.atomicoke.inf.middleware.sky.Ws;
@@ -19,7 +19,7 @@ import org.atomicoke.logic.modules.msg.WsPacket;
 public class EchoWs implements HttpHandler {
 
     @Override
-    public void handle(final HttpServerRequest request, final HttpServerResponse resp) throws Exception {
+    public void handle(final HttpServerRequest request, final HttpServerResponse resp) {
         final var token = request.params().get(StpUtil.getTokenName());
         if (token == null) {
             resp.end("请携带token");
