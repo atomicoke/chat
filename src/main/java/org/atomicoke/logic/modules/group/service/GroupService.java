@@ -104,7 +104,7 @@ public class GroupService {
         member.setAddTime(Time.now());
         member.setAddWay(0);
         groupChatMemberDao.save(member);
-        ContactMessageResp resp = req.ofResp(req.getApplyId(), applyUserId, userInfo);
+        ContactMessageResp resp = req.ofResp(req.getApplyId(), applyUserId, userInfo, apply.getType());
         Message message = resp.toMessage(applyUserId, MessageSyncer.incrSeq(applyUserId));
         //推送消息
         this.push(applyUserId, message);

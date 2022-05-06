@@ -28,11 +28,15 @@ public class GroupHandleReq implements Serializable {
     @NotNull(message = "处理结果不能为空！")
     private Integer handlerResult;
 
-    public ContactMessageResp ofResp(Long requestId, Long toId, UserInfo userInfo) {
+    public ContactMessageResp ofResp(Long requestId, Long toId, UserInfo userInfo, Integer applyType) {
         final var resp = new ContactMessageResp();
         resp.setApplyId(String.valueOf(requestId));
         resp.setToId(String.valueOf(toId));
-        resp.setContactType(ChatConst.Notify.Contact.handleGroup);
+        if (applyType == 1) {
+            resp.setContactType(ChatConst.Notify.Contact.handleApplyGroup);
+        } else {
+            resp.setContactType(ChatConst.Notify.Contact.handleInviteGroup);
+        }
         resp.setHandlerTime(Time.now());
         resp.setHandlerResult(this.getHandlerResult());
         ContactMessageResp.Content msg = new ContactMessageResp.Content();

@@ -114,9 +114,14 @@ public interface ChatConst {
             int inviteGroup = 12002;
 
             /**
-             * 处理入群通知
+             * 处理入群申请通知
              */
-            int handleGroup = 12003;
+            int handleApplyGroup = 12003;
+
+            /**
+             * 处理入群邀请通知
+             */
+            int handleInviteGroup = 12004;
 
             static boolean isFriendOperator(int code) {
                 return code >= 11001 && code <= 11003;
