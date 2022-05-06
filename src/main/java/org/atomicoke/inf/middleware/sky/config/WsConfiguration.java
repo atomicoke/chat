@@ -49,8 +49,8 @@ public class WsConfiguration implements InitializingBean {
                     router.GET(ws.value(), handler);
                 });
 
-        new HttpServer(
-                (req, resp) -> {
+        new HttpServer()
+                .handler((req, resp) -> {
 
                     final Tuple2<HttpHandler, NvMap> t2 = router.match(req);
 
@@ -61,8 +61,8 @@ public class WsConfiguration implements InitializingBean {
                     }
 
                     httpHandler.handle(req, resp);
-                }
-        ).withGroup(0, 0)
+                })
+                .withGroup(0, 0)
                 .bind(port);
     }
 
