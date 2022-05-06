@@ -1,6 +1,6 @@
 package org.atomicoke.logic.modules.msg;
 
-import io.github.fzdwx.inf.msg.WebSocket;
+import socket.WebSocket;
 import io.github.fzdwx.lambada.Lang;
 import io.github.fzdwx.lambada.fun.State;
 import io.netty.channel.ChannelFuture;
