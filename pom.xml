@@ -15,8 +15,8 @@
         <spring.boot.version>2.6.5</spring.boot.version>
         <spring.cloud-version>2021.0.1</spring.cloud-version>
 
-        <lambda.version>0.09.4</lambda.version>
-        <sky.version>0.091</sky.version>
+        <lambda.version>0.10</lambda.version>
+        <sky.version>0.10</sky.version>
 
         <HikariCP.version>5.0.1</HikariCP.version>
         <lombok.version>1.18.22</lombok.version>
