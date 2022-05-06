@@ -1,7 +1,7 @@
 package org.atomicoke.logic.modules.msg;
 
 import cn.hutool.extra.spring.SpringUtil;
-import io.github.fzdwx.inf.msg.WebSocket;
+import io.github.fzdwx.inf.socket.WebSocket;
 import io.github.fzdwx.lambada.Io;
 import io.github.fzdwx.lambada.Lang;
 import io.netty.channel.ChannelFuture;

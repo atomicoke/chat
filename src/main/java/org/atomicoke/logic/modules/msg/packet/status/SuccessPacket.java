@@ -1,6 +1,6 @@
 package org.atomicoke.logic.modules.msg.packet.status;
 
-import io.github.fzdwx.inf.msg.WebSocket;
+import io.github.fzdwx.inf.socket.WebSocket;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.atomicoke.inf.common.web.model.Rest;

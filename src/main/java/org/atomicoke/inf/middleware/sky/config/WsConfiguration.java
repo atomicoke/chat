@@ -48,7 +48,6 @@ public class WsConfiguration implements InitializingBean {
                 });
 
         Netty.HTTP(port, router)
-                .dev()
                 .bind();
     }
 

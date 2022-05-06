@@ -1,7 +1,7 @@
 package org.atomicoke.logic.modules.msg.packet.status;
 
 import cn.hutool.core.util.ArrayUtil;
-import io.github.fzdwx.inf.msg.WebSocket;
+import io.github.fzdwx.inf.socket.WebSocket;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.atomicoke.logic.modules.msg.WsPacket;
