@@ -8,6 +8,7 @@ import http.HttpServerResponse;
 import http.Router;
 import io.github.fzdwx.lambada.internal.Tuple2;
 import io.github.fzdwx.lambada.lang.NvMap;
+import io.netty.handler.codec.http.HttpResponseStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.atomicoke.inf.middleware.sky.Ws;
 import org.jetbrains.annotations.NotNull;
@@ -56,7 +57,7 @@ public class WsConfiguration implements InitializingBean {
 
                     final HttpHandler httpHandler = t2.v1;
                     if (httpHandler == null) {
-                        resp.sendNotFound();
+                        resp.status(HttpResponseStatus.NOT_FOUND).end("not found");
                         return;
                     }
 
