@@ -8,5 +8,4 @@ import org.atomicoke.logic.modules.group.domain.entity.GroupChatApply;
  */
 public interface GroupChatApplyMapper extends BaseMapper<GroupChatApply> {
 
-    Integer insertIgnore(GroupChatApply groupChatApply);
 }

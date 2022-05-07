@@ -72,11 +72,6 @@ public class GroupChatApply implements Serializable {
      */
     private Long createTime;
 
-    /**
-     * 随机id(用于去重)
-     */
-    private String randomId;
-
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 }

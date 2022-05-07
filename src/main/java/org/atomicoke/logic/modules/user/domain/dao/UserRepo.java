@@ -43,6 +43,7 @@ public class UserRepo extends BaseRepo<UserMapper, User> {
     public String getNickName(Long id) {
         User user = this.lq()
                 .select(User::getNickName)
+                .eq(User::getId, id)
                 .one();
         Assert.notNull(user, "用户不存在！");
         return user.getNickName();

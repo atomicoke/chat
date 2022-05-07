@@ -7,7 +7,9 @@
     <resultMap id="BaseResultMap" type="org.atomicoke.logic.modules.group.domain.entity.GroupChatApply">
         <!--@Table group_chat_apply-->
         <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="type" column="type" jdbcType="BIGINT"/>
         <result property="groupId" column="group_id" jdbcType="BIGINT"/>
+        <result property="userId" column="user_id" jdbcType="BIGINT"/>
         <result property="applyUserId" column="apply_user_id" jdbcType="BIGINT"/>
         <result property="applyMessage" column="apply_message" jdbcType="VARCHAR"/>
         <result property="handlerResult" column="handler_result" jdbcType="INTEGER"/>
@@ -15,21 +17,12 @@
         <result property="handlerTime" column="handler_time" jdbcType="BIGINT"/>
         <result property="handlerUser" column="handler_user" jdbcType="BIGINT"/>
         <result property="createTime" column="create_time" jdbcType="BIGINT"/>
-        <result property="randomId" column="random_id" jdbcType="VARCHAR"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,group_id,apply_user_id,
+        id,`type`,group_id,user_id,apply_user_id,
         apply_message,handler_result,add_way,
         handler_time,handler_user,
-        create_time,random_id
+        create_time
     </sql>
-    <insert id="insertIgnore">
-        insert ignore into group_chat_apply
-        (<include refid="Base_Column_List"/>)
-        values
-        (#{id},#{groupId},#{applyUserId},#{applyMessage},
-        #{handlerResult},#{addWay},#{handlerTime},
-        #{handlerUser},#{createTime},#{randomId});
-    </insert>
 </mapper>

@@ -27,4 +27,11 @@ public class GroupChatMemberRepo extends BaseRepo<GroupChatMemberMapper, GroupCh
         }
         return list.stream().map(GroupChatMember::getUserId).collect(Collectors.toList());
     }
+
+    public boolean existMember(Long userId, Long groupId) {
+        return this.lq()
+                .eq(GroupChatMember::getUserId, userId)
+                .eq(GroupChatMember::getGroupId, groupId)
+                .exists();
+    }
 }

@@ -33,7 +33,7 @@ public class GroupInviteReq {
 
     public GroupChatApply ofEntity(Long applyUserId) {
         GroupChatApply request = new GroupChatApply();
-        request.setType(2);
+        request.setType(ChatConst.GroupApplyType.invite);
         request.setApplyUserId(applyUserId);
         request.setApplyMessage(this.getApplyMessage());
         request.setUserId(this.getToId());

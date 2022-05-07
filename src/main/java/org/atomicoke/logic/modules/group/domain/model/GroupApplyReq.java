@@ -27,7 +27,7 @@ public class GroupApplyReq {
 
     public GroupChatApply ofEntity(Long applyUserId) {
         GroupChatApply request = new GroupChatApply();
-        request.setType(1);
+        request.setType(ChatConst.GroupApplyType.apply);
         request.setApplyUserId(applyUserId);
         request.setApplyMessage(this.getApplyMessage());
         request.setUserId(applyUserId);

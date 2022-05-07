@@ -36,7 +36,7 @@ public class BaseRepo<M extends BaseMapper<E>, E> extends ServiceImpl<M, E> impl
      * count id >= 1
      */
     public boolean exist(Long id) {
-        return SqlHelper.retCount(baseMapper.selectCount(query().eq("id", id))) >= 1;
+        return SqlHelper.retCount(query().eq("id", id).count()) >= 1;
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -88,6 +88,7 @@ public class BaseRepo<M extends BaseMapper<E>, E> extends ServiceImpl<M, E> impl
     protected LambdaQueryChainWrapper<E> lq() {
         return ChainWrappers.lambdaQueryChain(baseMapper);
     }
+
     protected LambdaUpdateChainWrapper<E> lu() {
         return ChainWrappers.lambdaUpdateChain(baseMapper);
     }

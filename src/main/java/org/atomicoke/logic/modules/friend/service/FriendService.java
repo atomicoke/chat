@@ -1,6 +1,5 @@
 package org.atomicoke.logic.modules.friend.service;
 
-import socket.WebSocket;
 import io.github.fzdwx.lambada.Lang;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +22,7 @@ import org.atomicoke.logic.modules.msg.domain.resp.ContactMessageResp;
 import org.atomicoke.logic.modules.msg.sync.MessageSyncer;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import socket.WebSocket;
 
 import java.util.List;
 import java.util.Objects;
@@ -50,9 +50,9 @@ public class FriendService {
     public void apply(UserInfo userInfo, FriendApplyReq req) {
         Assert.ensureFalse(friendDao.existFriend(userInfo.getIdLong(), req.getToId()), "已存在好友关系!");
         Assert.ensureFalse(Objects.equals(userInfo.getIdLong(), req.getToId()), "无法添加自己为好友!");
-        FriendApply apply = req.ofEntity(userInfo.getIdLong());
         boolean exist = friendApplyDao.existByResult(userInfo.getIdLong(), req.getToId());
         Assert.ensureFalse(exist, "请勿重复申请!");
+        FriendApply apply = req.ofEntity(userInfo.getIdLong());
         if (!friendApplyDao.save(apply)) {
             return;
         }

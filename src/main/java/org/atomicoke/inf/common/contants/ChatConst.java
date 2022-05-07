@@ -157,4 +157,16 @@ public interface ChatConst {
         Long SYS_ID = 0L;
         String SYS_NAME = "系统";
     }
+
+    interface GroupApplyType {
+        /**
+         * 申请入群
+         */
+        int apply = 1;
+
+        /**
+         * 邀请入群
+         */
+        int invite = 2;
+    }
 }

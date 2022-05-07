@@ -1,6 +1,5 @@
 package org.atomicoke.logic.modules.group.service;
 
-import socket.WebSocket;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.atomicoke.inf.common.Assert;
@@ -24,8 +23,10 @@ import org.atomicoke.logic.modules.msg.domain.model.Message;
 import org.atomicoke.logic.modules.msg.domain.resp.ContactMessageResp;
 import org.atomicoke.logic.modules.msg.sync.MessageSyncer;
 import org.atomicoke.logic.modules.user.domain.dao.UserRepo;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import socket.WebSocket;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -52,26 +53,31 @@ public class GroupService {
      */
     @Transactional(rollbackFor = Exception.class)
     public void apply(UserInfo userInfo, GroupApplyReq req) {
+        Assert.ensureFalse(groupChatMemberDao.existMember(userInfo.getIdLong(), req.getGroupId()), "您已加入该群!");
+        Assert.ensureFalse(groupChatApplyDao.existApply(userInfo.getIdLong(), req.getGroupId()), "请勿重复申请!");
         List<Long> toIdList = this.groupChatMemberDao.getGroupManager(req.getGroupId());
         Assert.notEmpty(toIdList, "不合法的群！");
         GroupChatApply apply = req.ofEntity(userInfo.getIdLong());
-        boolean flag = groupChatApplyDao.saveIgnore(apply);
+        boolean flag = groupChatApplyDao.save(apply);
         if (flag) {
             List<String> messages = toIdList.stream()
                     .map(toUserId -> {
                         ContactMessageResp resp = req.ofResp(apply.getId(), toUserId, userInfo);
                         Message message = resp.toMessage(toUserId, MessageSyncer.incrSeq(toUserId));
-                        this.push(req.getGroupId(), message);
+                        this.push(toUserId, message);
                         return Json.toJson(message);
                     }).collect(Collectors.toList());
             MessageSyncer.saveToMongo(messages);
         }
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public void invite(UserInfo userInfo, GroupInviteReq req) {
+        Assert.ensureFalse(groupChatMemberDao.existMember(req.getToId(), req.getGroupId()), "对方已加入该群!");
+        Assert.ensureFalse(groupChatApplyDao.existInvite(userInfo.getIdLong(), req.getToId(), req.getGroupId()), "请勿重复邀请!");
         Assert.ensureTrue(groupChatDao.exist(req.getGroupId()), "不合法的群！");
         GroupChatApply apply = req.ofEntity(userInfo.getIdLong());
-        boolean flag = groupChatApplyDao.saveIgnore(apply);
+        boolean flag = groupChatApplyDao.save(apply);
         if (flag) {
             ContactMessageResp resp = req.ofResp(apply.getId(), req.getToId(), userInfo);
             Message message = resp.toMessage(req.getToId(), MessageSyncer.incrSeq(req.getToId()));
@@ -96,13 +102,7 @@ public class GroupService {
         // 原申请人id
         Long applyUserId = apply.getApplyUserId();
         Long memberId = apply.getUserId();
-        GroupChatMember member = new GroupChatMember();
-        member.setGroupId(apply.getGroupId());
-        member.setUserId(memberId);
-        member.setNickName(userDao.getNickName(memberId));
-        member.setRoleType(1);
-        member.setAddTime(Time.now());
-        member.setAddWay(0);
+        GroupChatMember member = this.fetchMember(apply.getGroupId(), memberId);
         groupChatMemberDao.save(member);
         ContactMessageResp resp = req.ofResp(req.getApplyId(), applyUserId, userInfo, apply.getType());
         Message message = resp.toMessage(applyUserId, MessageSyncer.incrSeq(applyUserId));
@@ -125,5 +125,17 @@ public class GroupService {
         } else {
             conn.send(WsPacket.newNotifyPacket(message, ChatConst.Notify.contact).encode());
         }
+    }
+
+    @NotNull
+    private GroupChatMember fetchMember(Long groupId, Long memberId) {
+        GroupChatMember member = new GroupChatMember();
+        member.setGroupId(groupId);
+        member.setUserId(memberId);
+        member.setNickName(userDao.getNickName(memberId));
+        member.setRoleType(1);
+        member.setAddTime(Time.now());
+        member.setAddWay(0);
+        return member;
     }
 }

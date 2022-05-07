@@ -39,7 +39,7 @@ public class GroupController {
     }
 
     /**
-     * 邀请入群
+     * 入群邀请
      *
      * @param userInfo {@link UserInfo}
      * @param req      {@link GroupInviteReq}
