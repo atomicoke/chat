@@ -123,6 +123,16 @@ public interface ChatConst {
              */
             int handleInviteGroup = 12004;
 
+            /**
+             * 退解散通知
+             */
+            int dissolveGroup = 12005;
+
+            /**
+             * 群员退群通知
+             */
+            int leaveGroup = 12006;
+
             static boolean isFriendOperator(int code) {
                 return code >= 11001 && code <= 11003;
             }
