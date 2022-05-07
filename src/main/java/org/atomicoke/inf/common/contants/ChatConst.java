@@ -124,14 +124,21 @@ public interface ChatConst {
             int handleInviteGroup = 12004;
 
             /**
-             * 退解散通知
+             * 群解散通知
              */
+            //todo 2022/05/07 解散群聊(给所有群成员发送通知)
             int dissolveGroup = 12005;
 
             /**
-             * 群员退群通知
+             * 退群通知
              */
             int leaveGroup = 12006;
+
+            /**
+             * 移出群聊通知
+             */
+            //todo 2022/05/07 开除群籍(给除操作人以外的群管理员发送通知)
+            int kickOutGroup = 12007;
 
             static boolean isFriendOperator(int code) {
                 return code >= 11001 && code <= 11003;
