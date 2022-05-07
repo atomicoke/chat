@@ -112,6 +112,16 @@ public class GroupService {
     }
 
     /**
+     * 退群
+     *
+     * @param userInfo {@link UserInfo}
+     * @param groupId  群id
+     */
+    public void leave(UserInfo userInfo, Long groupId) {
+        groupChatMemberDao.removeMember(userInfo.getIdLong(), groupId);
+    }
+
+    /**
      * 推送消息
      *
      * @param userId  目标用户id

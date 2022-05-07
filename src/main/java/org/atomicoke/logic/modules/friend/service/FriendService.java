@@ -83,6 +83,16 @@ public class FriendService {
     }
 
     /**
+     * 删除好友
+     *
+     * @param userInfo {@link UserInfo}
+     * @param friendId 好友id
+     */
+    public void delete(UserInfo userInfo, Long friendId) {
+        friendDao.removeFriend(userInfo.getIdLong(), friendId);
+    }
+
+    /**
      * 获取好友信息
      *
      * @param ownerId  所有者id

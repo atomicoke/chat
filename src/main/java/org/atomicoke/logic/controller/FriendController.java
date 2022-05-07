@@ -9,12 +9,7 @@ import org.atomicoke.logic.modules.friend.domain.model.FriendHandleReq;
 import org.atomicoke.logic.modules.friend.domain.model.req.SyncFriendReq;
 import org.atomicoke.logic.modules.friend.domain.model.vo.FriendInfoVO;
 import org.atomicoke.logic.modules.friend.service.FriendService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -40,7 +35,7 @@ public class FriendController {
      * @return {@link Rest }<{@link List }<{@link FriendInfoVO }>>
      */
     @PostMapping("sync")
-    public Rest<List<FriendInfoVO>> sync(UserInfo userInfo,@RequestBody  SyncFriendReq req) {
+    public Rest<List<FriendInfoVO>> sync(UserInfo userInfo, @RequestBody SyncFriendReq req) {
         req.setUserId(userInfo.getIdLong());
 
         return Rest.of(friendService.sync(req));
@@ -76,10 +71,9 @@ public class FriendController {
      * @param userInfo {@link UserInfo}
      * @return rest
      */
-    @PostMapping("delete")
-    public Rest<?> delete(UserInfo userInfo) {
-        //todo 删除好友
-        return Rest.success();
+    @DeleteMapping("delete/{friendId}")
+    public Rest<?> delete(UserInfo userInfo, @PathVariable Long friendId) {
+        return Rest.of(() -> friendService.delete(userInfo, friendId));
     }
 
     /**

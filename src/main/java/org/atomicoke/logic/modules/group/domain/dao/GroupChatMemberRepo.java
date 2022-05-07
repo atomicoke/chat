@@ -34,4 +34,11 @@ public class GroupChatMemberRepo extends BaseRepo<GroupChatMemberMapper, GroupCh
                 .eq(GroupChatMember::getGroupId, groupId)
                 .exists();
     }
+
+    public void removeMember(Long userId, Long groupId) {
+        this.lu()
+                .eq(GroupChatMember::getUserId, userId)
+                .eq(GroupChatMember::getGroupId, groupId)
+                .remove();
+    }
 }

@@ -32,7 +32,7 @@ public class FriendRepo extends BaseRepo<FriendMapper, Friend> {
     }
 
     public FriendInfoVO info(final Long ownerId, final Long friendId) {
-        return this.baseMapper.info(ownerId,friendId);
+        return this.baseMapper.info(ownerId, friendId);
     }
 
     public List<FriendInfoVO> sync(final SyncFriendReq req) {
@@ -41,5 +41,12 @@ public class FriendRepo extends BaseRepo<FriendMapper, Friend> {
 
     public void insertOrUpdate(List<Friend> friends) {
         this.baseMapper.insertOrUpdate(friends);
+    }
+
+    public void removeFriend(Long userId, Long friendId) {
+        this.lu()
+                .eq(Friend::getOwnerId, userId)
+                .eq(Friend::getFriendId, friendId)
+                .remove();
     }
 }
