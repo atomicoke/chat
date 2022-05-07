@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <artifactId>chat</artifactId>
-    <groupId>io.github.fzdwx</groupId>
+    <groupId>org.atomicoke</groupId>
     <version>0.01</version>
     <modelVersion>4.0.0</modelVersion>
 
@@ -15,20 +15,21 @@
         <spring.boot.version>2.6.5</spring.boot.version>
         <spring.cloud-version>2021.0.1</spring.cloud-version>
 
-        <lambda.version>0.09.3</lambda.version>
-        <sky.version>0.09</sky.version>
+        <lambda.version>0.10</lambda.version>
+        <sky.version>0.10.1</sky.version>
 
         <HikariCP.version>5.0.1</HikariCP.version>
         <lombok.version>1.18.22</lombok.version>
-        <minio.version>8.3.7</minio.version>
+        <minio.version>8.3.8</minio.version>
         <okhttp.version>4.9.3</okhttp.version>
         <sa-token.version>1.29.0</sa-token.version>
         <ttl.version>2.12.6</ttl.version>
         <redisson.version>3.17.0</redisson.version>
         <mybatis-plus-boot-starter.version>3.5.1</mybatis-plus-boot-starter.version>
-        <cosid.version>1.8.11</cosid.version>
+        <cosid.version>1.8.15</cosid.version>
         <skipTests>true</skipTests>
-        <fastjson2.version>2.0.1</fastjson2.version>
+        <fastjson2.version>2.0.2</fastjson2.version>
+        <jakarta-validation-api.version>3.0.1</jakarta-validation-api.version>
     </properties>
 
     <build>
@@ -261,6 +262,13 @@
             <artifactId>mockito-inline</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>jakarta.validation</groupId>
+            <artifactId>jakarta.validation-api</artifactId>
+            <version>${jakarta-validation-api.version}</version>
+        </dependency>
+
     </dependencies>
 
 

@@ -2,8 +2,8 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="io.github.fzdwx.logic.modules.chathistory.domain.dao.mapper.ChatHistoryMapper">
-    <resultMap id="BaseResultMap" type="io.github.fzdwx.logic.modules.chathistory.domain.entity.ChatHistory">
+<mapper namespace="org.atomicoke.logic.modules.chathistory.domain.dao.mapper.ChatHistoryMapper">
+    <resultMap id="BaseResultMap" type="org.atomicoke.logic.modules.chathistory.domain.entity.ChatHistory">
         <!--@Table chat_history-->
         <id property="id" column="id" jdbcType="BIGINT"/>
         <result property="fromId" column="from_id" jdbcType="BIGINT"/>
@@ -14,7 +14,7 @@
         <result property="contentType" column="content_type" jdbcType="INTEGER"/>
         <result property="fileName" column="file_name" jdbcType="VARCHAR"/>
         <result property="fileSize" column="file_size" jdbcType="INTEGER"/>
-        <result property="sendTime" column="send_time" jdbcType="TIMESTAMP"/>
+        <result property="sendTime" column="send_time" jdbcType="BIGINT"/>
         <result property="randomId" column="random_id" jdbcType="VARCHAR"/>
     </resultMap>
 
