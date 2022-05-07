@@ -26,7 +26,7 @@
         <ttl.version>2.12.6</ttl.version>
         <redisson.version>3.17.0</redisson.version>
         <mybatis-plus-boot-starter.version>3.5.1</mybatis-plus-boot-starter.version>
-        <cosid.version>1.8.15</cosid.version>
+        <cosid.version>1.8.16</cosid.version>
         <skipTests>true</skipTests>
         <fastjson2.version>2.0.2</fastjson2.version>
         <jakarta-validation-api.version>3.0.1</jakarta-validation-api.version>

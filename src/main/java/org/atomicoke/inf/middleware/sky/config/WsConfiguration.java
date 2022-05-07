@@ -57,7 +57,7 @@ public class WsConfiguration implements InitializingBean {
 
                     final HttpHandler httpHandler = t2.v1;
                     if (httpHandler == null) {
-                        resp.status(HttpResponseStatus.NOT_FOUND).end("not found");
+                        resp.sendNotFound();
                         return;
                     }
 
