@@ -20,7 +20,9 @@ public class Assert {
     }
 
     public static void ensureTrue(final boolean flag, final String message) {
-        ensureFalse(!flag, message);
+        if (!flag) {
+            throw Err.normal(message);
+        }
     }
 
     public static void ensureFalse(final boolean flag, final String message) {
