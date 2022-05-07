@@ -20,11 +20,13 @@ import org.atomicoke.logic.modules.msg.WsPacket;
 import org.atomicoke.logic.modules.msg.domain.model.Message;
 import org.atomicoke.logic.modules.msg.domain.resp.ContactMessageResp;
 import org.atomicoke.logic.modules.msg.sync.MessageSyncer;
+import org.atomicoke.logic.modules.user.domain.dao.UserRepo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import socket.WebSocket;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -36,6 +38,7 @@ import java.util.Objects;
 @AllArgsConstructor
 public class FriendService {
 
+    private UserRepo userDao;
     private FriendRepo friendDao;
 
     private FriendApplyRepo friendApplyDao;
@@ -75,7 +78,9 @@ public class FriendService {
         // 好友请求的原申请人id为toId
         Long applyUserId = friendApplyDao.getApplyUserId(req.getApplyId());
         if (Lang.eq(req.getHandlerResult().intValue(), ChatConst.FriendAndGroupApplyResult.agree)) {
-            List<Friend> friends = Friend.of(applyUserId, userInfo.getIdLong(), Time.now());
+            Long userId = userInfo.getIdLong();
+            Map<Long, String> remarkMap = userDao.getNickName(List.of(applyUserId, userId));
+            List<Friend> friends = Friend.of(applyUserId, remarkMap.get(applyUserId), userId, remarkMap.get(userId), Time.now());
             friendDao.insertOrUpdate(friends);
         }
 
