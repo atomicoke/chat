@@ -1,6 +1,7 @@
 package org.atomicoke.logic.modules.user.domain.model;
 
 import lombok.Data;
+import org.apache.commons.lang3.StringUtils;
 import org.atomicoke.inf.common.err.Err;
 
 /**
@@ -48,6 +49,18 @@ public class EditUserInfoReq {
     public void preCheck() {
         if (id == null) {
             throw Err.verify("id不能为空");
+        }
+
+        if (StringUtils.isNotEmpty(nickName)) {
+            if (nickName.length() >= 20) {
+                throw Err.illegalArgument("昵称长度不能超过20");
+            }
+        }
+
+        if (StringUtils.isNotEmpty(passwd)) {
+            if (passwd.length() < 6 || passwd.length() > 16) {
+                throw Err.illegalArgument("密码长度必须在6-16位之间");
+            }
         }
     }
 }

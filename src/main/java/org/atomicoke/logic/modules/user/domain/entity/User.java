@@ -2,7 +2,6 @@ package org.atomicoke.logic.modules.user.domain.entity;
 
 import cn.dev33.satoken.secure.SaSecureUtil;
 import cn.hutool.core.util.RandomUtil;
-import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -86,10 +85,9 @@ public class User implements Serializable {
 
     public static User from(final SingUpReq req) {
         final var salt = RandomUtil.randomString(8);
-        String nickName = StrUtil.isEmpty(req.getNickName()) ? req.getUname() : req.getNickName();
         return new User()
                 .setUname(req.getUname())
-                .setNickName(nickName)
+                .setNickName(req.getNickName())
                 .setSalt(salt)
                 .setCreateTime(Time.now())
                 .setRoleKey(RoleConstant.COMMON)

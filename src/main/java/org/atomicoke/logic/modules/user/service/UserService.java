@@ -35,6 +35,8 @@ public class UserService {
      * 注册
      */
     public String singUp(final SingUpReq req) {
+        req.preCheck();
+
         final var count = userDao.countWithUname(req.getUname());
         if (count > 0) {
             Err.thrVerify("用户名已存在");
