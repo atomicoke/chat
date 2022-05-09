@@ -46,7 +46,6 @@ public class GroupInviteReq {
     public ContactMessageResp ofResp(Long requestId, Long toUserId, UserInfo userInfo) {
         final var resp = new ContactMessageResp();
         resp.setApplyId(String.valueOf(requestId));
-        //todo 系统头像
         resp.setToId(String.valueOf(toUserId));
         resp.setContactType(ChatConst.Notify.Contact.inviteGroup);
         resp.setHandlerTime(Time.now());
