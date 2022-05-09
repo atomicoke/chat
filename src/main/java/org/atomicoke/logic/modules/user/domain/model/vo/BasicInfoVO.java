@@ -14,6 +14,12 @@ public class BasicInfoVO implements UserAvatarFixer {
      * 用户id
      */
     private String userId;
+
+    /**
+     * uname
+     */
+    private String uname;
+
     /**
      * 昵称
      */

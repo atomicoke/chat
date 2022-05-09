@@ -36,8 +36,8 @@ public class UserRepo extends BaseRepo<UserMapper, User> {
         return super.getById(id);
     }
 
-    public BasicInfoVO basicInfo(final Long userId) {
-        return this.baseMapper.basicInfo(userId);
+    public BasicInfoVO basicInfo(final String uname) {
+        return this.baseMapper.basicInfo(uname);
     }
 
     public List<BasicInfoVO> search(final SearchUserReq req) {

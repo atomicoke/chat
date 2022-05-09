@@ -84,11 +84,11 @@ public class UserController {
     /**
      * 获取用户的基本信息
      *
-     * @param userId 用户id
+     * @param uname uname
      * @return {@link Rest }<{@link BasicInfoVO }>
      */
-    @GetMapping("basicInfo/{userId}")
-    public Rest<BasicInfoVO> basicInfo(@PathVariable final Long userId) {
-        return Rest.of(userService.basicInfo(userId));
+    @GetMapping("basicInfo/{uname}")
+    public Rest<BasicInfoVO> basicInfo(@PathVariable final String uname) {
+        return Rest.of(userService.basicInfo(uname));
     }
 }

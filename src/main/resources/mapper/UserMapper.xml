@@ -36,15 +36,17 @@
 
     <select id="basicInfo" resultType="org.atomicoke.logic.modules.user.domain.model.vo.BasicInfoVO">
         select a.id as userId,
+               a.uname,
                a.nick_name,
                a.avatar,
                a.gender
         from user a
-        where a.id = #{userId}
+        where a.uname = #{uname}
     </select>
 
     <select id="search" resultType="org.atomicoke.logic.modules.user.domain.model.vo.BasicInfoVO">
         select a.id as userId,
+               a.uname,
                a.nick_name,
                a.avatar,
                a.gender
