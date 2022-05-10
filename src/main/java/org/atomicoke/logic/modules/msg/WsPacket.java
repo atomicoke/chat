@@ -1,7 +1,6 @@
 package org.atomicoke.logic.modules.msg;
 
 import cn.hutool.extra.spring.SpringUtil;
-import socket.WebSocket;
 import io.github.fzdwx.lambada.Io;
 import io.github.fzdwx.lambada.Lang;
 import io.netty.channel.ChannelFuture;
@@ -18,8 +17,9 @@ import org.atomicoke.logic.modules.msg.packet.chat.ReplayPacket;
 import org.atomicoke.logic.modules.msg.packet.status.ErrorPacket;
 import org.atomicoke.logic.modules.msg.packet.status.NotifyPacket;
 import org.atomicoke.logic.modules.msg.packet.status.SuccessPacket;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import socket.WebSocket;
 
-import javax.annotation.Nullable;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
