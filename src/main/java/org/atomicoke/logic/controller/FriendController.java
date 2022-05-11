@@ -39,6 +39,7 @@ public class FriendController {
         req.setUserId(userInfo.getIdLong());
 
         return Rest.of(friendService.sync(req));
+
     }
 
     /**
