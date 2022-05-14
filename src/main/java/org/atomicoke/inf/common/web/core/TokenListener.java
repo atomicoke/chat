@@ -20,7 +20,7 @@ public class TokenListener implements SaTokenListener {
      * 每次登录时触发
      */
     @Override
-    public void doLogin(final String loginType, final Object loginId, final SaLoginModel loginModel) {
+    public void doLogin(final String loginType, final Object loginId, final String tokenValue, final SaLoginModel loginModel) {
         log.info("[ login ] 当前有用户登录：id:[ {} ]", loginId);
     }
 

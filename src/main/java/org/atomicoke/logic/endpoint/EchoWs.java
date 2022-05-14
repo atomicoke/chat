@@ -1,9 +1,9 @@
 package org.atomicoke.logic.endpoint;
 
 import cn.dev33.satoken.stp.StpUtil;
-import http.HttpHandler;
 import http.HttpServerRequest;
 import http.HttpServerResponse;
+import http.ext.HttpHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.atomicoke.inf.common.web.Web;
 import org.atomicoke.inf.middleware.sky.Ws;

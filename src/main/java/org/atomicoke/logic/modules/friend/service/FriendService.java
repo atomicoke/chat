@@ -1,11 +1,11 @@
 package org.atomicoke.logic.modules.friend.service;
 
 import io.github.fzdwx.lambada.Lang;
+import io.github.fzdwx.lambada.Time;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.atomicoke.inf.common.Assert;
 import org.atomicoke.inf.common.contants.ChatConst;
-import org.atomicoke.inf.common.util.Time;
 import org.atomicoke.inf.common.web.model.UserInfo;
 import org.atomicoke.logic.modules.friend.domain.dao.FriendApplyRepo;
 import org.atomicoke.logic.modules.friend.domain.dao.FriendRepo;

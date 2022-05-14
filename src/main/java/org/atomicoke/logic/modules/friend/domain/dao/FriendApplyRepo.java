@@ -1,8 +1,8 @@
 package org.atomicoke.logic.modules.friend.domain.dao;
 
+import io.github.fzdwx.lambada.Time;
 import org.atomicoke.inf.common.contants.ChatConst;
 import org.atomicoke.inf.common.err.Err;
-import org.atomicoke.inf.common.util.Time;
 import org.atomicoke.inf.middleware.db.BaseRepo;
 import org.atomicoke.logic.modules.friend.domain.dao.mapper.FriendApplyMapper;
 import org.atomicoke.logic.modules.friend.domain.entity.FriendApply;

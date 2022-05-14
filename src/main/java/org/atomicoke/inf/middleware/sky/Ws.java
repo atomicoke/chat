@@ -1,6 +1,6 @@
 package org.atomicoke.inf.middleware.sky;
 
-import http.HttpHandler;
+import http.ext.HttpHandler;
 import org.atomicoke.inf.middleware.sky.config.WsConfiguration;
 import org.springframework.stereotype.Component;
 

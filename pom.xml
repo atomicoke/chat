@@ -20,7 +20,7 @@
 
         <HikariCP.version>5.0.1</HikariCP.version>
         <lombok.version>1.18.22</lombok.version>
-        <minio.version>8.3.8</minio.version>
+        <minio.version>8.3.9</minio.version>
         <okhttp.version>4.9.3</okhttp.version>
         <sa-token.version>1.30.0</sa-token.version>
         <ttl.version>2.12.6</ttl.version>
@@ -98,6 +98,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>io.github.fzdwx</groupId>
+            <artifactId>lambda</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>io.github.fzdwx</groupId>
             <artifactId>sky-infrastructure</artifactId>
@@ -194,10 +200,6 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.github.fzdwx</groupId>
-            <artifactId>lambda</artifactId>
         </dependency>
         <!-- redis 缓存操作 lettuce -->
         <dependency>

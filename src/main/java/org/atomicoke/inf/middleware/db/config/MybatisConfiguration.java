@@ -2,8 +2,8 @@ package org.atomicoke.inf.middleware.db.config;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.core.incrementer.IdentifierGenerator;
+import io.github.fzdwx.lambada.Time;
 import org.apache.ibatis.reflection.MetaObject;
-import org.atomicoke.inf.common.util.Time;
 import org.atomicoke.inf.middleware.id.IdGenerate;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
