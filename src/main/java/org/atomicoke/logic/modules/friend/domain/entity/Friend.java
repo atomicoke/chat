@@ -1,10 +1,6 @@
 package org.atomicoke.logic.modules.friend.domain.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableLogic;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -65,19 +61,18 @@ public class Friend implements Serializable {
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 
-    public static List<Friend> of(Long userId1, Long userId2, Long time) {
-        //todo 好友备注
+    public static List<Friend> of(Long userId1, String remark1, Long userId2, String remark2, Long time) {
         return List.of(new Friend()
                         .setOwnerId(userId1)
                         .setFriendId(userId2)
-                        .setRemark("")
+                        .setRemark(remark1)
                         .setAddWay(0)
                         .setAddTime(time)
                         .setUpdateTime(time),
                 new Friend()
                         .setOwnerId(userId2)
                         .setFriendId(userId1)
-                        .setRemark("")
+                        .setRemark(remark2)
                         .setAddWay(0)
                         .setAddTime(time)
                         .setUpdateTime(time));

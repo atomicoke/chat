@@ -112,6 +112,42 @@ public class GroupService {
     }
 
     /**
+     * 退群
+     *
+     * @param userInfo {@link UserInfo}
+     * @param groupId  群id
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public void leave(UserInfo userInfo, Long groupId) {
+        Assert.ensureFalse(groupChatMemberDao.isOwner(userInfo.getIdLong(), groupId), "群主无法退群！");
+        boolean flag = groupChatMemberDao.removeMember(userInfo.getIdLong(), groupId);
+        if (flag) {
+            List<Long> toIdList = this.groupChatMemberDao.getGroupManager(groupId);
+            Assert.notEmpty(toIdList, "不合法的群！");
+            List<String> messages = toIdList.stream()
+                    .map(toUserId -> {
+                        ContactMessageResp resp = this.fetchLeaveResp(userInfo, toUserId);
+                        Message message = resp.toMessage(toUserId, MessageSyncer.incrSeq(toUserId));
+                        this.push(toUserId, message);
+                        return Json.toJson(message);
+                    }).collect(Collectors.toList());
+            MessageSyncer.saveToMongo(messages);
+        }
+    }
+
+    @NotNull
+    private ContactMessageResp fetchLeaveResp(UserInfo userInfo, Long toUserId) {
+        ContactMessageResp resp = new ContactMessageResp();
+        resp.setToId(String.valueOf(toUserId));
+        resp.setContactType(ChatConst.Notify.Contact.leaveGroup);
+        resp.setHandlerTime(Time.now());
+        ContactMessageResp.Content content = new ContactMessageResp.Content();
+        content.setOperatorId(userInfo.getId());
+        resp.setContent(content);
+        return resp;
+    }
+
+    /**
      * 推送消息
      *
      * @param userId  目标用户id

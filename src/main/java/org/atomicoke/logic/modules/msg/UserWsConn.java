@@ -1,16 +1,16 @@
 package org.atomicoke.logic.modules.msg;
 
-import socket.WebSocket;
 import io.github.fzdwx.lambada.Lang;
 import io.github.fzdwx.lambada.fun.State;
 import io.netty.channel.ChannelFuture;
 import io.netty.util.AttributeKey;
 import lombok.extern.slf4j.Slf4j;
 import org.atomicoke.inf.common.web.model.UserInfo;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
+import socket.WebSocket;
 
-import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.function.BiConsumer;

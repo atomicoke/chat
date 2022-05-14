@@ -16,7 +16,7 @@ import java.util.List;
  */
 public interface UserMapper extends BaseMapper<User> {
 
-    BasicInfoVO basicInfo(@Param("userId") Long userId);
+    BasicInfoVO basicInfo(@Param("uname") String uname);
 
     List<BasicInfoVO> search(@Param("req") SearchUserReq req);
 }

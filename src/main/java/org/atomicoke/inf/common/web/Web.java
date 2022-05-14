@@ -5,8 +5,8 @@ import org.atomicoke.inf.common.err.Err;
 import org.atomicoke.inf.common.web.core.Context;
 import org.atomicoke.inf.common.web.model.UserInfo;
 import org.atomicoke.logic.modules.user.domain.entity.User;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
-import javax.annotation.Nullable;
 
 /**
  * @author <a href="mailto:likelovec@gmail.com">fzdwx</a>

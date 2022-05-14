@@ -1,5 +1,6 @@
 package org.atomicoke.logic.modules.user.domain.dao;
 
+import cn.hutool.core.collection.CollUtil;
 import org.atomicoke.inf.common.Assert;
 import org.atomicoke.inf.middleware.db.BaseRepo;
 import org.atomicoke.logic.modules.user.domain.dao.mapper.UserMapper;
@@ -8,7 +9,10 @@ import org.atomicoke.logic.modules.user.domain.model.req.SearchUserReq;
 import org.atomicoke.logic.modules.user.domain.model.vo.BasicInfoVO;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * UserDaoImpl: 数据操作接口实现
@@ -32,8 +36,8 @@ public class UserRepo extends BaseRepo<UserMapper, User> {
         return super.getById(id);
     }
 
-    public BasicInfoVO basicInfo(final Long userId) {
-        return this.baseMapper.basicInfo(userId);
+    public BasicInfoVO basicInfo(final String uname) {
+        return this.baseMapper.basicInfo(uname);
     }
 
     public List<BasicInfoVO> search(final SearchUserReq req) {
@@ -47,5 +51,18 @@ public class UserRepo extends BaseRepo<UserMapper, User> {
                 .one();
         Assert.notNull(user, "用户不存在！");
         return user.getNickName();
+    }
+
+    public Map<Long, String> getNickName(List<Long> ids) {
+        if (CollUtil.isEmpty(ids)) {
+            return Collections.emptyMap();
+        }
+        List<User> list = this.lq()
+                .select(User::getId,
+                        User::getNickName)
+                .in(User::getId, ids)
+                .list();
+        Assert.ensureTrue(list != null && list.size() == ids.size(), "userId 不合法！");
+        return list.stream().collect(Collectors.toMap(User::getId, User::getNickName));
     }
 }

@@ -35,6 +35,8 @@ public class UserService {
      * 注册
      */
     public String singUp(final SingUpReq req) {
+        req.preCheck();
+
         final var count = userDao.countWithUname(req.getUname());
         if (count > 0) {
             Err.thrVerify("用户名已存在");
@@ -98,8 +100,8 @@ public class UserService {
         return Web.getUserInfo();
     }
 
-    public BasicInfoVO basicInfo(final Long userId) {
-        final var basicInfo = this.userDao.basicInfo(userId);
+    public BasicInfoVO basicInfo(final String uname) {
+        final var basicInfo = this.userDao.basicInfo(uname);
         Assert.notNull(basicInfo, "用户不存在");
 
         basicInfo.fixAvatar();

@@ -8,10 +8,7 @@ import org.atomicoke.logic.modules.group.domain.model.GroupApplyReq;
 import org.atomicoke.logic.modules.group.domain.model.GroupHandleReq;
 import org.atomicoke.logic.modules.group.domain.model.GroupInviteReq;
 import org.atomicoke.logic.modules.group.service.GroupService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 群
@@ -39,7 +36,7 @@ public class GroupController {
     }
 
     /**
-     * 入群邀请
+     * 邀请入群
      *
      * @param userInfo {@link UserInfo}
      * @param req      {@link GroupInviteReq}
@@ -65,8 +62,8 @@ public class GroupController {
     /**
      * 退出群聊
      */
-    @PostMapping("leave")
-    public void leave() {
-        // TODO: 2022/4/17 退出群聊
+    @DeleteMapping("leave/{groupId}")
+    public Rest<?> leave(UserInfo userInfo, @PathVariable Long groupId) {
+        return Rest.of(() -> groupService.leave(userInfo, groupId));
     }
 }
