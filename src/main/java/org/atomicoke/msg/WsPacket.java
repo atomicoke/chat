@@ -1,4 +1,4 @@
-package org.atomicoke.logic.modules.msg;
+package org.atomicoke.msg;
 
 import cn.hutool.extra.spring.SpringUtil;
 import io.github.fzdwx.lambada.Io;
@@ -11,12 +11,12 @@ import org.atomicoke.inf.common.err.Err;
 import org.atomicoke.inf.common.util.Json;
 import org.atomicoke.inf.common.web.model.UserInfo;
 import org.atomicoke.inf.middleware.redis.Redis;
-import org.atomicoke.logic.modules.msg.handler.ChatMessagePacketHandler;
-import org.atomicoke.logic.modules.msg.packet.chat.ChatMessagePacket;
-import org.atomicoke.logic.modules.msg.packet.chat.ReplayPacket;
-import org.atomicoke.logic.modules.msg.packet.status.ErrorPacket;
-import org.atomicoke.logic.modules.msg.packet.status.NotifyPacket;
-import org.atomicoke.logic.modules.msg.packet.status.SuccessPacket;
+import org.atomicoke.msg.handler.ChatMessagePacketHandler;
+import org.atomicoke.msg.packet.chat.ChatMessagePacket;
+import org.atomicoke.msg.packet.chat.ReplayPacket;
+import org.atomicoke.msg.packet.status.ErrorPacket;
+import org.atomicoke.msg.packet.status.NotifyPacket;
+import org.atomicoke.msg.packet.status.SuccessPacket;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import socket.WebSocket;
 

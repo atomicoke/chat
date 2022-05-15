@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.atomicoke.inf.common.contants.ChatConst;
 import org.atomicoke.inf.common.web.model.UserInfo;
-import org.atomicoke.logic.modules.msg.domain.resp.ContactMessageResp;
+import org.atomicoke.msg.domain.resp.ContactMessageResp;
 
 import java.io.Serializable;
 

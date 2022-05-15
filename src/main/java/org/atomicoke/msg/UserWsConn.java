@@ -1,4 +1,4 @@
-package org.atomicoke.logic.modules.msg;
+package org.atomicoke.msg;
 
 import io.github.fzdwx.lambada.Lang;
 import io.github.fzdwx.lambada.fun.State;

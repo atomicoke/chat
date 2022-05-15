@@ -1,10 +1,10 @@
-package org.atomicoke.logic.modules.msg.packet.status;
+package org.atomicoke.msg.packet.status;
 
 import socket.WebSocket;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import org.atomicoke.logic.modules.msg.WsPacket;
+import org.atomicoke.msg.WsPacket;
 
 /**
  * @author zhiyuan

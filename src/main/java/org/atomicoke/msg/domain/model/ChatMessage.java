@@ -1,4 +1,4 @@
-package org.atomicoke.logic.modules.msg.domain.model;
+package org.atomicoke.msg.domain.model;
 
 import io.github.fzdwx.lambada.Lang;
 import lombok.Data;

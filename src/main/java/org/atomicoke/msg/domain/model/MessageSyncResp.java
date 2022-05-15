@@ -1,8 +1,7 @@
-package org.atomicoke.logic.modules.msg.domain.model;
+package org.atomicoke.msg.domain.model;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.atomicoke.logic.modules.msg.domain.model.Message;
 
 import java.util.List;
 

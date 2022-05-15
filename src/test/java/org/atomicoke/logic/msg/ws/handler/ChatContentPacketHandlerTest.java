@@ -1,7 +1,7 @@
 package org.atomicoke.logic.msg.ws.handler;
 
-import org.atomicoke.logic.modules.msg.handler.ChatMessagePacketHandler;
-import org.atomicoke.logic.modules.msg.packet.chat.ChatMessagePacket;
+import org.atomicoke.msg.handler.ChatMessagePacketHandler;
+import org.atomicoke.msg.packet.chat.ChatMessagePacket;
 import org.junit.jupiter.api.Test;
 
 import static org.mockito.Mockito.mock;

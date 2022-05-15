@@ -1,10 +1,10 @@
-package org.atomicoke.logic.modules.msg.packet.chat;
+package org.atomicoke.msg.packet.chat;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.atomicoke.msg.WsPacket;
 import socket.WebSocket;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.atomicoke.logic.modules.msg.WsPacket;
 
 @EqualsAndHashCode(callSuper = true)
 @Data

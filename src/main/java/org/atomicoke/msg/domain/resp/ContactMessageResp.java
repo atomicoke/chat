@@ -1,10 +1,10 @@
-package org.atomicoke.logic.modules.msg.domain.resp;
+package org.atomicoke.msg.domain.resp;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 import org.atomicoke.inf.common.contants.ChatConst;
-import org.atomicoke.logic.modules.msg.domain.model.Message;
+import org.atomicoke.msg.domain.model.Message;
 
 /**
  * @author oneIdler
