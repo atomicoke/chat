@@ -1,9 +1,8 @@
 package org.atomicoke.logic.user.api;
 
 import org.atomicoke.inf.common.util.Json;
-import org.atomicoke.inf.common.util.Time;
-import org.atomicoke.logic.modules.msg.domain.resp.ContactMessageResp;
-import org.atomicoke.logic.modules.msg.sync.MessageSyncer;
+import org.atomicoke.msg.domain.resp.ContactMessageResp;
+import org.atomicoke.msg.sync.MessageSyncer;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;

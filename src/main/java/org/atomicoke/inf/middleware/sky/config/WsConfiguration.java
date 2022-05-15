@@ -1,11 +1,11 @@
 package org.atomicoke.inf.middleware.sky.config;
 
 import cn.hutool.extra.spring.SpringUtil;
-import http.HttpHandler;
 import http.HttpServer;
 import http.HttpServerRequest;
 import http.HttpServerResponse;
 import http.Router;
+import http.ext.HttpHandler;
 import io.github.fzdwx.lambada.internal.Tuple2;
 import io.github.fzdwx.lambada.lang.NvMap;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +15,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
@@ -49,21 +50,21 @@ public class WsConfiguration implements InitializingBean {
                     router.GET(ws.value(), handler);
                 });
 
-        new HttpServer()
-                .handler((req, resp) -> {
+        HttpServer.create()
+                .handle((req, resp) -> {
 
                     final Tuple2<HttpHandler, NvMap> t2 = router.match(req);
 
                     final HttpHandler httpHandler = t2.v1;
                     if (httpHandler == null) {
-                        resp.sendNotFound();
+                        resp.notFound();
                         return;
                     }
 
                     httpHandler.handle(req, resp);
                 })
                 .withGroup(0, 0)
-                .bind(port);
+                .start(port);
     }
 
     @NotNull
@@ -72,7 +73,11 @@ public class WsConfiguration implements InitializingBean {
         try {
             final Method handle = bean.getClass().getMethod("handle", HttpServerRequest.class, HttpServerResponse.class);
             handler = (request, resp) -> {
-                handle.invoke(bean, request, resp);
+                try {
+                    handle.invoke(bean, request, resp);
+                } catch (IllegalAccessException | InvocationTargetException e) {
+                    throw new RuntimeException(e);
+                }
             };
         } catch (NoSuchMethodException e) {
             log.info("unRegister ws endpoint: {}", bean.getClass().getName());

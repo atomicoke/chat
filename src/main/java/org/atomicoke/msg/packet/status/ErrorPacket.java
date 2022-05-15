@@ -1,10 +1,10 @@
-package org.atomicoke.logic.modules.msg.packet.status;
+package org.atomicoke.msg.packet.status;
 
 import cn.hutool.core.util.ArrayUtil;
+import org.atomicoke.msg.WsPacket;
 import socket.WebSocket;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.atomicoke.logic.modules.msg.WsPacket;
 
 @EqualsAndHashCode(callSuper = true)
 @Data

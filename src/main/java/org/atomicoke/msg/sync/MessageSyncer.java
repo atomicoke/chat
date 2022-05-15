@@ -1,12 +1,12 @@
-package org.atomicoke.logic.modules.msg.sync;
+package org.atomicoke.msg.sync;
 
 import cn.hutool.extra.spring.SpringUtil;
 import org.atomicoke.inf.middleware.redis.Redis;
-import org.atomicoke.logic.modules.msg.domain.model.Message;
-import org.atomicoke.logic.modules.msg.packet.chat.ReplayPacket;
-import org.atomicoke.logic.modules.msg.domain.resp.ChatMessageResp;
-import org.atomicoke.logic.modules.msg.domain.model.MessageSyncReq;
-import org.atomicoke.logic.modules.msg.domain.model.MessageSyncResp;
+import org.atomicoke.msg.domain.model.Message;
+import org.atomicoke.msg.packet.chat.ReplayPacket;
+import org.atomicoke.msg.domain.resp.ChatMessageResp;
+import org.atomicoke.msg.domain.model.MessageSyncReq;
+import org.atomicoke.msg.domain.model.MessageSyncResp;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Component;

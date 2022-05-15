@@ -2,7 +2,7 @@ package org.atomicoke.inf.middleware.minio;
 
 import cn.hutool.core.io.FileTypeUtil;
 import cn.hutool.core.util.StrUtil;
-import io.github.fzdwx.lambada.lang.UnixTime;
+import io.github.fzdwx.lambada.Time;
 import io.minio.GetPresignedObjectUrlArgs;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
@@ -99,7 +99,7 @@ public class Minio implements InitializingBean {
 
     public static MinioUploadRes upload(InputStream stream, String fileName, String bucket, String contentType,
                                         Function<String, String> accessUrlFunc) {
-        String objectName = UnixTime.unixTime() + "/" + IdGenerate.nextId() + fileName;
+        String objectName = Time.unix() + "/" + IdGenerate.nextId() + fileName;
 
         try {
             return MinioUploadRes.create(

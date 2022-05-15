@@ -3,7 +3,7 @@ package org.atomicoke.fzdwx;
 import cn.hutool.core.img.ImgUtil;
 import cn.hutool.http.HttpUtil;
 import io.github.fzdwx.lambada.lang.StopWatch;
-import org.atomicoke.logic.modules.msg.WsPacket;
+import org.atomicoke.msg.WsPacket;
 import org.junit.jupiter.api.Test;
 
 import java.awt.image.BufferedImage;

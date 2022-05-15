@@ -1,4 +1,4 @@
-package org.atomicoke.logic.modules.msg.domain.resp;
+package org.atomicoke.msg.domain.resp;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -6,9 +6,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.atomicoke.inf.common.contants.ChatConst;
 import org.atomicoke.inf.common.web.model.UserInfo;
 import org.atomicoke.logic.modules.chathistory.domain.entity.ChatHistory;
-import org.atomicoke.logic.modules.msg.domain.model.ChatMessage;
-import org.atomicoke.logic.modules.msg.domain.model.Message;
-import org.atomicoke.logic.modules.msg.packet.chat.ChatMessagePacket;
+import org.atomicoke.msg.domain.model.ChatMessage;
+import org.atomicoke.msg.domain.model.Message;
+import org.atomicoke.msg.packet.chat.ChatMessagePacket;
 
 /**
  * @author <a href="mailto:likelovec@gmail.com">fzdwx</a>

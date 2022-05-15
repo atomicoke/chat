@@ -1,14 +1,12 @@
-package org.atomicoke.logic.endpoint;
+package org.atomicoke.msg;
 
 import cn.dev33.satoken.stp.StpUtil;
-import http.HttpHandler;
 import http.HttpServerRequest;
 import http.HttpServerResponse;
+import http.ext.HttpHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.atomicoke.inf.common.web.Web;
 import org.atomicoke.inf.middleware.sky.Ws;
-import org.atomicoke.logic.modules.msg.UserWsConn;
-import org.atomicoke.logic.modules.msg.WsPacket;
 
 /**
  * @author <a href="mailto:likelovec@gmail.com">fzdwx</a>
