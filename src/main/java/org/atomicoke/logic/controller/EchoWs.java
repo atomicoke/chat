@@ -1,4 +1,4 @@
-package org.atomicoke.logic.endpoint;
+package org.atomicoke.logic.controller;
 
 import cn.dev33.satoken.stp.StpUtil;
 import http.HttpServerRequest;
