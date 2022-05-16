@@ -1,5 +1,6 @@
 package org.atomicoke.logic.user.api;
 
+import io.github.fzdwx.lambada.Time;
 import org.atomicoke.inf.common.util.Json;
 import org.atomicoke.msg.domain.resp.ContactMessageResp;
 import org.atomicoke.msg.sync.MessageSyncer;
