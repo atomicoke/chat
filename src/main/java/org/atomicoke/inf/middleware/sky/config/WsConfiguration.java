@@ -64,7 +64,7 @@ public class WsConfiguration implements InitializingBean {
                     httpHandler.handle(req, resp);
                 })
                 .withGroup(0, 0)
-                .listen(port);
+                .start(port);
     }
 
     @NotNull
