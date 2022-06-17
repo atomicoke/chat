@@ -50,3 +50,5 @@ Thumbs.db
 /mvnw
 rebel.xml
 /cosid-machine-state/
+/src/main/resources/application-dev.yml
+/src/main/resources/application-prod.yml
